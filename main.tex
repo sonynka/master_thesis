@@ -1,5 +1,38 @@
 \documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage[utf8]{inputenc}
+
+\setlength{\parskip}{1em}
+
 \begin{document}
-(Type your content here.)
+\section{Generative Adversarial Networks}
+
+
+Introduced in 2014 \cite{goodfellow_generative_2014}, generative adversarial  networks, so-called GANs, have been the focus of countless research papers and creative implementations.
+
+We can train them to generate new samples from a given distribution without the difficulties of approximating likelihood functions. In order to do so, we train two neural networks to compete with each other. The discriminator network is trained to tell apart real samples from "fake" samples, while the generator network tries to generate samples that will fool the discriminator.
+
+\subsection{Training Objective}
+Given input data with distribution $p(x)$, the generator $G$ is a neural network, that maps random input noise $z$ to the input space, as $G(z, \theta_{g})$, learning the model distribution $p\hat{}(x)$. The discriminator $D$ is a second neural network $D(x, \theta_{d})$ with a single scalar output, classifying the input as real, sampled from $p(x)$, or as fake, sampled from the model distribution $p\hat{}(x)$. 
+
+The training objective of the discriminator is to maximize the probability of assigning the correct label, while the objective of the generator is to minimize this probability. The loss function of the GAN can be described as the minimax objective,
+
+\begin{equation}
+\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ V(D,G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log 1 - D(G(z))]
+\label{eq:minimax}
+\end{equation}.
+
+In order to prevent vanish gradients, as a result of the discriminator saturating by confidently classifying the samples before the generator's update, \cite{goodfellow_generative_2014} suggests $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$ instead.
+
+\subsection{Training Difficulties}
+In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. 
+
+In reality, finding the right balance between the two networks is one of the difficulties when training a GAN. If discriminator gets too good at determining which samples are fake, then generator has no chance to learn the distribution. On the other hand, if generator is updated too much, it can collapse too many values of z to the same value of x to have enough diversity to model p(x).
+
+
+
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{Zotero} % Entries are in the "refs.bib" file
 \end{document}
