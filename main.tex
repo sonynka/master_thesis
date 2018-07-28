@@ -29,10 +29,34 @@ In order to prevent vanish gradients, as a result of the discriminator saturatin
 \subsection{Training Difficulties}
 In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. 
 
-In reality, finding the right balance between the two networks is one of the difficulties when training a GAN. If discriminator gets too good at determining which samples are fake, then generator has no chance to learn the distribution. On the other hand, if generator is updated too much, it can collapse too many values of z to the same value of x to have enough diversity to model p(x).
+In reality, finding the right balance between the two networks is one of the difficulties when training a GAN. If discriminator gets too good at determining which samples are fake, then generator has no chance to learn the distribution. On the other hand, if generator is updated too much, it can collapse too many values of $z$ to the same value of $x$ to have enough diversity to model the distribution.
+
+\section{GAN Comparison}
+Lot of papers and open-source repositories have been published since the appearance of the original GAN paper. I have reviewed and tested several of them, in order to find architectures and code applicable to the problem of generating and modifying fashion images. 
+
+\begin{table}
+\centering
+\begin{tabular}{l*{4}{c}}
+Network Characteristics & pix2pix &	StarGAN	& MUNIT	& FaderNetworks \\
+\hline
+Supervised Training		& Yes & No & No & No \\
+Multi-Domain  			& No  & Yes & No & No \\
+Multi-Modal				& No & No & Yes & No \\
+Latent Representations	& No & No & Yes & Yes \\
+\end{tabular}
+\caption{\label{tab:gan_comp}\textbf{Comparison of existing GAN models based on their characteristics.} Supervised training means that the dataset consists of image pairs, e.g: a dress and a person wearing the dress. Multi-Domain networks are able to train one model to change multiple attributes. Multi-Modal networks are able to generate more than one possible output. Networks with latent representations try to model the training data in a latent space, as opposed to pixel space.}
+\end{table}
+
+Based on various characteristics, compared in Table \ref{tab:gan_comp}, I have evaluated  5 networks: pix2pix \cite{isola_image--image_2016}, CycleGAN \cite{zhu_unpaired_2017}, StarGAN \cite{choi_stargan:_2017}, MUNIT \cite{huang_multimodal_2018} and FaderNetworks \cite{lample_fader_2017}. I have compared the following attributes for each of the mentioned networks:
+\begin{itemize}
+\item Supervised/Unsupervised learning: Describes if the network needs a dataset consisting of paired images, such as the same skirt in a short and log version.
+\item Multi-Domain: Describes if the network is able to train only one model for different domain modifications, or if each domain requieres its own trained generator.
+\item Multi-Modal: Describes if the network is able to generate different versions from the same input.
+\item Latent representation: Describes if the network trains directly in pixel-space or uses latent representation of the data, usually content and style of the images.
+\end{itemize}
 
 
 
-\bibliographystyle{plain} % We choose the "plain" reference style
-\bibliography{Zotero} % Entries are in the "refs.bib" file
+\bibliographystyle{apalike}
+\bibliography{Zotero}
 \end{document}
