@@ -6,6 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{multicol}
+\usepackage{multirow}
 \usepackage{subcaption}
 
 \setlength{\parskip}{1em}
@@ -13,6 +14,8 @@
 \graphicspath{ {./images_dataset/} }
 
 \begin{document}
+% ==============================================================
+% GANS
 % ==============================================================
 \section{Generative Adversarial Networks}
 
@@ -22,7 +25,7 @@ Introduced in 2014 \cite{goodfellow_generative_2014}, generative adversarial  ne
 We can train them to generate new samples from a given distribution without the difficulties of approximating likelihood functions. In order to do so, we train two neural networks to compete with each other. The discriminator network is trained to tell apart real samples from "fake" samples, while the generator network tries to generate samples that will fool the discriminator.
 
 % ==============================================================
-\subsection{Training Objective}
+\subsection{Training Objective} \label{sec:GAN_training}
 Given input data with distribution $p(x)$, the generator $G$ is a neural network, that maps random input noise $z$ to the input space, as $G(z, \theta_{g})$, learning the model distribution $\hat{p}(x)$. The discriminator $D$ is a second neural network $D(x, \theta_{d})$ with a single scalar output, classifying the input as real, sampled from $p(x)$, or as fake, sampled from the model distribution $\hat{p}(x)$. 
 
 The training objective of the discriminator is to maximize the probability of assigning the correct label, while the objective of the generator is to minimize this probability. The loss function of the GAN can be described as the minimax objective,
@@ -44,19 +47,6 @@ In reality, finding the right balance between the two networks is one of the dif
 \section{GAN Comparison}
 Lot of papers and open-source repositories have been published since the appearance of the original GAN paper. I have reviewed and tested several of them, in order to find architectures and code applicable to the problem of generating and modifying fashion images. 
 
-\begin{table}
-\centering
-\begin{tabular}{l*{4}{c}}
-Network Characteristics & pix2pix &	StarGAN	& MUNIT	& FaderNetworks \\
-\hline
-Supervised Training		& Yes & No & No & No \\
-Multi-Domain  			& No  & Yes & No & No \\
-Multi-Modal				& No & No & Yes & No \\
-Latent Representations	& No & No & Yes & Yes \\
-\end{tabular}
-\caption{\label{tab:gan_comp}\textbf{Comparison of existing GAN models based on their characteristics.} Supervised training means that the dataset consists of image pairs, e.g: a dress and a person wearing the dress. Multi-Domain networks are able to train one model to change multiple attributes. Multi-Modal networks are able to generate more than one possible output. Networks with latent representations try to model the training data in a latent space, as opposed to pixel space.}
-\end{table}
-
 Based on various characteristics, compared in Table \ref{tab:gan_comp}, I have evaluated  5 networks: pix2pix \cite{isola_image--image_2016}, CycleGAN \cite{zhu_unpaired_2017}, StarGAN \cite{choi_stargan:_2017}, MUNIT \cite{huang_multimodal_2018} and FaderNetworks \cite{lample_fader_2017}. I have compared the following attributes for each of the mentioned networks:
 \begin{itemize}
 \item Supervised/Unsupervised learning: Describes if the network needs a dataset consisting of paired images, such as the same skirt in a short and log version.
@@ -64,6 +54,19 @@ Based on various characteristics, compared in Table \ref{tab:gan_comp}, I have e
 \item Multi-Modal: Describes if the network is able to generate different versions from the same input.
 \item Latent representation: Describes if the network trains directly in pixel-space or uses latent representation of the data, usually content and style of the images.
 \end{itemize}
+
+\begin{table}
+\centering
+\begin{tabular}{l*{5}{c}}
+Network Characteristics & pix2pix &	CycleGAN & StarGAN	& MUNIT	& FaderNetworks \\
+\hline
+Supervised Training		& Yes & No & No & No & No \\
+Multi-Domain  			& No  & No & Yes & No & No \\
+Multi-Modal				& No & No & No & Yes & No \\
+Latent Representations	& No & No & No & Yes & Yes \\
+\end{tabular}
+\caption{\label{tab:gan_comp}\textbf{Comparison of existing GAN models based on their characteristics.} Supervised training means that the dataset consists of image pairs, e.g: a dress and a person wearing the dress. Multi-Domain networks are able to train one model to change multiple attributes. Multi-Modal networks are able to generate more than one possible output. Networks with latent representations try to model the training data in a latent space, as opposed to pixel space.}
+\end{table}
 
 % ==============================================================
 \subsection{Pix2Pix}
@@ -92,11 +95,47 @@ The final objective of the generator is:
 \begin{equation}
 G^{*} = arg \ \underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) + \lambda \mathcal{L}_{rec}(G)
 \end{equation}
-with the optimal $\lambda$ = 100.
+where $\lambda$ controls the relative importance of the two loss functions.
+
+% ==============================================================
+% CycleGAN
+% ==============================================================
+\subsection{CycleGAN}
+CycleGANs \cite{zhu_unpaired_2017} also solve the image-to-image translation problem, but unlike pix2pix, they do not require a paired image set for the image domains. The unsupervised setting is preferred in most translation tasks, as obtaining image pairs of two domains can be difficult or even impossible, for example when translating faces of women to faces of men, or artworks of Monet to realistic photographs. The assumption of this approach, is that both image domains share certain underlying visual similarities.
+
+The model consists of two generators, $G_{X}$ and $G_{Y}$, which learn mapping from image domain $X$ to image domain $Y$, $G_{Y}: X \rightarrow Y$, and vice versa. Each of the image domains has its own discriminator, $D_{X}$ and $D_{Y}$, that check if the given image comes from the real distribution of the domain or is translated from the opposite domain.
+
+\begin{equation}
+\mathcal{L}_{adv}(D_{X},G_{X}) = \mathbb{E}_{x}[\log D_{X}(x)] + \mathbb{E}_{y}[\log 1 - D_{X}(G_{X}(y))]
+\label{eq:cyclegan_adv}
+\end{equation}
+
+Additionally to the adversarial loss, CycleGAN also implements a so-called \textit{Cycle Consistency Loss}, which enforces that an image encoded from one domain to another, can also be brought back to the original domain. The \textit{forward cycle consistency} defines that the  an image $x$ from domain $X$ and its encoded-decoded version should be approximately the same: $G_{X}(G_{Y}(x)) \approx x$. The \textit{backward cycle consistency} defines the same for an image from domain $Y$.
+
+\begin{equation}
+\mathcal{L}_{cyc}(G_{X},G_{Y}) = \mathbb{E}_{x}[||G_{X}(G_{Y}(x)) - x||_{1}] + \mathbb{E}_{y}[||G_{Y}(G_{X}(y)) - y||_{1}]
+\label{eq:cyclegan_cycle}
+\end{equation}
+
+The authors argue, that by enforcing this encoder-decoder logic, the generators learn not to contradict each other. The final objective is:
+
+\begin{equation}
+\begin{split}
+G^{*}_{X}, G^{*}_{Y} = arg \ \underset{G_{X}, G_{Y}}{\mathrm{min}} \ \underset{D_{X}, D_{Y}}{\mathrm{max}} \ \mathcal{L}_{adv}(D_{X},G_{Y}) \ +  \mathcal{L}_{adv}(D_{Y}, G_{X}) \\ + \ \lambda \mathcal{L}_{cyc}(G_{X}, G_{Y})
+\end{split}
+\end{equation}
+
+% ==============================================================
+% StarGAN
+% ==============================================================
+\subsection{StarGAN}
+In case of Pix2Pix and CycleGAN, one of the disadvantages is the missing possibility multi-domain training. In other words, if there are more than 2 domains to translate between each other, one must train a new model for each domain pair. 
 
 
 % ==============================================================
-\section{Fashion Dataset}
+% DATASET
+% ==============================================================
+\section{Data}
 As in most machine learning algorithms applied to visual tasks, the quantity and quality of training data is essential to produce high-quality results. It is also common, that data collection and data cleaning make up a significant part of a machine learning project.
 
 In case of fashion images, there are several open-source datasets published online, however, after careful evaluation I have not found them sufficient for the type of tasks I wanted to achieve. Therefore, I have created an application that can scrape an online fashion store to download images of fashion products and their description to an easily-accessible format.
@@ -139,9 +178,30 @@ Additionally to an undesired low resolution of the returned images - around 100 
 \subsection{Dataset Scraper}
 Based on the evaluation of existing fashion datasets, I have identified a need for creating a new dataset specifically for the requirements of the application. I evaluated several fashion e-shops, from which images of the products and their descriptions could be downloaded. 
 
-I chose 3 websites, based on the structure and amount of information they provide: www.zalando.de, www.aboutyou.de and www.fashionid.de. All of these websites provide several thousands of fashion products, each of them with a photograph of the product on a white background and some basic description such as color, pattern, shape, length etc.
+I chose 3 websites, based on the structure and amount of information they provide: www.zalando.de \cite{zalando_damenmode_nodate}, www.aboutyou.de \cite{about_you_mode_nodate} and www.fashionid.de \cite{p&c_damen_nodate}. Each of them provides several thousand fashion products for women, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc.
 
+The fashion scraper is python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, joining and translating. This project was part of my Independent Coursework and a thorough documentation of the project can be found in Attachments.
 
+\subsubsection{Final Dataset}
+The scraped dataset consists of around 50.000 images, falling into 10 categories. 
+Each datapoint is described in a CSV file, which includes the following information:
+
+\begin{itemize}
+\item \textbf{img\_path}: local file path to the saved product image
+\item \textbf{img\_url}: URL to the product image file hosted on the website
+\item \textbf{model\_img\_urls}: if given, URLs to the images of the product worn by models
+\item \textbf{category}: clothing category of the product, e.g: dress, blouse, pants, etc.
+\item \textbf{color}: color of the product, e.g: black, white, blue, etc.
+\item \textbf{id}: ID of the product as defined by the website (usually SKU)
+\item \textbf{brand}: product brand
+\item \textbf{name}: product name
+\item \textbf{attributes}: list of product attributes listed on the website, such as shape, length, material, size etc.
+\end{itemize}
+
+\marginpar{A table with all attributes and num of images will be in attachments}
+The application processes the collected data and cleans the attributes into a list of the most useful and common attributes, which are then assigned to each of the downloaded images. The img\_attr.csv file contains a list of image file paths and around 40 columns with binary classification.
+
+entr
 
 \newpage
 \bibliographystyle{alphadin}
