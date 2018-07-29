@@ -4,8 +4,11 @@
 \usepackage{amsfonts}
 \usepackage{url}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
 
 \setlength{\parskip}{1em}
+
+\graphicspath{ {./images_dataset/} }
 
 \begin{document}
 % ==============================================================
@@ -110,9 +113,22 @@ I have defined these requirements on based on my previous experience with genera
 
 % ==============================================================
 \subsection {Existing Fashion Datasets}
+
+\subsubsection{DeepFashion}
 The existing datasets that consist or include images of fashion items do not fulfill the criteria of the dataset for the application. The Deep Fashion Set includes a very extensive Attribute Prediction collection, with more than 200.000 images of clothing images, labeled with 1000 attributes \cite{the_chinese_university_of_hong_kong_deepfashion_nodate}. However, this dataset does not fulfill the first requirement, with its clothing items photographed on people in various poses and backgrounds. This type of variation might be too complex for the algorithms and can lead to unsatisfactory results.
 
-Another available option, that has been provided by Prof. Dr. Barthel, was the Fotolia and Pixabay image datasets, which can be explored on the picsbuffet website \cite{noauthor_picsbuffet_nodate}. However, in addition to the problem with too much variety as in DeepFashion, the attributes saved for each item did not prove to be useful and the images did not have sufficient resolution. 
+\subsubsection{Pixabay and Fotolia}
+Another available option, that has been provided by Prof. Dr. Barthel, was the Fotolia and Pixabay image datasets, which can be explored on the picsbuffet website \cite{noauthor_picsbuffet_nodate}.
+
+Based on 64-dimensional feature vectors calculated via the akiwi API, figure 1 shows images with the closest L1 distance to the template image and keywords "dress" and "isolated". 
+
+\begin{figure}[h]
+\centering
+\caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+\end{figure}
+
+
+However, in addition to the problem with too much variety as in DeepFashion, the attributes saved for each item did not prove to be useful and the images did not have sufficient resolution. 
 
 
 
