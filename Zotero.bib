@@ -1,4 +1,81 @@
 
+@misc{noauthor_picsbuffet_nodate,
+	title = {picsbuffet},
+	url = {https://picsbuffet.com/fotolia/#0,147,1576},
+	urldate = {2018-07-29TZ}
+}
+
+@misc{the_chinese_university_of_hong_kong_deepfashion_nodate,
+	title = {{DeepFashion}},
+	url = {http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion.html},
+	urldate = {2018-07-29TZ},
+	journal = {Large-scale Fashion (DeepFashion) Database},
+	author = {The Chinese University of Hong Kong}
+}
+
+@article{pathak_context_2016,
+	title = {Context {Encoders}: {Feature} {Learning} by {Inpainting}},
+	shorttitle = {Context {Encoders}},
+	url = {http://arxiv.org/abs/1604.07379},
+	abstract = {We present an unsupervised visual feature learning algorithm driven by context-based pixel prediction. By analogy with auto-encoders, we propose Context Encoders -- a convolutional neural network trained to generate the contents of an arbitrary image region conditioned on its surroundings. In order to succeed at this task, context encoders need to both understand the content of the entire image, as well as produce a plausible hypothesis for the missing part(s). When training context encoders, we have experimented with both a standard pixel-wise reconstruction loss, as well as a reconstruction plus an adversarial loss. The latter produces much sharper results because it can better handle multiple modes in the output. We found that a context encoder learns a representation that captures not just appearance but also the semantics of visual structures. We quantitatively demonstrate the effectiveness of our learned features for CNN pre-training on classification, detection, and segmentation tasks. Furthermore, context encoders can be used for semantic inpainting tasks, either stand-alone or as initialization for non-parametric methods.},
+	urldate = {2018-07-28TZ},
+	journal = {arXiv:1604.07379 [cs]},
+	author = {Pathak, Deepak and Krahenbuhl, Philipp and Donahue, Jeff and Darrell, Trevor and Efros, Alexei A.},
+	month = apr,
+	year = {2016},
+	note = {arXiv: 1604.07379},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics, Computer Science - Machine Learning}
+}
+
+@article{zhu_generative_2016,
+	title = {Generative {Visual} {Manipulation} on the {Natural} {Image} {Manifold}},
+	url = {http://arxiv.org/abs/1609.03552},
+	abstract = {Realistic image manipulation is challenging because it requires modifying the image appearance in a user-controlled way, while preserving the realism of the result. Unless the user has considerable artistic skill, it is easy to "fall off" the manifold of natural images while editing. In this paper, we propose to learn the natural image manifold directly from data using a generative adversarial neural network. We then define a class of image editing operations, and constrain their output to lie on that learned manifold at all times. The model automatically adjusts the output keeping all edits as realistic as possible. All our manipulations are expressed in terms of constrained optimization and are applied in near-real time. We evaluate our algorithm on the task of realistic photo manipulation of shape and color. The presented method can further be used for changing one image to look like the other, as well as generating novel imagery from scratch based on user's scribbles.},
+	urldate = {2018-07-28TZ},
+	journal = {arXiv:1609.03552 [cs]},
+	author = {Zhu, Jun-Yan and Krähenbühl, Philipp and Shechtman, Eli and Efros, Alexei A.},
+	month = sep,
+	year = {2016},
+	note = {arXiv: 1609.03552},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition}
+}
+
+@article{mirza_conditional_2014,
+	title = {Conditional {Generative} {Adversarial} {Nets}},
+	url = {http://arxiv.org/abs/1411.1784},
+	abstract = {Generative Adversarial Nets [8] were recently introduced as a novel way to train generative models. In this work we introduce the conditional version of generative adversarial nets, which can be constructed by simply feeding the data, y, we wish to condition on to both the generator and discriminator. We show that this model can generate MNIST digits conditioned on class labels. We also illustrate how this model could be used to learn a multi-modal model, and provide preliminary examples of an application to image tagging in which we demonstrate how this approach can generate descriptive tags which are not part of training labels.},
+	urldate = {2018-07-28TZ},
+	journal = {arXiv:1411.1784 [cs, stat]},
+	author = {Mirza, Mehdi and Osindero, Simon},
+	month = nov,
+	year = {2014},
+	note = {arXiv: 1411.1784},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Statistics - Machine Learning}
+}
+
+@misc{hesse_image--image_2017,
+	title = {Image-to-{Image} {Translation} in {Tensorflow} - {Affine} {Layer}},
+	url = {https://affinelayer.com/pix2pix/},
+	urldate = {2018-07-28TZ},
+	journal = {Image-to-Image Translation in Tensorflow},
+	author = {Hesse, Christopher},
+	month = jan,
+	year = {2017}
+}
+
+@article{arjovsky_towards_2017,
+	title = {Towards {Principled} {Methods} for {Training} {Generative} {Adversarial} {Networks}},
+	url = {http://arxiv.org/abs/1701.04862},
+	abstract = {The goal of this paper is not to introduce a single algorithm or method, but to make theoretical steps towards fully understanding the training dynamics of generative adversarial networks. In order to substantiate our theoretical analysis, we perform targeted experiments to verify our assumptions, illustrate our claims, and quantify the phenomena. This paper is divided into three sections. The first section introduces the problem at hand. The second section is dedicated to studying and proving rigorously the problems including instability and saturation that arize when training generative adversarial networks. The third section examines a practical and theoretically grounded direction towards solving these problems, while introducing new tools to study them.},
+	urldate = {2018-07-28TZ},
+	journal = {arXiv:1701.04862 [cs, stat]},
+	author = {Arjovsky, Martin and Bottou, Léon},
+	month = jan,
+	year = {2017},
+	note = {arXiv: 1701.04862},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning}
+}
+
 @article{yoo_pixel-level_2016,
 	title = {Pixel-{Level} {Domain} {Transfer}},
 	url = {http://arxiv.org/abs/1603.07442},
@@ -23,19 +100,6 @@
 	year = {2016},
 	note = {arXiv: 1606.03498},
 	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Computer Science - Neural and Evolutionary Computing}
-}
-
-@article{radford_unsupervised_2015,
-	title = {Unsupervised {Representation} {Learning} with {Deep} {Convolutional} {Generative} {Adversarial} {Networks}},
-	url = {http://arxiv.org/abs/1511.06434},
-	abstract = {In recent years, supervised learning with convolutional networks (CNNs) has seen huge adoption in computer vision applications. Comparatively, unsupervised learning with CNNs has received less attention. In this work we hope to help bridge the gap between the success of CNNs for supervised learning and unsupervised learning. We introduce a class of CNNs called deep convolutional generative adversarial networks (DCGANs), that have certain architectural constraints, and demonstrate that they are a strong candidate for unsupervised learning. Training on various image datasets, we show convincing evidence that our deep convolutional adversarial pair learns a hierarchy of representations from object parts to scenes in both the generator and discriminator. Additionally, we use the learned features for novel tasks - demonstrating their applicability as general image representations.},
-	urldate = {2018-07-22TZ},
-	journal = {arXiv:1511.06434 [cs]},
-	author = {Radford, Alec and Metz, Luke and Chintala, Soumith},
-	month = nov,
-	year = {2015},
-	note = {arXiv: 1511.06434},
-	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning}
 }
 
 @article{zhu_unpaired_2017,
@@ -78,7 +142,7 @@
 	keywords = {Computer Science - Computer Vision and Pattern Recognition}
 }
 
-@article{radford_unsupervised_2015-1,
+@article{radford_unsupervised_2015,
 	title = {Unsupervised {Representation} {Learning} with {Deep} {Convolutional} {Generative} {Adversarial} {Networks}},
 	url = {http://arxiv.org/abs/1511.06434},
 	abstract = {In recent years, supervised learning with convolutional networks (CNNs) has seen huge adoption in computer vision applications. Comparatively, unsupervised learning with CNNs has received less attention. In this work we hope to help bridge the gap between the success of CNNs for supervised learning and unsupervised learning. We introduce a class of CNNs called deep convolutional generative adversarial networks (DCGANs), that have certain architectural constraints, and demonstrate that they are a strong candidate for unsupervised learning. Training on various image datasets, we show convincing evidence that our deep convolutional adversarial pair learns a hierarchy of representations from object parts to scenes in both the generator and discriminator. Additionally, we use the learned features for novel tasks - demonstrating their applicability as general image representations.},
@@ -103,18 +167,6 @@
 }
 
 @incollection{goodfellow_generative_2014,
-	title = {Generative {Adversarial} {Nets}},
-	url = {http://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf},
-	urldate = {2018-07-22TZ},
-	booktitle = {Advances in {Neural} {Information} {Processing} {Systems} 27},
-	publisher = {Curran Associates, Inc.},
-	author = {Goodfellow, Ian and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
-	editor = {Ghahramani, Z. and Welling, M. and Cortes, C. and Lawrence, N. D. and Weinberger, K. Q.},
-	year = {2014},
-	pages = {2672--2680}
-}
-
-@incollection{goodfellow_generative_2014-1,
 	title = {Generative {Adversarial} {Nets}},
 	url = {http://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf},
 	booktitle = {Advances in {Neural} {Information} {Processing} {Systems} 27},
