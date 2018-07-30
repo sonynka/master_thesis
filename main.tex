@@ -129,11 +129,61 @@ G^{*}_{X}, G^{*}_{Y} = arg \ \underset{G_{X}, G_{Y}}{\mathrm{min}} \ \underset{D
 % StarGAN
 % ==============================================================
 \subsection{StarGAN}
-In case of Pix2Pix and CycleGAN, one of the disadvantages is the missing possibility multi-domain training. In other words, if there are more than 2 domains to translate between each other, one must train a new model for each domain pair. 
+In case of Pix2Pix and CycleGAN, one of the disadvantages is the missing possibility multi-domain training. In other words, if there are more than 2 domains to translate between each other, one must train a new model for each domain pair. This can be time and computationally intensive.
 
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{StarGAN_graph}
+\begin{figure}[t]
+\centering
+\subcaptionbox{Cross-Domain Models}
+{\includegraphics[height=4cm]{StarGAN_graph}}\hspace{1cm}
+\subcaptionbox{StarGAN Model}
+{\includegraphics[height=4cm]{StarGAN_graph2}}
+\caption{\label{fig:stargan_topo} \textbf{Comparison of cross-domain models and StarGAN model.} While cross-domain models need one generator per each domain pair, StarGAN only trains one generator for multiple domains. Figure adapted from \cite{choi_stargan:_2017}.}
 \end{figure}
+
+StarGAN \cite{choi_stargan:_2017} is unique among the tested models, as it is able to train one single generator that maps input to multiple domains, as shown in Figure \ref{fig:stargan_topo}. Using the conditional GAN model, the generator is conditioned on a randomly chosen target domain each iteration, so that it can learn mapping for all given domains. 
+
+Given an image $x$ and a target domain label $c_{trg}$, generator $G$ tries to minimize the adversarial loss objective, to generate real-looking images conditioned on the target domain, while the discriminator classifying the source of the image, $D_{src}$, tries to maximize it.
+
+\begin{equation}
+\mathcal{L}_{adv} = \mathbb{E}_{x}[\log D_{src}(x)] + \mathbb{E}_{x, c_{trg}}[\log 1 - D_{src}(G(x, c_{trg}))]
+\label{eq:stargan_adv}
+\end{equation}
+
+
+Instead of feeding the target domain class $c$ to the discriminator, as in common conditional networks, StarGAN uses an auxiliary classifier GAN, AC-GAN \cite{odena_conditional_2016}. It forces the discriminator to output both the probability distribution over the sources of the input, and the probability of the target domain labels, $D: x \rightarrow {D_{src}(x), D_{cls}(x)}$. This improves the network's stability and performance, as it forces the discriminator to perform and additional task.
+
+This modification to the discriminator introduces the \textit{Domain Classification Loss} with two objectives, optimizing $D$ and $G$ respectively. Given training data with an image $x$ and its original domain $c_{in}$, $D$ learns to classify the domain label correctly by minimizing the following objective:
+\begin{equation}
+\mathcal{L}^{r}_{cls} = \mathbb{E}_{x,c_{in}}[-\log D_{cls}(c_{in}|x)].
+\label{eq:stargan_clsr}
+\end{equation}
+
+The generator objective is to generate images, that fool the auxiliary classifier and are classified as the target domain $c_{trg}$:
+\begin{equation}
+\mathcal{L}^{f}_{cls} = \mathbb{E}_{x,c_{trg}}[-\log D_{cls}(c_{trg}|G(x, c_{trg}))].
+\label{eq:stargan_clsf}
+\end{equation}
+
+StarGAN \cite{choi_stargan:_2017} also uses the \textit{Cycle Consistency Loss} \cite{zhu_unpaired_2017}, in order to generate images that preserve the underlying content of the original image, and only change the domain-related attributes:
+\begin{equation}
+\mathcal{L}_{cyc} = \mathbb{E}_{x,c_{in},c_{trg}}[||x - G(G(x,c_{trg}), c_{in})||_{1}].
+\label{eq:stargan_cyc}
+\end{equation}
+
+
+The full training objective for $D$ and $G$ respectively is:
+
+\begin{equation}
+\mathcal{L}_{D} = -\mathcal{L}_{adv} + \lambda_{cls} \mathcal{L}^{r}_{cls},
+\label{eq:stargan_D}
+\end{equation}
+\begin{equation}
+\mathcal{L}_{G} = \mathcal{L}_{adv} + \lambda_{cls} \mathcal{L}^{f}_{cls} + \lambda_{cyc} \mathcal{L}_{cyc},
+\label{eq:stargan_G}
+\end{equation}
+
+where $\lambda_{cls}$ and $\lambda_{cyc}$ control the relative importance of the two loss functions against the adversarial loss.
+
 % ==============================================================
 % DATASET
 % ==============================================================
