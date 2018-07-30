@@ -103,6 +103,15 @@ where $\lambda$ controls the relative importance of the two loss functions.
 \subsection{CycleGAN}
 CycleGANs \cite{zhu_unpaired_2017} also solve the image-to-image translation problem, but unlike pix2pix, they do not require a paired image set for the image domains. The unsupervised setting is preferred in most translation tasks, as obtaining image pairs of two domains can be difficult or even impossible, for example when translating faces of women to faces of men, or artworks of Monet to realistic photographs. The assumption of this approach, is that both image domains share certain underlying visual similarities.
 
+\begin{figure}[h]
+\centering
+\subcaptionbox{Cycle GAN Model}
+{\includegraphics[height=3cm]{CycleGAN_graph}}\hspace{1cm}
+\subcaptionbox{Cycle Consistency Loss}
+{\includegraphics[height=2cm]{CycleGAN_graph2}}
+\caption{\label{fig:cyclegan} (a) CycleGAN consists of two mappings, $G_{X}$ and $G_{Y}$ and a corresponding discriminators $D_{X}$ and $D_{Y}$. (b) Cycle Consistency Loss measures the L1 distance between a real sample from one image domain and its encoded-decoded version.}
+\end{figure}
+
 The model consists of two generators, $G_{X}$ and $G_{Y}$, which learn mapping from image domain $X$ to image domain $Y$, $G_{Y}: X \rightarrow Y$, and vice versa. Each of the image domains has its own discriminator, $D_{X}$ and $D_{Y}$, that check if the given image comes from the real distribution of the domain or is translated from the opposite domain.
 
 \begin{equation}
