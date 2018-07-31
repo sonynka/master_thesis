@@ -103,13 +103,13 @@ where $\lambda$ controls the relative importance of the two loss functions.
 \subsection{CycleGAN}
 CycleGANs \cite{zhu_unpaired_2017} also solve the image-to-image translation problem, but unlike pix2pix, they do not require a paired image set for the image domains. The unsupervised setting is preferred in most translation tasks, as obtaining image pairs of two domains can be difficult or even impossible, for example when translating faces of women to faces of men, or artworks of Monet to realistic photographs. The assumption of this approach, is that both image domains share certain underlying visual similarities.
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
-\subcaptionbox{Cycle GAN Model}
-{\includegraphics[height=3cm]{CycleGAN_graph}}\hspace{1cm}
+\subcaptionbox{CycleGAN Model}
+{\includegraphics[height=4cm]{CycleGAN_graph}}\hspace{1cm}
 \subcaptionbox{Cycle Consistency Loss}
-{\includegraphics[height=2cm]{CycleGAN_graph2}}
-\caption{\label{fig:cyclegan} (a) CycleGAN consists of two mappings, $G_{X}$ and $G_{Y}$ and a corresponding discriminators $D_{X}$ and $D_{Y}$. (b) Cycle Consistency Loss measures the L1 distance between a real sample from one image domain and its encoded-decoded version.}
+{\includegraphics[height=4cm]{CycleGAN_graph2}}
+\caption{\label{fig:cyclegan} (a) The CycleGAN model consists of two mappings, $G_{X}$ and $G_{Y}$ and corresponding discriminators $D_{X}$ and $D_{Y}$. (b) Cycle Consistency Loss measures the L1 distance between a real sample from one image domain and its encoded-decoded version. Figure adapted from \cite{zhu_unpaired_2017}.}
 \end{figure}
 
 The model consists of two generators, $G_{X}$ and $G_{Y}$, which learn mapping from image domain $X$ to image domain $Y$, $G_{Y}: X \rightarrow Y$, and vice versa. Each of the image domains has its own discriminator, $D_{X}$ and $D_{Y}$, that check if the given image comes from the real distribution of the domain or is translated from the opposite domain.
@@ -140,15 +140,6 @@ G^{*}_{X}, G^{*}_{Y} = arg \ \underset{G_{X}, G_{Y}}{\mathrm{min}} \ \underset{D
 \subsection{StarGAN}
 In case of Pix2Pix and CycleGAN, one of the disadvantages is the missing possibility multi-domain training. In other words, if there are more than 2 domains to translate between each other, one must train a new model for each domain pair. This can be time and computationally intensive.
 
-\begin{figure}[t]
-\centering
-\subcaptionbox{Cross-Domain Models}
-{\includegraphics[height=4cm]{StarGAN_graph}}\hspace{1cm}
-\subcaptionbox{StarGAN Model}
-{\includegraphics[height=4cm]{StarGAN_graph2}}
-\caption{\label{fig:stargan_topo} \textbf{Comparison of cross-domain models and StarGAN model.} While cross-domain models need one generator per each domain pair, StarGAN only trains one generator for multiple domains. Figure adapted from \cite{choi_stargan:_2017}.}
-\end{figure}
-
 StarGAN \cite{choi_stargan:_2017} is unique among the tested models, as it is able to train one single generator that maps input to multiple domains, as shown in Figure \ref{fig:stargan_topo}. Using the conditional GAN model, the generator is conditioned on a randomly chosen target domain each iteration, so that it can learn mapping for all given domains. 
 
 Given an image $x$ and a target domain label $c_{trg}$, generator $G$ tries to minimize the adversarial loss objective, to generate real-looking images conditioned on the target domain, while the discriminator classifying the source of the image, $D_{src}$, tries to maximize it.
@@ -160,6 +151,15 @@ Given an image $x$ and a target domain label $c_{trg}$, generator $G$ tries to m
 
 
 Instead of feeding the target domain class $c$ to the discriminator, as in common conditional networks, StarGAN uses an auxiliary classifier GAN, AC-GAN \cite{odena_conditional_2016}. It forces the discriminator to output both the probability distribution over the sources of the input, and the probability of the target domain labels, $D: x \rightarrow {D_{src}(x), D_{cls}(x)}$. This improves the network's stability and performance, as it forces the discriminator to perform and additional task.
+
+\begin{figure}[t]
+\centering
+\subcaptionbox{Cross-Domain Models}
+{\includegraphics[height=4cm]{StarGAN_graph}}\hspace{1cm}
+\subcaptionbox{StarGAN Model}
+{\includegraphics[height=4cm]{StarGAN_graph2}}
+\caption{\label{fig:stargan_topo} \textbf{Comparison of cross-domain models and StarGAN model.} While cross-domain models need one generator per each domain pair, StarGAN only trains one generator for multiple domains. Figure adapted from \cite{choi_stargan:_2017}.}
+\end{figure}
 
 This modification to the discriminator introduces the \textit{Domain Classification Loss} with two objectives, optimizing $D$ and $G$ respectively. Given training data with an image $x$ and its original domain $c_{in}$, $D$ learns to classify the domain label correctly by minimizing the following objective:
 \begin{equation}
@@ -192,6 +192,41 @@ The full training objective for $D$ and $G$ respectively is:
 \end{equation}
 
 where $\lambda_{cls}$ and $\lambda_{cyc}$ control the relative importance of the two loss functions against the adversarial loss.
+
+% ==============================================================
+% MUNIT
+% ==============================================================
+\subsection{MUNIT}
+All of the introduced models approach the image translation problem as one-to-one mapping. However, many of the image domain translation tasks are in fact multi-modal, meaning one single input can have multiple different outputs. The MUNIT network \cite{huang_multimodal_2018} introduces an unsupervised multi-modal method, which is able to capture the diversity of the output.
+
+Instead of using translation in pixel space, the model tries to model the translation in a latent space. Based on the \textit{partially shared latent space assumption}, a content latent code $c \in \mathcal{C}$ and a style latent code $s_{i} \in \mathcal{S}_{i}$ are separated, assuming that the two image domains share a common content space but each has an individual style space. 
+
+For each domain, there is an auto-encoder, which consists of a generator $G$ and two encoders: content encoder $E^c$, and style encoder $E^s$. Given an image $x \in X$, it is encoded into a content and latent code, $E^c_x(x)$ and $E^s_x(x)$. To translate the image $x \in X$ to domain $Y$, its content code $c_{x}$ is extracted using the content encoder $E^c_x$, and it is combined with a random style code $s_{y}$, $G_y(c_x, s_y)$.
+
+
+\textbf{Reconstruction Loss.}
+The reconstruction loss is similar to the cycle consistency loss \cite{zhu_unpaired_2017}, enforcing the reconstruction between an image and its latent representation in both directions. $\mathcal{L}^{x}_{rec}$ encourages 
+\begin{equation}
+\mathcal{L}^{x}_{rec} = \mathbb{E}_{x}[||x - G_{x}(E^{c}_{x}(x), E^{s}_{x}(x))||_{1}]
+\end{equation}
+\begin{equation}
+\mathcal{L}^{c_{x}}_{rec} = \mathbb{E}_{c_{x}, s_{y}}[||c_{x} - E^{c}_{y}(G_{y}(c_{x},s_{y}))||_{1}]
+\end{equation}
+\begin{equation}
+\mathcal{L}^{s_{y}}_{rec} = \mathbb{E}_{c_{x}, s_{y}}[||s_{y} - E^{s}_{y}(G_{y}(c_{x},s_{y}))||_{1}]
+\end{equation}
+
+
+\textbf{Adversarial Loss.}
+
+
+
+
+While the style code is assumed to have a global and simple effect and is therefore sufficiently represented by a low-dimensional vector, the content is assumed to be a high-dimensional vector describing the complex spatial structure of the data.
+
+
+
+
 
 % ==============================================================
 % DATASET
