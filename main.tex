@@ -31,9 +31,9 @@ Given input data with distribution $p(x)$, the generator $G$ is a neural network
 The training objective of the discriminator is to maximize the probability of assigning the correct label, while the objective of the generator is to minimize this probability. The loss function of the GAN can be described as the minimax objective,
 
 \begin{equation}
-\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ V(D,G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log 1 - D(G(z))]
+\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ V(D,G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log 1 - D(G(z))].
 \label{eq:minimax}
-\end{equation}.
+\end{equation}
 
 In order to prevent vanish gradients, as a result of the discriminator saturating by confidently classifying the samples before the generator's update, \cite{goodfellow_generative_2014} suggests $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$ instead.
 
