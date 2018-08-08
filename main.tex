@@ -2,12 +2,19 @@
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{url}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{subcaption}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\urlstyle{same}
 
 \setlength{\parskip}{1em}
 
@@ -221,7 +228,6 @@ The reconstruction loss is similar to the cycle consistency loss \cite{zhu_unpai
 
 
 
-
 While the style code is assumed to have a global and simple effect and is therefore sufficiently represented by a low-dimensional vector, the content is assumed to be a high-dimensional vector describing the complex spatial structure of the data.
 
 
@@ -234,30 +240,30 @@ While the style code is assumed to have a global and simple effect and is theref
 \section{Data}
 As in most machine learning algorithms applied to visual tasks, the quantity and quality of training data is essential to produce high-quality results. It is also common, that data collection and data cleaning make up a significant part of a machine learning project.
 
-In case of fashion images, there are several open-source datasets published online, however, after careful evaluation I have not found them sufficient for the type of tasks I wanted to achieve. Therefore, I have created an application that can scrape an online fashion store to download images of fashion products and their description to an easily-accessible format.
+In case of fashion images, there are several open-source datasets published online. However, after careful evaluation I have not found them sufficient for the type of tasks I wanted to achieve. Therefore I have created an application that can scrape an online fashion store to download images of fashion products and their description in a computer-readable format.
 
 % ==============================================================
 \subsection {Requirements}
 In order to generate high-quality outputs using GANs, the collected dataset should fulfill the following requirements as much as possible:
 \begin{enumerate}
-\item The fashion products should be photographed on a white background.
-\item There should be a machine-readable description of each product, such as color, shape, category, etc.
+\item The fashion products should be photographed on a white background. 
+\item There should be a machine-readable description of each product, such as color, shape, category, etc. 
 \item The images should be in a sufficient resolution.
 \item There should be a sufficient amount of images of various items.
 
 \end{enumerate}
-I have defined these requirements on based on my previous experience with generative algorithms. 
+I have defined these requirements on based on my previous experience with generative algorithms. It is generally easier for the algorithm to focus on the important attributes of the images, if there are no distractions in terms of different model poses, backgrounds, etc. And since the main point of the project is to modify different attributes of the products, the images need to be labeled.
 
 % ==============================================================
 \subsection {Existing Fashion Datasets}
 
 \subsubsection{DeepFashion}
-The existing datasets that consist or include images of fashion items do not fulfill the criteria of the dataset for the application. The Deep Fashion Set includes a very extensive Attribute Prediction collection, with more than 200.000 images of clothing images, labeled with 1000 attributes \cite{the_chinese_university_of_hong_kong_deepfashion_nodate}. However, this dataset does not fulfill the first requirement, with its clothing items photographed on people in various poses and backgrounds. This type of variation might be too complex for the algorithms and can lead to unsatisfactory results.
+The existing datasets that consist or include images of fashion items do not fulfill the criteria of the dataset for the application. The Deep Fashion Set \cite{the_chinese_university_of_hong_kong_deepfashion_nodate} includes a very extensive Attribute Prediction collection, with more than 200.000 images of clothing images, labeled with 1000 attributes. However, this dataset does not fulfill the first requirement, with its clothing items photographed on people in various poses and backgrounds. This type of variation might be too complex for the algorithms and can lead to unsatisfactory results.
 
 \subsubsection{Fotolia}
-Another available option, that has been provided by Prof. Dr. Barthel, was the Fotolia image dataset, which can be explored on the picsbuffet website \cite{noauthor_picsbuffet_nodate}.
+Another available option, that has been provided by Prof. Dr. Barthel, is the Fotolia image dataset, which can be explored on the picsbuffet website \cite{noauthor_picsbuffet_nodate}.
 
-To test the dataset, I have chosen all images with keywords "dress" and "isolated". This has not yielded the desired results, therefore I have compared each of the "isolated dress" images to a template image, based on the distance between their 64-dimensional feature vectors. Figure \ref{fig:fotolia} shows the results of this search. The 64-dimensional feature vectors were calculated via Akiwi API \cite{sonnenberg_akiwi_nodate}.
+To test the dataset, I have chosen all images with keywords "dress" and "isolated" and compared them to a template image, based on L1 distance between their 64-dimensional feature vectors. Figure \ref{fig:fotolia} shows the results of this search. The 64-dimensional feature vectors were calculated via Akiwi API \cite{sonnenberg_akiwi_nodate}.
 
 \begin{figure}[h]
 \centering
@@ -269,12 +275,12 @@ To test the dataset, I have chosen all images with keywords "dress" and "isolate
 \end{figure}
 
 
-Additionally to an undesired low resolution of the returned images - around 100 x 160 pixels - the results also have too much variety, such as different model poses, different zoom levels and backgrounds. The description of the images did not include many useful attributes, with most pictures lacking information about colors, shapes and pattern and instead having tags such as: beauty, young, person, female, hair etc.
+Additionally to an undesired low resolution of the returned images - around 100 x 160 pixels - the results also have too much variety, such as different model poses, different zoom levels and backgrounds. The description of the images did not include many useful attributes, with most pictures being labeled with words such as: "beauty", "young", "person", and lacking information about colors, shapes and pattern.
 
 \subsection{Dataset Scraper}
 Based on the evaluation of existing fashion datasets, I have identified a need for creating a new dataset specifically for the requirements of the application. I evaluated several fashion e-shops, from which images of the products and their descriptions could be downloaded. 
 
-I chose 3 websites, based on the structure and amount of information they provide: www.zalando.de \cite{zalando_damenmode_nodate}, www.aboutyou.de \cite{about_you_mode_nodate} and www.fashionid.de \cite{p&c_damen_nodate}. Each of them provides several thousand fashion products for women, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc.
+I chose 3 websites, based on the structure and amount of information they provide: \href{https://www.zalando.de/damen-home/}{zalando.de}, \href{https://www.aboutyou.de/}{aboutyou.de} and \href{https://www.fashionid.de/damen/}{fashionid.de}. Each of them provides several thousand fashion products for women and men, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc. For simplicity, I have limited the dataset to women's clothes, excluding products like accessories and shoes.
 
 The fashion scraper is python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, joining and translating. This project was part of my Independent Coursework and a thorough documentation of the project can be found in Attachments.
 
