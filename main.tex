@@ -285,25 +285,32 @@ I chose 3 websites, based on the structure and amount of information they provid
 The fashion scraper is python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, joining and translating. This project was part of my Independent Coursework and a thorough documentation of the project can be found in Attachments.
 
 \subsubsection{Final Dataset}
-The scraped dataset consists of around 50.000 images, falling into 10 categories. 
-Each datapoint is described in a CSV file, which includes the following information:
-
+The scraped dataset consists of 92.200 images of size 256x256 pixels in JPEG format. The images are split into folders by categories and the whole dataset is described in a CSV file, which includes the following information:
 \begin{itemize}
+\item \textbf{id}: ID of the product as defined by the website (SKU)
 \item \textbf{img\_path}: local file path to the saved product image
-\item \textbf{img\_url}: URL to the product image file hosted on the website
-\item \textbf{model\_img\_urls}: if given, URLs to the images of the product worn by models
-\item \textbf{category}: clothing category of the product, e.g: dress, blouse, pants, etc.
-\item \textbf{color}: color of the product, e.g: black, white, blue, etc.
-\item \textbf{id}: ID of the product as defined by the website (usually SKU)
-\item \textbf{brand}: product brand
-\item \textbf{name}: product name
-\item \textbf{attributes}: list of product attributes listed on the website, such as shape, length, material, size etc.
+\item \textbf{img\_url}: URL to the product image file hosted on the seller website
+\item \textbf{model\_img\_urls}: URLs to the images of the product worn by models
+\item \textbf{product\_url}: if given, the URL to the product listing on the website
+\item \textbf{brand}: product brand as displayed on the website
+\item \textbf{name}: product name as displayed on the website
+\item \textbf{attributes}: list of product attributes listed on the website in German, such as shape, length, material, size etc.
+\end{itemize}
+
+In addition to the website data, there are columns that contain processed and translated data. Below is the list of the column names and the values they can take.
+\begin{itemize}
+\item \textbf{category}: blouses, dresses, jackets, knitwear, pants, skirts, tops
+\item \textbf{color}: beige, black, blue, gray, green, pink, red, white, yellow
+\item \textbf{length}: 3-4, knee, long, normal, short or no value
+\item \textbf{sleeve\_length}: half, long, short, sleeveless or no value
+\item \textbf{fit}: loose, normal, tight or no value
+\item \textbf{pattern}: floral, lace, polkadots, print, stripes, unicolors or no value
+\item \textbf{neckline}: back, deep, lines, round, v, wide or no value
 \end{itemize}
 
 \marginpar{A table with all attributes and num of images will be in attachments}
-The application processes the collected data and cleans the attributes into a list of the most useful and common attributes, which are then assigned to each of the downloaded images. The img\_attr.csv file contains a list of image file paths and around 40 columns with binary classification.
+There is also a CSV file that contains a list of image file paths and binary classification of the list of values mentioned in the above list.
 
-entr
 
 \newpage
 \bibliographystyle{alphadin}
