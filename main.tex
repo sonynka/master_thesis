@@ -285,6 +285,19 @@ I chose 3 websites, based on the structure and amount of information they provid
 The fashion scraper is python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, joining and translating. This project was part of my Independent Coursework and a thorough documentation of the project can be found in Attachments.
 
 \subsubsection{Final Dataset}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=0.2\linewidth]{dataset_examples/blouse}}
+\subcaptionbox{dress}{\includegraphics[width=0.2\linewidth]{dataset_examples/dress}}
+\subcaptionbox{jacket}{\includegraphics[width=0.2\linewidth]{dataset_examples/jacket}}
+\subcaptionbox{knitwear}{\includegraphics[width=0.2\linewidth]{dataset_examples/knitwear}}
+\subcaptionbox{pants}{\includegraphics[width=0.2\linewidth]{dataset_examples/pants}}
+\subcaptionbox{skirt}{\includegraphics[width=0.2\linewidth]{dataset_examples/skirt}}
+\subcaptionbox{top}{\includegraphics[width=0.2\linewidth]{dataset_examples/top}}
+\caption{\label{fig:fotolia} Fotolia images with keywords "dress" and "isolated" with closest feature vector distance from the template image.}
+\end{figure}
+
 The scraped dataset consists of 92.200 images of size 256x256 pixels in JPEG format. The images are split into folders by categories and the whole dataset is described in a CSV file, which includes the following information:
 \begin{itemize}
 \item \textbf{id}: ID of the product as defined by the website (SKU)
