@@ -15,12 +15,18 @@
     urlcolor=cyan,
 }
 \urlstyle{same}
-
 \setlength{\parskip}{1em}
-
 \graphicspath{ {./images/} }
 
+\title{Sections and Chapters}
+\author{Gubert Farnsworth}
+\date{ }
+
 \begin{document}
+\maketitle
+\tableofcontents
+
+
 % ==============================================================
 % GANS
 % ==============================================================
@@ -103,6 +109,7 @@ The final objective of the generator is:
 G^{*} = arg \ \underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) + \lambda \mathcal{L}_{rec}(G)
 \end{equation}
 where $\lambda$ controls the relative importance of the two loss functions.
+
 
 % ==============================================================
 % CycleGAN
@@ -288,14 +295,13 @@ The fashion scraper is python project, that scrapes images and data from all the
 
 \begin{figure}[h]
 \centering
-{\includegraphics[width=0.2\linewidth]{dataset_examples/blouse}}
-\subcaptionbox{dress}{\includegraphics[width=0.2\linewidth]{dataset_examples/dress}}
-\subcaptionbox{jacket}{\includegraphics[width=0.2\linewidth]{dataset_examples/jacket}}
+\subcaptionbox{blouse}{\includegraphics[width=0.2\linewidth]{dataset_examples/blouse}}
+\subcaptionbox{skirt}{\includegraphics[width=0.2\linewidth]{dataset_examples/skirt}}
+\subcaptionbox{jacket}{\includegraphics[width=0.2\linewidth]{dataset_examples/jacket}} \\
 \subcaptionbox{knitwear}{\includegraphics[width=0.2\linewidth]{dataset_examples/knitwear}}
 \subcaptionbox{pants}{\includegraphics[width=0.2\linewidth]{dataset_examples/pants}}
-\subcaptionbox{skirt}{\includegraphics[width=0.2\linewidth]{dataset_examples/skirt}}
-\subcaptionbox{top}{\includegraphics[width=0.2\linewidth]{dataset_examples/top}}
-\caption{\label{fig:fotolia} Fotolia images with keywords "dress" and "isolated" with closest feature vector distance from the template image.}
+\subcaptionbox{dress}{\includegraphics[width=0.2\linewidth]{dataset_examples/dress}}
+\caption{\label{fig:dataset} \textbf{Examples of images in the final dataset with their respective categories.}}
 \end{figure}
 
 The scraped dataset consists of 92.200 images of size 256x256 pixels in JPEG format. The images are split into folders by categories and the whole dataset is described in a CSV file, which includes the following information:
@@ -323,6 +329,12 @@ In addition to the website data, there are columns that contain processed and tr
 
 \marginpar{A table with all attributes and num of images will be in attachments}
 There is also a CSV file that contains a list of image file paths and binary classification of the list of values mentioned in the above list.
+
+\subsubsection{Model Images}
+For some of the tasks of this project, not only product images, but also images of people modeling the clothes were required. I have acquired this auxiliary dataset by downloading the model images for all products. However, each product, has multiple images of a model wearing it, and for the purposes of this project, I had to use clustering methods to filter out only images where the models are facing the front and photographed full-bodied.
+
+
+\section{Methods}
 
 
 \newpage
