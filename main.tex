@@ -325,11 +325,24 @@ In addition to the website data, there are columns that contain processed and tr
 \marginpar{A table with all attributes and num of images will be in attachments}
 There is also a CSV file that contains a list of image file paths and binary classification of the list of values mentioned in the above list.
 
-\subsubsection{Model Images}
+\subsection{Model Images}
 For some of the tasks of this project also images of people modeling the products were required.  However, each product, has multiple images of a model wearing it, and for the purposes of this project, I had to use clustering methods to filter out only images where the models are facing the front and photographed full-bodied.
 
+\subsubsection{Clustering}
+The supervised algorithms require a paired image set - in the case of generating model image from product image, it was neccessary to obtain images showing a person modelling the product. This could be obtained from the scraped websites, however each product usually has multiple model images - unordered, usually front-facing, back-facing, detail and cut. I have applied the K-Means clustering algorithm in order to separate these types of images, and for each product, find the front-facing model image.
 
-\section{Methods}
+
+
+
+
+
+\section{Products to Models}
+One of the tasks of the framework is to generate a realistic image of a model wearing a product, given an image of the product. The motivation is to expand the amount of similar images found - as some products might not have a photograph without a model available at all.
+
+I acquired the dataset for this task by downloading all model images for each product, as listed in the scraped data file. However, each product usually has multiple images with variety of model poses and detail; usually unordered and with no pattern that would indicate which image displays what pose. Therefore I have applied the K-means clustering algorithm to try to cluster these image by the model pose and for each product, select the image where the model is photographed front-facing and full-bodied.
+
+\subsection{Clustering}
+
 
 
 \newpage
