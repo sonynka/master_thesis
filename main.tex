@@ -50,11 +50,18 @@ Unlike regular feed-forward neural networks based on fully-connected layers of n
 % ==============================================================
 \subsubsection{Convolution}
 % ==============================================================
+The cornerstone of ConvNets are the convolutions, represented in Figure \ref{fig:conv}. Convolutions are based on small filters, which run through the image and sum the multiplications of each input value with the corresponding filter value. Each filter must have the same amount of channels as the input, the width and height are optional. 
+
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{GAN/convolutions}}
-\caption{\label{fig:gan} \textbf{Convolution.} The generator network produces fake images, which the discriminator network tries to distinguish from the real samples coming from the dataset.}
+\caption{\label{fig:conv} \textbf{Convolution.} The input image is convolved with 3 filters, each one detecting a different low-level feature. The final output is the output of each convolution stack in the channel dimension.}
 \end{figure}
+
+
+\subsubsection{Convolutional Layers}
+In the first layers of a network, each filter usually extracts some low-level feature, such as horizontal or vertical edges. The output of the convolution, are the outputs of each filter stacked in the channel dimension. As the convolutions get deeper into the network, they start to combine these low-level features, to higher level features, such as an eye or a mouth.
+
 
 
 
@@ -153,11 +160,13 @@ In order to influence the output of a GAN, \cite{mirza_conditional_2014} introdu
 
 Considering the previous example of MNIST hand-written digits synthesis, one can condition the networks using the digits as class labels, and control the network to generate an image of a specific digit. There have also been experiments with text-to-image translation \cite{reed_generative_2016}, where the network is conditioned on a text description of an image, and various image-to-image translations such as \cite{yoo_pixel-level_2016}, \cite{yoo_pixel-level_2016}, \cite{pathak_context_2016}.
 
-The conditioning information $c$, such as a class label, text, or another image, is fed to both discriminator $D$ and generator $G$ as an additional input layer. The training objective of conditional GAN is as follows:
+ The training objective of conditional GAN is following:
 \begin{equation}
 \underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ V(D,G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x|c)] + \mathbb{E}_{z \sim p_{z}(z)}[\log 1 - D(G(z|c))].
 \label{eq:cgan}
 \end{equation}
+
+The conditioning information $c$, such as a class label, text, or another image, is fed to both discriminator $D$ and generator $G$ as additional input layers. For example, conditioning a MNIST image on the label 7, 
 
 
 
