@@ -91,6 +91,13 @@ In reality, finding the right balance between the two networks is one of the dif
 % Deep Convolutional GANs
 % ==============================================================
 \subsection{Deep Convolutional GANs}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/dcgan_generator}}
+\caption{\label{fig:dcgan} \textbf{DCGAN Generator.} An example architecture of a DCGAN generator $G(z)$. The random input noise $z$ is mapped to a 64x64 image with 3 color channels via fractionally-strided convolution layers. Figure reprinted from \cite{radford_unsupervised_2015}.}
+\end{figure}
+
 Many GAN implementations base their network architecture on Deep Convolutional GANs, described by \cite{radford_unsupervised_2015}. The authors introduced architectural guidelines for convolutional networks used in GANs, that stabilize the training and result in more realistic outputs.
 
 After experimenting with CNN architectures commonly used in computer vision tasks, Radford et al. have found that this set of architecture modifications has a positive effect on the stability and convergence speed of the models:
@@ -100,6 +107,8 @@ After experimenting with CNN architectures commonly used in computer vision task
 \item \textbf{Batch Normalization}: Batch Normalization \cite{ioffe_batch_2015} has been introduced in common image-classification to make models more robust to parameter initialization and speed up training. The DCGAN paper shows that including a batch-norm layer in all GAN layers (except discriminator output and generator input), helps generators start learning and produce diverse outputs.
 \item \textbf{Activation Functions}: As opposed to maxout activation suggested by the original GAN paper \cite{goodfellow_generative_2014}, GANs seem to benefit from \textit{Leaky ReLU} activation function in discriminator, and \textit{ReLU} activation function for generator, except last \textit{tanh} layer. 
 \end{itemize}
+
+
 
 % ==============================================================
 % Conditional GANs
