@@ -120,14 +120,16 @@ The training objective of the discriminator is to maximize the probability of as
 
 In order to prevent vanish gradients, as a result of the discriminator saturating by confidently classifying the samples before the generator's update, \cite{goodfellow_generative_2014} suggests $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$ instead.
 
-The parameters of the discriminator and generator, $\theta_{d}$ and $\theta_{g}$, are updated using backpropagation algorithm, computing the gradients of the loss function in respect to each network's parameters. 
+The parameters of the discriminator and generator, $\theta_{d}$ and $\theta_{g}$, are updated using gradient descent algorithms, by back-propagating the gradients of the loss function in respect to each of the networks' parameters. 
 
 
 % ==============================================================
 \subsubsection{Training Difficulties}
 In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. 
 
-In reality, finding the right balance between the two networks is one of the difficulties when training a GAN. If discriminator gets too good at determining which samples are fake, then generator has no chance to learn the distribution. On the other hand, if generator is updated too much, it can collapse too many values of $z$ to the same value of $x$ to have enough diversity to model the distribution.
+In reality, finding the right balance between the two networks can be difficult. If discriminator gets too good at determining which samples are fake, then generator has no chance to learn the distribution. On the other hand, if generator is updated too much, it can collapse too many values of $z$ to the same value of $x$ to have enough diversity to model the distribution. 
+
+Because a modification of the weights of the discriminator that decrease 
 
 % ==============================================================
 % Deep Convolutional GANs
@@ -166,7 +168,7 @@ Considering the previous example of MNIST hand-written digits synthesis, one can
 \label{eq:cgan}
 \end{equation}
 
-The conditioning information $c$, such as a class label, text, or another image, is fed to both discriminator $D$ and generator $G$ as additional input layers. For example, conditioning a MNIST image on the label 7, 
+The conditioning information $c$, such as a class label, text, or another image, is fed to both discriminator $D$ and generator $G$ as additional input layers. 
 
 
 
