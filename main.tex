@@ -10,12 +10,7 @@
 \usepackage{multirow}
 \usepackage{subcaption}
 \usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-}
+\hypersetup{}
 \urlstyle{same}
 
 \pagestyle{fancy}
@@ -23,6 +18,16 @@
 \lhead{ \rightmark}
 \rhead{ \thepage}
 \renewcommand{\headrulewidth}{.5pt}
+
+\usepackage{titlesec}
+\titleformat*{\section}{\LARGE\bfseries}
+\titleformat*{\subsection}{\Large\bfseries}
+\titleformat*{\subsubsection}{\large\bfseries}
+\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+
 
 \setlength{\parskip}{1em}
 \graphicspath{ {./images/} }
@@ -164,7 +169,7 @@ After experimenting with CNN architectures commonly used in computer vision task
 % ==============================================================
 % Conditional GANs
 % ==============================================================
-\subsubsection{Conditional GANs}
+\subsubsection{Conditional GANs} \label{sec:cond_gan}
 In order to influence the output of a GAN, \cite{mirza_conditional_2014} introduced the Conditional Generative Adversarial Networks. By conditioning both the discriminator and the generator on additional information, the generator learns to output realistic samples given a condition. 
 
 Considering the previous example of MNIST hand-written digits synthesis, one can condition the networks using the digits as class labels, and control the network to generate an image of a specific digit. There have also been experiments with text-to-image translation \cite{reed_generative_2016}, where the network is conditioned on a text description of an image, and various image-to-image translations such as \cite{yoo_pixel-level_2016}, \cite{yoo_pixel-level_2016}, \cite{pathak_context_2016}.
@@ -281,17 +286,19 @@ For some tasks of this work, I have also downloaded an extra dataset of images o
 % ==============================================================
 \subsection{Image-To-Image Translation}
 % ==============================================================
-Image-To-Image Translation using GANs has been widely researched in the past few years, with creative approaches and models published regularly. For the purpose of this thesis, I have reviewed and tested some of these projects, to evaluate what results can be achieved on the fashion dataset and which GAN model is best suited for what task..
+Image-To-Image Translation using GANs has been widely researched in the past few years, with creative approaches and models published regularly. For the purpose of this thesis, I have reviewed and tested some of these projects, to evaluate what results can be achieved on the fashion dataset and which GAN is best suited for what task.
 
-Based on various characteristics, compared in Table \ref{tab:gan_comp}, I have evaluated  5 networks: pix2pix \cite{isola_image--image_2016}, CycleGAN \cite{zhu_unpaired_2017}, StarGAN \cite{choi_stargan_2017}, MUNIT \cite{huang_multimodal_2018} and FaderNetworks \cite{lample_fader_2017}. I have compared the following attributes for each of the mentioned networks:
+Table \ref{tab:gan_comp} shows the comparison of 5 evaluated networks: \textit{pix2pix} \cite{isola_image--image_2016}, \textit{CycleGAN} \cite{zhu_unpaired_2017}, \textit{StarGAN} \cite{choi_stargan_2017}, \textit{MUNIT} \cite{huang_multimodal_2018} and \textit{FaderNetworks} \cite{lample_fader_2017}, for which I compared the following attributes:
 \begin{itemize}
-\item Supervised/Unsupervised learning: Describes if the network needs a dataset consisting of paired images, such as the same skirt in a short and log version.
-\item Multi-Domain: Describes if the network is able to train only one model for different domain modifications, or if each domain requieres its own trained generator.
-\item Multi-Modal: Describes if the network is able to generate different versions from the same input.
-\item Latent representation: Describes if the network trains directly in pixel-space or uses latent representation of the data, usually content and style of the images.
+\item \textbf{Supervised}: Does the network need a dataset consisting of paired images, such as the same skirt in a short and long version.
+\item \textbf{Multi-Domain}: Is the network able to train one model for different domains translations, or does each domain pair require its own trained generator.
+\item \textbf{Multi-Modal}: Is the network able to generate different outputs from the same input.
+\item \textbf{Latent representations}: Does the network train in pixel-space or uses latent representations, such as separate content and style representations.
 \end{itemize}
 
-\begin{table}[h]
+The following sections describe the characteristics of the evaluated networks, their applications, training process and architecture.
+
+\begin{table}[t]
 \centering
 \begin{tabular}{l*{5}{c}}
 Characteristics & pix2pix &	CycleGAN & StarGAN	& MUNIT	& FaderNets \\
@@ -301,21 +308,24 @@ Multi-Domain  			& No  & No & Yes & No & No \\
 Multi-Modal				& No & No & No & Yes & No \\
 Latent Space 			& No & No & No & Yes & Yes \\
 \end{tabular}
-\caption{\label{tab:gan_comp}\textbf{Comparison of existing GAN models based on their characteristics.} Supervised training means that the dataset consists of image pairs, e.g: a dress and a person wearing the dress. Multi-Domain networks are able to train one model to change multiple attributes. Multi-Modal networks are able to generate more than one possible output. Networks with latent representations try to model the training data in a latent space, as opposed to pixel space.}
+\caption{\label{tab:gan_comp}\textbf{Comparison of existing GAN models based on their characteristics.} %Supervised training means that the dataset consists of image pairs, e.g: a dress and a person wearing the dress. Multi-Domain networks are able to train one model to change multiple attributes. Multi-Modal networks are able to generate more than one possible output. Networks with latent representations try to model the training data in a latent space, as opposed to pixel space.
+}
 \end{table}
 
+\pagebreak
 \subsubsection{Pix2Pix}
 The so-called Pi2Pix networks were first introduced by Isola et al. \cite{isola_image--image_2016} as a framework for image-to-image translations. Some of the applications of Pix2Pix include mapping day photographs to night, sketches of shoes to realistic shoe images or colorizing black-and-white photos.
 
-Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} to influence the network's output by providing a condition $c$. In case of Pix2Pix, the condition is an image that is to be translated. To translate images from an input domain to a target domain, the model requires a dataset of paired images $(x_{input}, x_{target})$, such as a grayscale image and a corresponding color image. 
-
-As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{input}$ and tries to map it to the target domain $\hat{x}_{target}$, such as: $G: (x_{input}, z) \rightarrow \hat{x}_{target}$. The discriminator, also conditioned on the input image $x_{input}$, tries to predict real, if the target image comes from the data distribution and fake if it was generated. The discriminator is trying to minimize these predictions, while the generator tries to prevent correct classification.
+Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (described in Section \ref{sec:cond_gan}) to influence the network's output by providing a condition. In case of Pix2Pix, the condition is an image that is to be translated to another domain. To translate images from an input domain to a target domain, the model requires a dataset of paired images $(x_{input}, x_{target})$, such as a grayscale image and a corresponding color image. 
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{GAN/pix2pix}}
-\caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} The dataset consists of paired input and target images. The generator takes the input image as condition to output the generated image. The discriminator tries to predict, given the input image, if the target image comes from the dataset or from the generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_nodate-1}.}
+\caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} Dataset consists of paired input and target images. Generator takes input image as condition to output a generated image. Discriminator tries to predict, given an input image, if the target image comes from dataset or from generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_nodate-1}.}
 \end{figure}
+
+As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{input}$ and tries to map it to the target domain $\hat{x}_{target}$, such as: $G: (x_{input}, z) \rightarrow \hat{x}_{target}$. The discriminator, also conditioned on the input image $x_{input}$, tries to predict if the target image comes from the data distribution or if it was generated. The discriminator tries to improve these classifications, while the generator tries to prevent correct classification.
+
 
 \paragraph{Training Objective}
 The adversarial objective, which $G$ is trained to minimize and $D$ is trained to maximize, can be expressed as following:
@@ -351,13 +361,13 @@ The authors therefore suggest to base the generator on a U-Net architecture. U-N
 \paragraph{Discriminator} \label{sec:patchgan}
 The authors of Pix2Pix \cite{isola_image--image_2016} argue, that while the use of L1 or L2 loss for image generation usually produces blurry outputs, they are sufficient to capture low-level frequencies, for example the colorfulness of the image. Therefore, when combining adversarial loss with an L1 loss, the discriminator only needs to focus on high-level frequencies. 
 
-Pix2Pix introduces a \textit{PatchGAN} architecture - a discriminator, which evaluates the high-frequency structure of the input image in patches. The PatchGAN discriminator can be described as a convolution running over the input image, classifying each patch as real or fake. The overall classification of an image is then calculated as the average of the decision for each patch. This allows the discriminator to scale efficiently to larger images and, as the authors have shown, forces sharp and colorful outputs.
+They introduce the \textit{PatchGAN} architecture - a discriminator, which evaluates the high-frequency structure of the input image in patches. The PatchGAN discriminator can be described as a convolution running over the input image, classifying each patch as real or fake. The overall classification of an image is then calculated as the average of the decision for each patch. This allows the discriminator to scale efficiently to larger images and, as the authors have shown, forces sharp and colorful outputs.
 
 
 %\paragraph{Usage}
 %The distinct feature of Pix2Pix among the evaluated networks is that the training process is supervised. In case of the fashion dataset, there are not a lot of examples of paired images from two domains, e.g: images of the same products with long sleeves and with short sleeves.
 
-
+\pagebreak
 \subsubsection{CycleGAN}
 CycleGANs \cite{zhu_unpaired_2017}, unlike Pix2Pix, do not require a paired image set for the image domains to be translated. The unsupervised setting is preferred in most translation tasks, as obtaining image pairs of two domains can be difficult or even impossible - for example translating female faces to male, or Monet artworks to realistic photographs. The assumption hereby is that both image domains share certain underlying visual similarities.
 
@@ -398,7 +408,7 @@ G^{*}_{X}, G^{*}_{Y} = arg \ \underset{G_{X}, G_{Y}}{\mathrm{min}} \ \underset{D
 CycleGAN models are roughly based on Deep Convolutional GANs \cite{radford_unsupervised_2015}, using the PatchGAN architecture \cite{isola_image--image_2016} for the discriminator.
 
 
-
+\pagebreak
 % =======================================================================
 \subsubsection{StarGAN}
 % =======================================================================
@@ -474,6 +484,8 @@ where $\lambda_{cls}$ and $\lambda_{cyc}$ control the relative importance of the
 
 The model architecture is based on CycleGAN.
 
+
+\pagebreak
 % ==============================================================
 \subsubsection{MUNIT}
 % ==============================================================
@@ -482,14 +494,26 @@ All of the introduced models approach the image translation problem as one-to-on
 
 Instead of using translation in pixel space, the model tries to model the translation in a latent space. Based on the \textit{partially shared latent space assumption}, a content latent code $c \in \mathcal{C}$ and a style latent code $s_{i} \in \mathcal{S}_{i}$ are separated, assuming that the two image domains share a common content space but each has an individual style space. 
 
-For each domain, there is an auto-encoder, which consists of a generator $G$ and two encoders: content encoder $E^c$, and style encoder $E^s$. Given an image $x \in X$, it is encoded into a content and latent code, $E^c_x(x)$ and $E^s_x(x)$. To translate the image $x \in X$ to domain $Y$, its content code $c_{x}$ is extracted using the content encoder $E^c_x$, and it is combined with a random style code $s_{y}$, $G_y(c_x, s_y)$.
+For each domain, there is an auto-encoder, which consists of a generator $G$ and two encoders: content encoder $E^c$, and style encoder $E^s$. Given an image $x \in X$, it is encoded into a content and style code, $E^c_x(x)$ and $E^s_x(x)$. To translate the image $x \in X$ to domain $Y$, its content code $c_{x}$ is extracted using the content encoder $E^c_x$, and it is combined with a random style code $s_{y}$, $G_y(c_x, s_y)$.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/munit_enc}}
+\caption{\label{fig:stargan_topo} \textbf{MUNIT within-domain reconstruction.}  An image from domain X is decomposed into content and style code via respective encoders. The decoder is a generator that combines the two latent encodings and translates them back to the original domain. A reconstruction loss is calculated between the original and the reconstructed image to optimize the auto-encoders. Figure adapted from \cite{huang_multimodal_2018}.}
+\end{figure}
+
+While the style code is assumed to have a global and simple effect and is therefore sufficiently represented by a low-dimensional vector, the content is assumed to be a high-dimensional vector describing the complex spatial structure of the data.
 
 
-\textbf{Reconstruction Loss.}
-The reconstruction loss is similar to the cycle consistency loss \cite{zhu_unpaired_2017}, enforcing the reconstruction between an image and its latent representation in both directions. $\mathcal{L}^{x}_{rec}$ encourages 
+\paragraph{Reconstruction Loss}
+The reconstruction loss is similar to the cycle consistency loss \cite{zhu_unpaired_2017}, enforcing the reconstruction between an image and its latent representation in both directions. 
+
+The \textit{image reconstruction loss} encourages the reconstruction of an image after encoding to latent space and decoding back to image space.
 \begin{equation}
 \mathcal{L}^{x}_{rec} = \mathbb{E}_{x}[||x - G_{x}(E^{c}_{x}(x), E^{s}_{x}(x))||_{1}]
 \end{equation}
+
+The \textit{latent reconstruction loss} consists of a style loss and a content loss, which should be reconstructed after being encoded to image space and decoded back. The content loss enforces the preservation of semantic information of the translated image, while the style loss encourages diversity in the translated outputs.
 \begin{equation}
 \mathcal{L}^{c_{x}}_{rec} = \mathbb{E}_{c_{x}, s_{y}}[||c_{x} - E^{c}_{y}(G_{y}(c_{x},s_{y}))||_{1}]
 \end{equation}
@@ -497,12 +521,32 @@ The reconstruction loss is similar to the cycle consistency loss \cite{zhu_unpai
 \mathcal{L}^{s_{y}}_{rec} = \mathbb{E}_{c_{x}, s_{y}}[||s_{y} - E^{s}_{y}(G_{y}(c_{x},s_{y}))||_{1}]
 \end{equation}
 
+The same losses are also applied to image domain $Y$.
 
-\textbf{Adversarial Loss.}
+\paragraph{Adversarial Loss}
+In order to enforce the generated output to look realistic, each domain has a discriminator, $D_x$ and $D_y$, which is trained to distinguish if the source of the image is the data distribution of the image domain, or if it was generated by the auto-encoder.
+\begin{equation}
+\mathcal{L}^{x}_{adv} = \mathbb{E}_{c_{y}, s_{x}}[log(1 - D_{x}(G_{x}(c_{y}, s_{x})))] + \mathbb{E}_{x}[logD_{x}(x)]
+\end{equation}
+
+The adversarial loss for domain $Y$ is defined similarly.
+
+\begin{figure}[t]
+\centering
+{\includegraphics[width=\linewidth]{GAN/munit_adv}}
+\caption{\label{fig:stargan_topo} \textbf{MUNIT cross-domain reconstruction.} The content code of image from domain Y is combined with style from domain X to generate a fake image X. The discriminator decides if the image was translated or comes from the original image domain based on which the adversarial objective is calculated. Figure adapted from \cite{huang_multimodal_2018}.}
+\end{figure}
 
 
+\paragraph{Training Objective}
+The overall training objective, which is trained to be maximized by the discriminators and minimized by the generators and auto-encoders can be modified by $\lambda$, $\lambda_c$, $\lambda_s$, controlling the relative weight of each loss:
+\begin{equation}
+\mathcal{L} = \mathcal{L}^{x}_{adv} + \mathcal{L}^{y}_{adv} + 
+\lambda(\mathcal{L}^{x}_{rec} + \mathcal{L}^{y}_{rec}) + 
+\lambda_c(\mathcal{L}^{c_x}_{rec} + \mathcal{L}^{c_y}_{rec}) + 
+\lambda_s(\mathcal{L}^{s_x}_{rec} + \mathcal{L}^{s_y}_{rec})
+\end{equation}
 
-While the style code is assumed to have a global and simple effect and is therefore sufficiently represented by a low-dimensional vector, the content is assumed to be a high-dimensional vector describing the complex spatial structure of the data.
 
 \pagebreak
 % ==============================================================
@@ -512,10 +556,27 @@ The objective of the experiments is to improve image retrieval of fashion produc
 
 The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodate}, using the machine learning framework \textit{PyTorch} \cite{noauthor_pytorch_nodate} and several common python packages, such as: \textit{pandas} \cite{noauthor_python_nodate}, \textit{numpy} \cite{noauthor_numpy_nodate}, \textit{scikit-learn} \cite{noauthor_scikit-learn_nodate}, \textit{matplotlib} \cite{noauthor_matplotlib_nodate}, \textit{PIL} \cite{noauthor_pillow_nodate} and others. 
 
+\pagebreak
 \subsection{Products to Models Translation}
 Most fashion online stores provide product images that are taken on white background without a person modeling the product. However, there are also countless images online, coming from social media, blogs and other platforms, of people wearing a certain product, without a corresponding product image. 
 
 The goal of this experiment was to translate a product image to an image of a person wearing that product, in order to be able to extend the search possibilities.
+
+I have deducted several experiments, first using an unsupervised GAN, translating between the domain of all product images and the domain of all model images. This approach has not yielded the desired results, since the model images were  Therefore I have decided to train the network in a supervised manner, creating a dataset of image pairs using clustering algorithms.
+
+\subsubsection{Test Environment}
+
+\paragraph{Data}
+As mentioned in Section \ref{sec:data}, each scraped product has a variable amount of images of people modeling the given product. The average amount of images for a product is 4, and based on manual screening of the dataset, these images follow a certain pattern:
+\begin{itemize}
+\item full-body model front-facing
+\item full-body model back-facing
+\item zoom to part of body were product is worn
+\item large zoom on detail
+\end{itemize}
+
+For the used data category "dresses", there is 15.348 product images and 63.103 model images in total. Since this experiment is a pure image-to-image translation task, no attribute parsing was required. 
+
 
 \subsubsection{Data Clustering}
 As mentioned in Section \ref{sec:data}, each scraped product has a variable amount of images displaying people modeling the given product. The average amount of images for a product is 4, and based on manual screening of the dataset, these images follow a certain pattern:
@@ -526,7 +587,7 @@ As mentioned in Section \ref{sec:data}, each scraped product has a variable amou
 \item large zoom on detail
 \end{itemize}
 
-In order to create a dataset of image pairs, each product having exactly 1 corresponding model image, I chose the most common and basic model image - where the model is facing the camera and the full body is captured. However, there is no clear order or pattern from which to deduce the pose of the model based on the name of the image or the position it is at in the list of images. Since there are more than 60.000 model images only for category dresses, manual selection of the best image for each product would be too time consuming.
+In order to create a dataset of image pairs, each product must have exactly 1 corresponding model image. I chose the most common and basic model image - where the model is facing the camera and the full body is captured. However, there is no clear order or pattern from which to deduce the pose of the model based on the name of the image or its position the list of images. Since there are more than 60.000 model images only for category dresses, manual selection of the best image for each product would be too time consuming.
 
 To identify the best image for each product, I used the following approach:
 \begin{enumerate}
@@ -538,18 +599,65 @@ To identify the best image for each product, I used the following approach:
 \end{enumerate}
 
 
-For clustering, I used the \textit{K-Means Clustering} algorithm \cite{noauthor_k-means_2018}, which creates $k$ clusters and assigns each data point with the nearest cluster center. The \textit{scikit-learn} library offers a fast implementation of the algorithm \cite{noauthor_sklearn.cluster.kmeans_nodate}.
+For clustering, I used the \textit{K-Means Clustering} algorithm \cite{noauthor_k-means_2018}, which creates $k$ clusters and assigns each data point to the nearest cluster center. The \textit{scikit-learn} library offers a fast implementation of the algorithm \cite{noauthor_sklearn.cluster.kmeans_nodate}.
 
 \paragraph{Grayscale Clustering}
+Since most of the models are photographed on a white background, for the initial experiment, I have converted the images to grayscale, in order to separate the person from the background regardless of the color.
+
+In order to reduce the dimensionality, I resized the images to 64x64 pixels, which means the clustering algorithm was fed with an array of size 63103x64x64, the first number representing the number of images. 
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{clustering/grayscale}}
+\caption{\label{fig:cluster_gray} \textbf{Cluster centers with grayscale features.} Each row displays one cluster center (left-most image) and random images from the dataset that are assigned to the respective cluster center based on their grayscale feature vector.}
+\end{figure}
+
+Figure \ref{fig:cluster_gray} shows the results of K-Means clustering with 4 cluster centers. The second cluster center seems to be the most suitable to find front-facing full-body images. However, as one can see from the results, the fourth cluster center tends to group all images with light-colored dresses, in all poses. Grayscale features do not fit the requirement for the clustering process to disregard color as a feature.
 
 
+\paragraph{Edges}
+In order to avoid the problem of separating dark and light colors into different clusters regardless of model pose, I used the \textit{Canny Edge Detection} algorithm on the model images, in order to only select model contours.
+
+As part of the data collection process, all images were resized to a uniform size of 256x256, extending the shorter side with white color. However, some models are photographed on a darker background and the edge detection algorithms can detect this transition of light-grey background to white as an edge. One can observe this artifact on the second and fourth image in Figure \ref{fig:cluster_edges_data}.
+
+Some clustering experiments were affected by this detection and tended to group images with darker backgrounds together, regardless of the model pose. Therefore, in all further experiments, the images have center-cropped width of 116 pixels.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{clustering/edges_data}}
+\caption{\label{fig:cluster_edges_data} \textbf{Canny Edge Detection for model images.} Top row shows original data, second row shows the corresponding edges produced with Canny Edge detection algorithm.}
+\end{figure}
+
+Overall, clustering with \textit{Canny Edge Detection} did not prove to be effective, as the edges are very thin and therefore the measured distance between two images, which are quite similar, but a little bit shifted, would be very big. The detection is also quite sensitive to patterns in the dresses, as seen in Figure \ref{fig:cluster_edges_data}.
+
+\paragraph{Threshold Mask}
+To avoid the difficulties that thin edges cause when clustering, I applied a thresholding technique to the images, in order to fill the person's contour with white color and background with black. Figure \ref{fig:cluster_outline_data} shows the steps applied to each image to get a binary threshold mask.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{clustering/outlines_data}}
+\caption{\label{fig:cluster_outline_data} \textbf{Threshold Mask for model images.} Starting from left is the original image, converted to grayscale, applied Gaussian blur, binary threshold, and the image masked with binary threshold.}
+\end{figure}
+
+This feature selection has proven to be the most effective for \textit{K-Means} algorithm with 3 cluster centers. First column of Figure \ref{fig:cluster_outline} shows the three cluster centers: the first groups full-body photographs, second groups zoomed images of upper-body and the last one groups detail images. 
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{clustering/outlines_clusters}}
+\caption{\label{fig:cluster_outline} \textbf{Cluster centers with threshold mask.} The rows A-C show 3 cluster centers created with the \textit{K-Means Clustering} algorithm with threshold mask features of images. Each row 1-6 shows one product and the image that is closest to the respective cluster center.}
+\end{figure}
 
 
+Columns 1-6 of Figure \ref{fig:cluster_outline} each show images of one product, each row shows the image that is the closest to the respective cluster. Each product can have more photographs that are not displayed because they are not the best match for any of the cluster centers, just like one photograph can be best match for more than one cluster center. We can observe that most of the photographs are grouped accordingly to expectations.
+
+Based on these results, I selected the one image for each product that is the closest to cluster center \textbf{A} from Figure \ref{fig:cluster_outline}. Although the results are not perfect, the network working with this data should be able to learn to ignore the outliers.
+
+\pagebreak
+\subsubsection{Supervised Training}
+The only network from the evaluated options that translates images in a supervised matter is Pix2Pix \cite{isola_image--image_2016}. I have used the official PyTorch implementation of the paper \cite{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate}, which can be found on github: \hyperlink{https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix}{github.com/junyanz/pytorch-CycleGAN-and-pix2pix}.
 
 
-
-
-
+\pagebreak
 % ==============================================================
 \section{Other}
 % ==============================================================
