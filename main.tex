@@ -126,7 +126,7 @@ Given input data with distribution $p(x)$, the generator $G$ is a neural network
 The training objective of the discriminator is to maximize the probability of assigning the correct label, while the objective of the generator is to minimize this probability. The loss function of the GAN can be described as the minimax objective,
 
 \begin{equation}
-\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ V(D,G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log 1 - D(G(z))].
+\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}(D,G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log (1 - D(G(z))].
 \label{eq:minimax}
 \end{equation}
 
@@ -314,14 +314,21 @@ Latent Space 			& No & No & No & Yes & Yes \\
 
 \pagebreak
 \subsubsection{Pix2Pix}
-The so-called Pi2Pix networks were first introduced by Isola et al. \cite{isola_image--image_2016} as a framework for image-to-image translations. Some of the applications of Pix2Pix include mapping day photographs to night, sketches of shoes to realistic shoe images or colorizing black-and-white photos.
+The so-called Pi2Pix networks were first introduced by Isola et al. \cite{isola_image--image_2016} as a framework for image-to-image translations. Some of the applications of Pix2Pix include mapping day photographs to night, sketches of shoes to realistic shoe images or colorizing black-and-white photos (Figure \ref{fig:pix2pix_example}).
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/pix2pix_example}}
+\caption{\label{fig:pix2pix_example} \textbf{Pix2Pix: Examples of translation between various domains.} Use cases of the pix2pix framework include translating day images to night or colorizing grayscale images. Figure reprinted from \cite{hesse_image--image_nodate-1}.}
+\end{figure}
 
 Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (described in Section \ref{sec:cond_gan}) to influence the network's output by providing a condition. In case of Pix2Pix, the condition is an image that is to be translated to another domain. To translate images from an input domain to a target domain, the model requires a dataset of paired images $(x_{input}, x_{target})$, such as a grayscale image and a corresponding color image. 
+
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{GAN/pix2pix}}
-\caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} Dataset consists of paired input and target images. Generator takes input image as condition to output a generated image. Discriminator tries to predict, given an input image, if the target image comes from dataset or from generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_nodate-1}.}
+\caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} Dataset consists of paired input and target images. Generator takes input image as condition to output a generated image. Discriminator tries to predict, given the input image, if the target image comes from dataset or from generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_nodate-1}.}
 \end{figure}
 
 As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{input}$ and tries to map it to the target domain $\hat{x}_{target}$, such as: $G: (x_{input}, z) \rightarrow \hat{x}_{target}$. The discriminator, also conditioned on the input image $x_{input}$, tries to predict if the target image comes from the data distribution or if it was generated. The discriminator tries to improve these classifications, while the generator tries to prevent correct classification.
@@ -330,7 +337,7 @@ As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{in
 \paragraph{Training Objective}
 The adversarial objective, which $G$ is trained to minimize and $D$ is trained to maximize, can be expressed as following:
 \begin{equation}
-\mathcal{L}_{adv}(D,G) = \mathbb{E}_{x_{in},x_{trg}}[\log D(x_{in},x_{trg})] + \mathbb{E}_{x_{in},z}[\log 1 - D(x_{in}, G(x_{in},z))]
+\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) = \mathbb{E}_{x_{in},x_{trg}}[\log D(x_{in},x_{trg})] + \mathbb{E}_{x_{in},z}[\log 1 - D(x_{in}, G(x_{in},z))]
 \label{eq:pix2pix_minimax_cond}
 \end{equation}
 
@@ -342,7 +349,7 @@ Based on the results of previous conditional GAN approaches \cite{pathak_context
 
 The final objective of the generator is:
 \begin{equation}
-G^{*} = arg \ \underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) + \lambda \mathcal{L}_{rec}(G)
+\mathcal{L} = arg \ \underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) + \lambda \mathcal{L}_{rec}(G)
 \end{equation}
 where $\lambda$ controls the relative importance of the two loss functions.
 
@@ -373,22 +380,20 @@ CycleGANs \cite{zhu_unpaired_2017}, unlike Pix2Pix, do not require a paired imag
 
 \begin{figure}[h]
 \centering
-\subcaptionbox{CycleGAN Model}
-{\includegraphics[height=4cm]{CycleGAN_graph}}\hspace{1cm}
-\subcaptionbox{Cycle Consistency Loss}
-{\includegraphics[height=4cm]{CycleGAN_graph2}}
-\caption{\label{fig:cyclegan} \textbf{CycleGAN} (a) Themodel consists of two mappings, $G_{X}$ and $G_{Y}$ and corresponding discriminators $D_{X}$ and $D_{Y}$. (b) Cycle Consistency Loss measures the L1 distance between a real sample from one image domain and its encoded-decoded version. Figure adapted from \cite{zhu_unpaired_2017}.}
+{\includegraphics[width=\linewidth]{GAN/cyclegan_example}}
+\caption{\label{fig:cyclegan_examples} \textbf{CycleGAN: Examples of translations between various domains.} Examples of bi-directional mappings between photography and Monet artworks, zebras and horses and summer and winter images. Figure reprinted from \cite{zhu_unpaired_2017}.}
 \end{figure}
 
 The model consists of two generators, $G_{X}$ and $G_{Y}$, which learn mapping from image domain $X$ to image domain $Y$, $G_{Y}: X \rightarrow Y$, and vice versa, $G_{X}: Y \rightarrow X$. Each of the image domains has its own discriminator, $D_{X}$ and $D_{Y}$, that check if the given image comes from the real distribution of the domain or is translated from the opposite domain.
 
-The adversarial loss is therefore applied to both pairs of networks, $(D_{X}, G_{X})$ and $(D_{Y}, G_{Y})$.
+\paragraph{Adversarial Loss}
+The adversarial loss is applied to both pairs of networks, $(D_{X}, G_{X})$ and $(D_{Y}, G_{Y})$.
 \begin{equation}
 \mathcal{L}_{adv}(D_{X},G_{X}) = \mathbb{E}_{x}[\log D_{X}(x)] + \mathbb{E}_{y}[\log 1 - D_{X}(G_{X}(y))]
 \label{eq:cyclegan_adv}
 \end{equation}
 
-
+\paragraph{Cycle Consistency Loss}
 Additionally to the adversarial loss, CycleGAN also implements a so-called \emph{Cycle Consistency Loss}, which enforces that an image encoded from one domain to another, can also be reconstructed back to the original domain. The authors argue, that reducing the amount of possible mapping functions can help avoid the network to learn mappings that contradict each other \cite{zhu_unpaired_2017}.
 
 The \textit{forward cycle consistency} defines that an image $x$ from domain $X$ and its encoded-decoded version should be approximately the same: $G_{X}(G_{Y}(x)) \approx x$. The \textit{backward cycle consistency} defines the same for an image from domain $Y$.
@@ -397,6 +402,18 @@ The \textit{forward cycle consistency} defines that an image $x$ from domain $X$
 \label{eq:cyclegan_cycle}
 \end{equation}
 
+
+\begin{figure}[t]
+\centering
+\subcaptionbox{CycleGAN Model}
+{\includegraphics[height=4cm]{GAN/cyclegan1}}\hspace{1cm}
+\subcaptionbox{Cycle Consistency Loss}
+{\includegraphics[height=4cm]{GAN/cyclegan2}}
+\caption{\label{fig:cyclegan} \textbf{CycleGAN} (a) The model consists of two mappings, $G_{X}$ and $G_{Y}$ and corresponding discriminators $D_{X}$ and $D_{Y}$. (b) Cycle Consistency Loss measures the L1 distance between a real sample from one image domain and its encoded-decoded version. Figure adapted from \cite{zhu_unpaired_2017}.}
+\end{figure}
+
+
+\paragraph{Training Objective}
 Both generators train to minimize and both discriminators train to maximize the final objective, which regulates the relative weight of the adversarial loss against the cycle consistency loss with the hyperparameter $\lambda$.
 \begin{equation}
 \begin{split}
@@ -415,6 +432,8 @@ CycleGAN models are roughly based on Deep Convolutional GANs \cite{radford_unsup
 
 One of the disadvantages of Pix2Pix and CycleGAN is the missing possibility of multi-domain translation. If there are more than 2 domains to translate between, one must train a new model for each domain pair. This can be time and computationally intensive.
 
+StarGAN \cite{choi_stargan_2017} is unique among the tested models, as it is able to train one single generator that maps input to multiple domains, as shown in Figure \ref{fig:stargan_topo}. Using the conditional GAN model \cite{mirza_conditional_2014}, the generator is conditioned on a randomly chosen target domain each iteration, so that it can learn mapping for all given domains. %StarGAN does not require paired image examples, however, the images need to be labeled in order to be separated into different domains.
+
 \begin{figure}[h]
 \centering
 \subcaptionbox{Cross-Domain Models}
@@ -424,14 +443,18 @@ One of the disadvantages of Pix2Pix and CycleGAN is the missing possibility of m
 \caption{\label{fig:stargan_topo} \textbf{Comparison of cross-domain models and StarGAN model.} While cross-domain models need one generator per each domain pair, StarGAN only trains one generator for multiple domains. Figure adapted from \cite{choi_stargan_2017}.}
 \end{figure}
 
-StarGAN \cite{choi_stargan_2017} is unique among the tested models, as it is able to train one single generator that maps input to multiple domains, as shown in Figure \ref{fig:stargan_topo}. Using the conditional GAN model \cite{mirza_conditional_2014}, the generator is conditioned on a randomly chosen target domain each iteration, so that it can learn mapping for all given domains. %StarGAN does not require paired image examples, however, the images need to be labeled in order to be separated into different domains.
-
 The overall training objective of StarGAN consists of three loss functions:
 \begin{itemize}
 \item \textit{Domain Classification Loss}, which forces the discriminator to also output the domain class of the input image
 \item \textit{Adversarial Loss}, which is maximized by the discriminator and minimized by the generator
 \item \textit{Cycle Consistency Loss}, which measures the distance between an original image and its version encoded-decoded by the generator
 \end{itemize}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/stargan_example}}
+\caption{\label{fig:stargan_examples} \textbf{StarGAN: Examples of translations based on various attributes.} The first and sixth columns show the input image, the rest columns show modified versions based on the given attribute. Figure reprinted from \cite{choi_stargan_2017}.}
+\end{figure}
 
 \paragraph{Domain Classification Loss} 
 Instead of feeding the target domain class $c$ to the discriminator, as in common conditional networks, StarGAN trains the discriminator to classify it. It uses an auxiliary classifier GAN, AC-GAN \cite{odena_conditional_2016}, which forces the discriminator to output both the probability distribution over the sources of the input, and the probability of the target domain labels, $D: x \rightarrow {D_{src}(x), D_{cls}(x)}$. This improves the network's stability and performance, as it forces the discriminator to perform and additional task.
@@ -490,20 +513,26 @@ The model architecture is based on CycleGAN.
 \subsubsection{MUNIT}
 % ==============================================================
 
-All of the introduced models approach the image translation problem as one-to-one mapping. However, many of the image domain translation tasks are in fact multi-modal, meaning one single input can have multiple different outputs. The MUNIT network \cite{huang_multimodal_2018} introduces an unsupervised multi-modal method, which is able to capture the diversity of the output.
+All of the introduced models approach the image translation problem as one-to-one mapping. However, many of the image domain translation tasks are in fact multi-modal, meaning one single input can have multiple different outputs. The MUNIT network \cite{huang_multimodal_2018} introduces an unsupervised multi-modal method, which is able to capture the diversity of the output, as shown in Figure \ref{fig:munit_example}.
 
 Instead of using translation in pixel space, the model tries to model the translation in a latent space. Based on the \textit{partially shared latent space assumption}, a content latent code $c \in \mathcal{C}$ and a style latent code $s_{i} \in \mathcal{S}_{i}$ are separated, assuming that the two image domains share a common content space but each has an individual style space. 
 
-For each domain, there is an auto-encoder, which consists of a generator $G$ and two encoders: content encoder $E^c$, and style encoder $E^s$. Given an image $x \in X$, it is encoded into a content and style code, $E^c_x(x)$ and $E^s_x(x)$. To translate the image $x \in X$ to domain $Y$, its content code $c_{x}$ is extracted using the content encoder $E^c_x$, and it is combined with a random style code $s_{y}$, $G_y(c_x, s_y)$.
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/munit_example}}
+\caption{\label{fig:munit_example} \textbf{MUNIT: Examples of multi-modal translations.} For both translations, the input and ground-truth image are shown in the first two columns and the rest shows various generated samples. Figure reprinted from \cite{huang_multimodal_2018}.}
+\end{figure}
+
+
+For each domain, there is an auto-encoder, which consists of a generator $G$ and two encoders: content encoder $E^c$, and style encoder $E^s$. Given an image $x \in X$, it is encoded into a content and style code, $E^c_x(x)$ and $E^s_x(x)$. To translate the image $x \in X$ to domain $Y$, its content code $c_{x}$ is extracted using the content encoder $E^c_x$, and it is combined with a random style code $s_{y}$, $G_y(c_x, s_y)$. 
+
+While the style code is assumed to have a global and simple effect and is therefore sufficiently represented by a low-dimensional vector, the content is assumed to be a high-dimensional vector describing the complex spatial structure of the data. Figure \ref{fig:munit_enc} shows the encoding of an image from domain $X$ to style and content code and the decoding back to the image domain.
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{GAN/munit_enc}}
-\caption{\label{fig:stargan_topo} \textbf{MUNIT within-domain reconstruction.}  An image from domain X is decomposed into content and style code via respective encoders. The decoder is a generator that combines the two latent encodings and translates them back to the original domain. A reconstruction loss is calculated between the original and the reconstructed image to optimize the auto-encoders. Figure adapted from \cite{huang_multimodal_2018}.}
+\caption{\label{fig:munit_enc} \textbf{MUNIT within-domain reconstruction.}  An image from domain X is decomposed into content and style code via respective encoders. The decoder is a generator that combines the two latent encodings and translates them back to the original domain. A reconstruction loss is calculated between the original and the reconstructed image to optimize the auto-encoders. Figure adapted from \cite{huang_multimodal_2018}.}
 \end{figure}
-
-While the style code is assumed to have a global and simple effect and is therefore sufficiently represented by a low-dimensional vector, the content is assumed to be a high-dimensional vector describing the complex spatial structure of the data.
-
 
 \paragraph{Reconstruction Loss}
 The reconstruction loss is similar to the cycle consistency loss \cite{zhu_unpaired_2017}, enforcing the reconstruction between an image and its latent representation in both directions. 
@@ -523,25 +552,25 @@ The \textit{latent reconstruction loss} consists of a style loss and a content l
 
 The same losses are also applied to image domain $Y$.
 
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/munit_adv}}
+\caption{\label{fig:munit_adv} \textbf{MUNIT cross-domain translation.} The content code of image from domain Y is combined with style from domain X to generate a fake image X. The discriminator decides if the image was translated or comes from the original image domain based on which the adversarial objective is calculated. Figure adapted from \cite{huang_multimodal_2018}.}
+\end{figure}
+
 \paragraph{Adversarial Loss}
 In order to enforce the generated output to look realistic, each domain has a discriminator, $D_x$ and $D_y$, which is trained to distinguish if the source of the image is the data distribution of the image domain, or if it was generated by the auto-encoder.
 \begin{equation}
-\mathcal{L}^{x}_{adv} = \mathbb{E}_{c_{y}, s_{x}}[log(1 - D_{x}(G_{x}(c_{y}, s_{x})))] + \mathbb{E}_{x}[logD_{x}(x)]
+\underset{G_x}{\mathrm{min}} \ \underset{D_x}{\mathrm{max}} \ \mathcal{L}^{x}_{adv} = \mathbb{E}_{x}[logD_{x}(x)] + \mathbb{E}_{c_{y}, s_{x}}[log(1 - D_{x}(G_{x}(c_{y}, s_{x})))]
 \end{equation}
 
-The adversarial loss for domain $Y$ is defined similarly.
-
-\begin{figure}[t]
-\centering
-{\includegraphics[width=\linewidth]{GAN/munit_adv}}
-\caption{\label{fig:stargan_topo} \textbf{MUNIT cross-domain reconstruction.} The content code of image from domain Y is combined with style from domain X to generate a fake image X. The discriminator decides if the image was translated or comes from the original image domain based on which the adversarial objective is calculated. Figure adapted from \cite{huang_multimodal_2018}.}
-\end{figure}
+Figure \ref{fig:munit_adv} shows the adversarial loss for translation from domain $Y$ to domain $X$. The adversarial loss for domain $Y$ is defined similarly.
 
 
 \paragraph{Training Objective}
 The overall training objective, which is trained to be maximized by the discriminators and minimized by the generators and auto-encoders can be modified by $\lambda$, $\lambda_c$, $\lambda_s$, controlling the relative weight of each loss:
 \begin{equation}
-\mathcal{L} = \mathcal{L}^{x}_{adv} + \mathcal{L}^{y}_{adv} + 
+\underset{G_x, G_y, E_x, E_y}{\mathrm{min}} \ \underset{D_x, D_y}{\mathrm{max}} \ \mathcal{L} = \mathcal{L}^{x}_{adv} + \mathcal{L}^{y}_{adv} + 
 \lambda(\mathcal{L}^{x}_{rec} + \mathcal{L}^{y}_{rec}) + 
 \lambda_c(\mathcal{L}^{c_x}_{rec} + \mathcal{L}^{c_y}_{rec}) + 
 \lambda_s(\mathcal{L}^{s_x}_{rec} + \mathcal{L}^{s_y}_{rec})
@@ -550,11 +579,62 @@ The overall training objective, which is trained to be maximized by the discrimi
 
 \pagebreak
 % ==============================================================
+\subsubsection{Fader Networks}
+% ==============================================================
+The Fader Networks \cite{lample_fader_2017} is an unsupervised technique of training GANs that, similarly to MUNIT \cite{huang_multimodal_2018}, translates images in latent space instead of pixel space. 
+
+The unique feature of Fader Networks is that the images are modified based on attribute values that are regarded as continuous, e.g: the network can translate a photo of a young person to old person at increasing level of interpolation. Figure \ref{fig:fader_ex} shows example interpolations of different attributes.
+
+Similarly to MUNIT \cite{huang_multimodal_2018}, the model consists of an encoder-decoder architecture, which learns how to translate an input image to its latent representation, and a discriminator to enforce an adversarial approach. In case of Fader Networks the latent representation is a $N$-dimensional vector $z$.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/fader_example}}
+\caption{\label{fig:fader_ex} \textbf{FaderNetworks: Interpolations of different attributes.} The original image on the left is translated to the given attribute with increasing intensity from left to right. The outputs of the decoder and discriminator are compared to ground truth and the networks parameters are optimized accordingly. Figure reprinted from \cite{lample_fader_2017}.}
+\end{figure}
+
+
+Given a pair of input image and its corresponding attribute ($x^i \in X, y^i \in Y$), the encoder maps it to its latent representation $z$, $Enc: X \rightarrow \mathbb{R}^N$. The decoder takes a latent vector $z$ and a target attribute $y'$, and translates it to a modified version of the image, $Dec: (\mathbb{R}^N, Y) \rightarrow X$.
+
+The essential feature of this approach is that latent representation of an image is \textit{attribute-invariant}, e.g: an image of the same person young and old should be encoded as the same latent vector. Without this invariance, the decoder would simply learn to ignore the given attribute value. By removing the information about the attributes from the encoded representation, the decoder must consider the attribute in order to reconstruct the image.
+
+However, since paired image training data is not available, the invariance cannot be enforced by adding a simple distance to the loss function, instead it must be learned through an adversarial objective on the latent space. Therefore, the architecture also includes a discriminator network $Dis$, which is trained to predict the attribute value $y$ of an image $x$, given its latent representation $E(x)$.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{GAN/fader}}
+\caption{\label{fig:fader_ex} \textbf{FaderNetworks Model.} Given a training pair of input image and attribute value, the image is encoded to a latent code. The decoder learns to reconstruct the image based on its latent code and attribute value, while the discriminator tries to predict the attribute based on the latent code. Figure adapted from \cite{lample_fader_2017}.}
+\end{figure}
+
+
+\paragraph{Reconstruction Loss}
+The authors use a \textit{mean squared error} loss (MSE) to optimize the auto-encoder to output images similar to the original inputs. However, they mention that the previously described \textit{PatchGAN} architecture with L1 loss might lead to sharper results.
+\begin{equation}
+\mathcal{L}_{rec}(Enc,Dec) = \mathbb{E}_{x,y}[||x-Dec(Enc(x),y)||^2_2]
+\end{equation}
+
+\paragraph{Adversarial Loss}
+The discriminator trains to predict the attributes correctly:
+\begin{equation}
+\mathcal{L}_{Dis} = \mathbb{E}_{x,y}[log(Dis(y|Enc(x)))],
+\end{equation}
+
+while the objective of the encoder is for the decoder to be able to reconstruct the image, and to prevent discriminator from correct classification:
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{rec} - \lambda_E \mathbb{E}_{x,y}[log(Dis(1-y|Enc(x)))].
+\end{equation}
+
+
+
+\pagebreak
+% ==============================================================
 \section{Experiments}
 % ==============================================================
-The objective of the experiments is to improve image retrieval of fashion products, by allowing the user to perform a series of modifications on the given product image. I have performed most of the experiments on the data category of dresses to reduce the complexity of the experiments and the algorithms.
+The objective of the experiments is to improve image retrieval of fashion products, by allowing the user to perform a series of modifications on the given product image. Unless indicated differently, the experiments were performed on the data category of dresses to reduce the complexity of the experiments and the algorithms and simplify the evaluation process.
 
 The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodate}, using the machine learning framework \textit{PyTorch} \cite{noauthor_pytorch_nodate} and several common python packages, such as: \textit{pandas} \cite{noauthor_python_nodate}, \textit{numpy} \cite{noauthor_numpy_nodate}, \textit{scikit-learn} \cite{noauthor_scikit-learn_nodate}, \textit{matplotlib} \cite{noauthor_matplotlib_nodate}, \textit{PIL} \cite{noauthor_pillow_nodate} and others. 
+
+%TODO train / val / test split
 
 \pagebreak
 \subsection{Products to Models Translation}
@@ -591,8 +671,7 @@ In order to create a dataset of image pairs, each product must have exactly 1 co
 
 To identify the best image for each product, I used the following approach:
 \begin{enumerate}
-	\item \textbf{Select Features}: Select most relevant visual features such as contours of the person in the image
-	\item \textbf{Image Processing}: Highlight the selected features in the image, while suppressing irrelevant features, such as color
+	\item \textbf{Image Processing}: Highlight most relevant features, such as contours, while suppressing irrelevant features, such as color
 	\item \textbf{Clustering}: Cluster features and experiment with amount of clusters
 	\item \textbf{Select Best Cluster}: Visualize clusters and manually select the cluster with most sensible results
 	\item \textbf{Select Best Image}: For each product, select the image which distance to the best cluster center is the smallest
@@ -654,7 +733,11 @@ Based on these results, I selected the one image for each product that is the cl
 
 \pagebreak
 \subsubsection{Supervised Training}
-The only network from the evaluated options that translates images in a supervised matter is Pix2Pix \cite{isola_image--image_2016}. I have used the official PyTorch implementation of the paper \cite{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate}, which can be found on github: \hyperlink{https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix}{github.com/junyanz/pytorch-CycleGAN-and-pix2pix}.
+The only network from the evaluated ones that translates images in a supervised matter is Pix2Pix \cite{isola_image--image_2016}. I have modified the official PyTorch implementation of the paper \cite{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate}, in order to work with the fashion data structure: \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}.
+
+The network is built with the architecture described in the paper, using the Adam optimizer \cite{kingma_adam_2014} to train the discriminator and generator. The training data set is split to mini-batches.
+
+
 
 
 \pagebreak
