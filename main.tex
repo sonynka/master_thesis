@@ -77,7 +77,7 @@ The cornerstone of ConvNets are the convolutions, represented in Figure \ref{fig
 In the first layers of a network, each filter usually extracts some low-level feature, such as horizontal or vertical edges. The output of the convolution, are the outputs of each filter stacked in the channel dimension. As the convolutions get deeper into the network, they start to combine these low-level features, to higher level features, such as an eye or a mouth.
 
 
-
+\pagebreak
 % ==============================================================
 \subsection{Generative Adversarial Networks}
 % ==============================================================
@@ -182,6 +182,44 @@ Considering the previous example of MNIST hand-written digits synthesis, one can
 
 The conditioning information $c$, such as a class label, text, or another image, is fed to both discriminator $D$ and generator $G$ as additional input layers. 
 
+\pagebreak
+% ==============================================================
+% Image Retrieval
+% ==============================================================
+\subsection{Content-Based Image Retrieval}
+The idea of content-based image retrieval systems, also called CBIR, is to find semantically similar images without depending on textual meta-data, such as tags or descriptions. Instead they only rely on the images pixel values and try to find similarities based on visual features that can be extracted from the content of the images.
+
+CBIR is a field of computer vision that has seen a lot of changes since the rise of fast and available deep learning algorithms. While the first implementations have relied on low-level features such as color and texture to identify similar images, today the state-of-art techniques rely on high-dimensional descriptors produced by convolutional neural networks.
+
+The systems are used for many specific applications in different fields, e.g: medicine, retail or archives. Many CBIR systems are also freely available online, such as the visual image search on Google, or a tool for exploring large amounts of images based on their similarities \cite{Barthel:2017:VBM:3078971.3079016}.
+
+
+\pagebreak
+\subsubsection{Low-Level Visual Features}
+A lot of features have been developed to improved the search for similar images, from features describing the colors and textures, to complex algorithms finding points of interest such as SIFT and SURF.
+
+\paragraph{Color Histogram}
+Color is one of the most basic features of an image. While there are many possibilities to describe the color of an image, such as average color or selecting a few dominant colors, the color histogram has proven to be a robust choice and is often used as a baseline when comparing other color features \cite{Torres_content-basedimage}.
+
+To create a color histogram, the number each color (described by the image's discrete color space, such as RGB) occurs in the image. The counts can be grouped into various amount of bins and represented as relative frequencies \cite{Swain1991}.
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{RGB Image}{\includegraphics[height=5cm]{CBIR/atacama}}
+\subcaptionbox{3D Color Histogram}{\includegraphics[height=5cm]{CBIR/color_hist}}
+\caption{\label{fig:color_hist} \textbf{Color Histogram}. A 3-D visualization of the color histogram with 200 color bins for an RGB image. Histogram visualization created with 3D Color Inspector \cite{barthel_3d_nodate}.}
+\end{figure}
+
+The main advantage of color features is that they are invariant to image transformations such as rotation. However, basing the retrieval only on colors is insufficient, since images that share similar color histograms do not necessarily display the same content and images showing the same content can have different color palettes.
+
+
+
+
+
+
+
+
+\subsubsection{CNN Features}
 
 \pagebreak
 % ==============================================================
@@ -723,11 +761,20 @@ This feature selection has proven to be the most effective for \textit{K-Means} 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{clustering/outlines_clusters}}
-\caption{\label{fig:cluster_outline} \textbf{Cluster centers with threshold mask.} The rows A-C show 3 cluster centers created with the \textit{K-Means Clustering} algorithm with threshold mask features of images. Each row 1-6 shows one product and the image that is closest to the respective cluster center.}
+\caption{\label{fig:cluster_outline} \textbf{Cluster centers with threshold mask.} The rows A-C show 3 cluster centers created by \textit{K-Means Clustering} algorithm with threshold mask features of images. Each column 1-6 shows one product and the image that is closest to the respective cluster center.}
 \end{figure}
 
+Each column 1-6 of Figure \ref{fig:cluster_outline} shows images of one product, each row shows the image that is the closest to the respective cluster center. The products can have more photographs that are not displayed because they are not the best match for any of the cluster centers, just like one photograph can be best match for more than one cluster center. 
 
-Columns 1-6 of Figure \ref{fig:cluster_outline} each show images of one product, each row shows the image that is the closest to the respective cluster. Each product can have more photographs that are not displayed because they are not the best match for any of the cluster centers, just like one photograph can be best match for more than one cluster center. We can observe that most of the photographs are grouped accordingly to expectations.
+We can observe that products 1-4 are grouped accordingly to expectations. Product 5 is problematic, because the dress is lighter that the background, so its features do not match the cluster centers as expected. Product 6 is an example of an outlier product, where there are no model images available and instead only a product image is provided.
+
+Figure \ref{fig:cluster_outline_distances} shows all available images for product 1 sorted based on their respective distances to cluster center A. The first picture is therefore the best match for the cluster center.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{clustering/outlines_distances}}
+\caption{\label{fig:cluster_outline_distances} \textbf{Product images distances to cluster center A.} Images are sorted by the distances towards cluster center A from Figure \ref{fig:cluster_outline}}.
+\end{figure}
 
 Based on these results, I selected the one image for each product that is the closest to cluster center \textbf{A} from Figure \ref{fig:cluster_outline}. Although the results are not perfect, the network working with this data should be able to learn to ignore the outliers.
 
