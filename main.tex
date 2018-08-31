@@ -53,30 +53,6 @@
 \section{Background}
 % ==============================================================
 
-
-% ==============================================================
-\subsection{Convolutional Neural Networks}
-% ==============================================================
-Convolutional Neural Networks, also known as ConvNets or CNNs, are the state-of-the-art neural networks for most computer vision tasks, such as image classification and object detection or face recognition.
-
-Unlike regular feed-forward neural networks based on fully-connected layers of neurons, ConvNets are trained to learn relatively small filter kernels, that can extract valuable information from different areas of an image. Therefore, they reduce the amount of training parameters significantly and are able to train also on large images.
-
-% ==============================================================
-\subsubsection{Convolution}
-% ==============================================================
-The cornerstone of ConvNets are the convolutions, represented in Figure \ref{fig:conv}. Convolutions are based on small filters, which run through the image and sum the multiplications of each input value with the corresponding filter value. Each filter must have the same amount of channels as the input, the width and height are optional. 
-
-\begin{figure}[h]
-\centering
-{\includegraphics[width=\linewidth]{GAN/convolutions}}
-\caption{\label{fig:conv} \textbf{Convolution.} The input image is convolved with 3 filters, each one detecting a different low-level feature. The final output is the output of each convolution stack in the channel dimension.}
-\end{figure}
-
-
-\subsubsection{Convolutional Layers}
-In the first layers of a network, each filter usually extracts some low-level feature, such as horizontal or vertical edges. The output of the convolution, are the outputs of each filter stacked in the channel dimension. As the convolutions get deeper into the network, they start to combine these low-level features, to higher level features, such as an eye or a mouth.
-
-
 \pagebreak
 % ==============================================================
 \subsection{Generative Adversarial Networks}
@@ -194,11 +170,18 @@ CBIR is a field of computer vision that has seen a lot of changes since the rise
 The systems are used for many specific applications in different fields, e.g: medicine, retail or archives. Many CBIR systems are also freely available online, such as the visual image search on Google, or a tool for exploring large amounts of images based on their similarities \cite{Barthel:2017:VBM:3078971.3079016}.
 
 
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{CBIR/cnn_cbir}}
+\caption{\label{fig:conv_cbir} \textbf{Image Retrieval with CNN Features}. The test image on the left is compared to images from the train set to find most similar matches. The images are compared based on 4028-dimensional feature vectors extracted from the last hidden layer of a convolutional neural network. Figure reprinted from \cite{NIPS2012_4824}.}
+\end{figure}
+
+
 \pagebreak
 \subsubsection{Low-Level Visual Features}
 A lot of features have been developed to improved the search for similar images, from features describing the colors and textures, to complex algorithms finding points of interest such as SIFT and SURF.
 
-\paragraph{Color Histogram}
+\paragraph{Color Features}
 Color is one of the most basic features of an image. While there are many possibilities to describe the color of an image, such as average color or selecting a few dominant colors, the color histogram has proven to be a robust choice and is often used as a baseline when comparing other color features \cite{Torres_content-basedimage}.
 
 To create a color histogram, the number each color (described by the image's discrete color space, such as RGB) occurs in the image. The counts can be grouped into various amount of bins and represented as relative frequencies \cite{Swain1991}.
@@ -213,13 +196,50 @@ To create a color histogram, the number each color (described by the image's dis
 The main advantage of color features is that they are invariant to image transformations such as rotation. However, basing the retrieval only on colors is insufficient, since images that share similar color histograms do not necessarily display the same content and images showing the same content can have different color palettes.
 
 
+\paragraph{Shape Features}
+Shape features can be divided into two groups: \textit{contour-based} features which only extract the edges of the shape, or \textit{region-based} features which extract the edges together with their interior \cite{zhang2004review}. Figure \ref{fig:shape_feat} shows the difference between these two groups.
 
+Various methods for shape extraction have been developed, however, most of them have difficulties dealing with the projection of real world 3-D object onto a 2-D image and can also struggle with abnormalities created by lighting and shadows \cite{zhang2004review}.
 
+\begin{figure}[h]
+\centering
+{\includegraphics[height=5cm]{CBIR/shape_features}}
+\caption{\label{fig:shape_feat} \textbf{Shape Features}. The highlighted row shows images considered similar based on region shape feature, and the highlighted column shows contour-based similarity. Figure reprinted from \cite{bober_mpeg-7_2001}}.
+\end{figure}
 
+\paragraph{Texture Features}
+Although texture can be perceived equally important to color, it is more difficult to define it.  Some of the terms to describe texture, as defined by Tamura et al \cite{tamura1978textural}, are contrast, directionality, line-likeness, and regularity.
 
+There are several methods for extracting texture that can be based on statistics, such as the co-occurence matrix, human perception, such as Tamura features, or signal processing, such as Gabor filters or Fourier transformations.
 
+\paragraph{MPEG-7}
+The MPEG-7 standards were developed to describe the contents of images, audio and video independently from their format. They provide various low-level feature descriptors of color, shape, texture, motion and others, that enable fast and efficient multimedia search \cite{noauthor_visual_nodate}.
 
+Many of these descriptors are widely used in CBIR systems, such as the color layout, edge histogram or 3D shape descriptor.
+
+\pagebreak
 \subsubsection{CNN Features}
+Convolutional Neural Networks, also known as ConvNets or CNNs, are the state-of-the-art neural networks for most computer vision tasks, such as image classification and object detection or face recognition. Various research has also shown that a ConvNet can produce very powerful image descriptors, which can be used for image retrieval \cite{razavian_cnn_2014-2}, \cite{NIPS2012_4824}.
+
+Unlike regular feed-forward neural networks based on fully-connected layers of neurons, ConvNets are trained to learn relatively small filter kernels, that can extract valuable information from different areas of an image. Therefore, they reduce the amount of training parameters significantly and are able to train also on large images.
+
+As shown in Figure \ref{fig:conv_feats}, in the early layers of the network, the filters learn to recognize simple visual features, such as horizontal edges or colors. The filters recognize more complex structures as the network's layers get deeper. In the last layers of the network, the filters are trained to recognize high-level features. 
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{Low-Level Features}{\includegraphics[height=3.5cm]{CBIR/feat_low}}\hspace{.3cm}
+\subcaptionbox{Mid-Level Features}{\includegraphics[height=3.5cm]{CBIR/feat_mid}}\hspace{.3cm}
+\subcaptionbox{High-Level Features}{\includegraphics[height=3.5cm]{CBIR/feat_high}}
+\caption{\label{fig:conv_feats} \textbf{Convolutional Feature Maps}. Each image displays a sample of feature maps (filters) from different layers of the networks. The early layer feature maps recognize simple patterns, while the last layers recognize more complex structures. Figure adapted from \cite{gandhi_build_2018}.}
+\end{figure}
+
+
+Krizhevsky et al. \cite{NIPS2012_4824} use a ConvNet, trained to classify more than 1 million images into 1000 classes, to extract 4028-dimensional image features from the last hidden layer of the network. They show, that these feature vectors can be used to find images with similar content and are invariant to the position of the objects in the image, lighting and colors.
+
+
+\pagebreak
+\subsubsection{Feature Matching}
+
 
 \pagebreak
 % ==============================================================
@@ -810,5 +830,5 @@ I acquired the dataset for this task by downloading all model images for each pr
 
 \newpage
 \bibliographystyle{abbrvnat}
-\bibliography{zotero2}
+\bibliography{zotero}
 \end{document}
