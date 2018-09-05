@@ -113,11 +113,17 @@ The parameters of the discriminator and generator, $\theta_{d}$ and $\theta_{g}$
 
 % ==============================================================
 \subsubsection{Training Difficulties}
-In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. 
 
-In reality, finding the right balance between the two networks can be difficult. If discriminator gets too good at determining which samples are fake, then generator has no chance to learn the distribution. On the other hand, if generator is updated too much, it can collapse too many values of $z$ to the same value of $x$ to have enough diversity to model the distribution. 
 
-Because a modification of the weights of the discriminator that decrease 
+
+In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. In reality, the training of a GAN can prove to be unstable and finding the right balance between the two networks is difficult.
+
+It can for example happen, that the gradient descent gets stuck in a cycle, where a modification to the discriminator weights reduces the discriminator loss and increases the generator loss, while the following modification of generator weights does the opposite \cite{salimans_improved_2016}. In this scenario, the gradient descent is not able to converge.
+
+One of the common problems is that the discriminator gets too good at determining which samples are fake, the generator gradient vanishes and it has no chance to improve \cite{arjovsky_towards_2017}. There are some techniques to prevent this behavior, mostly trying to confuse the discriminator, to give the generator an advantage in the training.
+
+One of the techniques that can be applied is to add noise to the labels that define if the image is real (1.0) or fake (0.0). As shown by Saliman et al. \cite{salimans_improved_2016}, varying the labels with a slight noise can help to stabilize the training. To further confuse the discriminator, we can also occassionally flip the labels. 
+
 
 % ==============================================================
 % Deep Convolutional GANs
@@ -238,7 +244,28 @@ Krizhevsky et al. \cite{NIPS2012_4824} use a ConvNet, trained to classify more t
 
 
 \pagebreak
-\subsubsection{Feature Matching}
+\subsubsection{Distance Metrics}
+To retrieve relevant images, distances between the extracted image features need to be evaluated based on a metric. The most commonly used metrics is the \textit{L1 norm}, also called \textit{Manhattan distance}, and \textit{L2 norm}, also known as \textit{Euclidean distance}.
+
+Given two $n$-dimensional vectors vector $x = (x_1, x_2, ..., x_n)$ and $y = (y_1, y_2, ..., y_n)$, the L1 distance is computed by summing up the absolute values of the difference between the respective coordinates of the vectors:
+\begin{equation}
+L_1(x, y) = \sum_{i=1}^{n} |x_i - y_i|.
+\end{equation} 
+
+L2 distance is the squared root of sum of squared distances between respective vector coordinates:
+\begin{equation}
+L_2(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}.
+\end{equation}
+
+There are also other possible metrics like the \textit{Chebychev metric} or the \textit{Minkowski Metric}.
+
+
+\pagebreak
+% ==============================================================
+% Clustering
+% ==============================================================
+\subsection{Clustering}
+
 
 
 \pagebreak
@@ -683,6 +710,35 @@ while the objective of the encoder is for the decoder to be able to reconstruct 
 \end{equation}
 
 
+\pagebreak
+% ==============================================================
+\subsection{Image Retrieval Features}
+% ==============================================================
+
+
+
+\subsubsection{Akiwi}
+
+\subsubsection{ResNet}
+Nowadays, almost every deep learning framework offers a variety of pre-trained convolutional networks. The deep learning framework PyTorch offers 6 different pre-trained CNN architectures, such as the \textit{VGG Network} \cite{simonyan_very_2014}, \textit{Inception Network} \cite{szegedy_rethinking_2015} or the \textit{ResNet} \cite{he_deep_2015}. 
+
+The networks are pre-trained to classify images from the ImageNet dataset, which contains around 14 million images labels with 1.000 classes, and has established itself as a reference for testing convolutional architectures. 
+
+Currently, the best scoring pre-trained model offered by PyTorch is the \textit{ResNet152}, which is 152 layers deep and contains so-called \textit{Residual Blocks}. These blocks allow the output of one layer to be added directly to another layer deeper in the network. This technique is useful when training very deep neural networks.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{CBIR/resnet_arch}}
+\caption{\label{fig:search_pink} \textbf{Resnet34 Architecture.} An example of the ResNet architecture with 34 layers. Figure reprinted from \cite{noauthor_resnet-152_nodate}}.
+\end{figure}
+
+The extraction of the image feature happens at the last hidden layer of the network, which in case of ResNet152, is a 2048-dimensional layer. For each image, the output of this layer is its unique descriptor, which can be used to compare distances between images.
+
+%TODO retrained network / transfer learning
+Since the ResNet152 was trained on a dataset with a big variety of objects, most of the product images most likely fall to one category and therefore could have very similar feature vectors, which do not mirror the differences between the products well.
+
+Therefore I re-trained the last few layers of the network on the fashion dataset, to classify the 6 categories of the products: dresses, blouses, tops, etc. 
+
 
 \pagebreak
 % ==============================================================
@@ -694,6 +750,10 @@ The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodat
 
 %TODO train / val / test split
 
+
+% ==============================================================
+% PRODUCTS TO MODLES
+% ==============================================================
 \pagebreak
 \subsection{Products to Models Translation}
 Most fashion online stores provide product images that are taken on white background without a person modeling the product. However, there are also countless images online, coming from social media, blogs and other platforms, of people wearing a certain product, without a corresponding product image. 
@@ -796,35 +856,81 @@ Figure \ref{fig:cluster_outline_distances} shows all available images for produc
 \caption{\label{fig:cluster_outline_distances} \textbf{Product images distances to cluster center A.} Images are sorted by the distances towards cluster center A from Figure \ref{fig:cluster_outline}}.
 \end{figure}
 
-Based on these results, I selected the one image for each product that is the closest to cluster center \textbf{A} from Figure \ref{fig:cluster_outline}. Although the results are not perfect, the network working with this data should be able to learn to ignore the outliers.
+Based on these results, I selected the one image for each product that is the closest to cluster center \textbf{A} from Figure \ref{fig:cluster_outline}. Although there are some outliers in the results, the network working with this data should be able to learn to ignore them.
 
 \pagebreak
 \subsubsection{Supervised Training}
-The only network from the evaluated ones that translates images in a supervised matter is Pix2Pix \cite{isola_image--image_2016}. I have modified the official PyTorch implementation of the paper \cite{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate}, in order to work with the fashion data structure: \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}.
+The only network from the evaluated models that translates images in a supervised matter is Pix2Pix \cite{isola_image--image_2016}. I have modified the official PyTorch implementation of the paper \cite{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate}, in order to work with the fashion data structure: \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}.
 
-The network is built with the architecture described in the paper, using the Adam optimizer \cite{kingma_adam_2014} to train the discriminator and generator. The training data set is split to mini-batches.
+The original set-up of the network however has resulted in a common failure when training GANs: the discriminator learns to distinguish the source of an image very fast, resulting in the generator not having opportunity to improve.
+
+Figure \ref{fig:pix2pix_losses}a demonstrates this scenario, showing the adversarial losses of the discriminator and the generator. While discriminator manages to optimize its loss easily, the generator loss keeps on increasing throughout the training. 
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{Original Model}{\includegraphics[width=.48\linewidth]{pix2pix/loss_original}}
+\subcaptionbox{Label Noise}{\includegraphics[width=.48\linewidth]{pix2pix/loss_soft_labels}}
+\caption{\label{fig:pix2pix_losses} \textbf{Pix2Pix Adversarial Loss.} Adversarial Loss of the Discriminator and the Generator, a) with the original pix2pix set-up, b) with adding noise to discriminator. For visualization purposes, the curves are smoothed, such as described in \cite{noauthor_tensorflows_2018}. The real loss values are shown in the background.}
+\end{figure}
+
+This phenomenon can be avoided by making the training harder for the discriminator. One of the techniques that can be applied is to add noise to the labels that define if the image is real (1.0) or fake (0.0). As shown by Saliman et al. \cite{salimans_improved_2016}, varying the labels with a slight noise can help to stabilize the training. In my implementation, the real labels fluctuate between 0.7 to 1.2 and fake labels can be anywhere between 0.0 and 0.3 \cite{preserve_knowledge_how_nodate}.
+
+%TODO don't explain the soft labels here, move it to difficulties with GAn training in the intro
+
+To further confuse the discriminator, and therefore prevent it from getting too good, we can also occassionally flip the labels. In my implementation, every 5 out of 100 iterations, the discriminator gets the wrong labels, meaning the real images are described as fake and vice versa. As shown in Figure \ref{fig:pix2pix_losses}b, by disadvantaging the discriminator, both losses get stabilized.
 
 
 
 
+% ==============================================================
+% IMAGE RETRIEVAL
+% ==============================================================
 \pagebreak
-% ==============================================================
-\section{Other}
-% ==============================================================
+\subsection{Image Retrieval}
 
-\subsection{Model Images}
-For some of the tasks of this project also images of people modeling the products were required.  However, each product, has multiple images of a model wearing it, and for the purposes of this project, I had to use clustering methods to filter out only images where the models are facing the front and photographed full-bodied.
+\subsubsection{Dataset Images}
+In this part of the image features comparison, I have used the original product images from the dataset as input to retrieve the most similar images. Figure \ref{fig:search_pink} illustrates the strengths and weaknesses of the tested feature vectors. 
 
-\subsubsection{Clustering}
-The supervised algorithms require a paired image set - in the case of generating model image from product image, it was neccessary to obtain images showing a person modelling the product. This could be obtained from the scraped websites, however each product usually has multiple model images - unordered, usually front-facing, back-facing, detail and cut. I have applied the K-Means clustering algorithm in order to separate these types of images, and for each product, find the front-facing model image.
+Akiwi50 retrieves images that have similar color palettes but different shapes, while Akiwi64 does the opposite: it retrieves similarly shaped products regardless of their color. Although the two features combined together return more sensible results, given that the input dress is not very unique in the dataset, the results are still not very accurate. 
+
+The ResNet features are quite similar, however in both ResNet and ResNet retrained there are outliers of images that do not fit color-wise. The combination of the original ResNet feature with the color-focused Akiwi50 prevents this issue and returns the most similar images. 
+
+%The ResNet original and ResNet retrained results are quite similar. I have therefore decided to only focus on the original pre-trained ResNet in my further experiments, since it is very easily accessible via different machine learning frameworks, and the version  retrained on the fashion dataset doesn't deliver visibly better results. 
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.48\linewidth]{retrieval_exp/akiwi_pink}}\hspace{0.2cm}
+{\includegraphics[width=.48\linewidth]{retrieval_exp/resnet_pink}}
+\caption{\label{fig:search_pink} \textbf{Image retrieval results with tested feature vectors.} The left shows the Akiwi Features, the right one shows ResNet Features. Each row shows the input image in the left column and the best 5 matches based on L2 distance between the respective feature vectors. The number under each image represents its distance to the input}.
+\end{figure}
+
+To further analyse the issue of color outliers within ResNet results, I have also tested different weighing combinations of ResNet and Akiwi50 features. Figure \ref{fig:search_weights} shows the retrieved images for different relative ratios between the two features, such as 1:1, 1:2 and 1:3 for ResNet and Akiwi50 respectively. 
+
+When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.48\linewidth]{retrieval_exp/resnet_red}}\hspace{0.2cm}
+{\includegraphics[width=.48\linewidth]{retrieval_exp/resnet_yellow}}
+\caption{\label{fig:search_weights} \textbf{Image retrieval results with different combinations of ResNet and Akiwi50 features.} Displaying the results for two different input images, the first row shows an equal ratio, second row shows 1:2 ratio and third row shows 1:3 ratio when combining ResNet and Akiwi50 features respectively.}.
+\end{figure}
+
+More examples of results of the image retrieval with different outputs can be found in attachments.
+
+\subsubsection{Generated Images}
 
 
-\section{Products to Models}
-One of the tasks of the framework is to generate a realistic image of a model wearing a product, given an image of the product. The motivation is to expand the amount of similar images found - as some products might not have a photograph without a model available at all.
 
-I acquired the dataset for this task by downloading all model images for each product, as listed in the scraped data file. However, each product usually has multiple images with variety of model poses and detail; usually unordered and with no pattern that would indicate which image displays what pose. Therefore I have applied the K-means clustering algorithm to try to cluster these image by the model pose and for each product, select the image where the model is photographed front-facing and full-bodied.
 
-\subsection{Clustering}
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,1116 @@
+
+@article{huang_multimodal_2018,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1804.04732},
+  primaryClass = {cs, stat},
+  title = {Multimodal {{Unsupervised Image}}-to-{{Image Translation}}},
+  url = {http://arxiv.org/abs/1804.04732},
+  abstract = {Unsupervised image-to-image translation is an important and challenging problem in computer vision. Given an image in the source domain, the goal is to learn the conditional distribution of corresponding images in the target domain, without seeing any pairs of corresponding images. While this conditional distribution is inherently multimodal, existing approaches make an overly simplified assumption, modeling it as a deterministic one-to-one mapping. As a result, they fail to generate diverse outputs from a given source domain image. To address this limitation, we propose a Multimodal Unsupervised Image-to-image Translation (MUNIT) framework. We assume that the image representation can be decomposed into a content code that is domain-invariant, and a style code that captures domain-specific properties. To translate an image to another domain, we recombine its content code with a random style code sampled from the style space of the target domain. We analyze the proposed framework and establish several theoretical results. Extensive experiments with comparisons to the state-of-the-art approaches further demonstrates the advantage of the proposed framework. Moreover, our framework allows users to control the style of translation outputs by providing an example style image. Code and pretrained models are available at https://github.com/nvlabs/MUNIT.},
+  urldate = {2018-04-30},
+  date = {2018-04-12},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Learning,Statistics - Machine Learning},
+  author = {Huang, Xun and Liu, Ming-Yu and Belongie, Serge and Kautz, Jan},
+  file = {/Users/sonynka/Zotero/storage/SXYG63DR/Huang et al. - 2018 - Multimodal Unsupervised Image-to-Image Translation.pdf;/Users/sonynka/Zotero/storage/BJGS7X6V/1804.html},
+  annotation = {MUNIT
+
+nvidia labs}
+}
+
+@article{zhu_toward_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1711.11586},
+  primaryClass = {cs, stat},
+  title = {Toward {{Multimodal Image}}-to-{{Image Translation}}},
+  url = {http://arxiv.org/abs/1711.11586},
+  abstract = {Many image-to-image translation problems are ambiguous, as a single input image may correspond to multiple possible outputs. In this work, we aim to model a $\backslash$emph\{distribution\} of possible outputs in a conditional generative modeling setting. The ambiguity of the mapping is distilled in a low-dimensional latent vector, which can be randomly sampled at test time. A generator learns to map the given input, combined with this latent code, to the output. We explicitly encourage the connection between output and the latent code to be invertible. This helps prevent a many-to-one mapping from the latent code to the output during training, also known as the problem of mode collapse, and produces more diverse results. We explore several variants of this approach by employing different training objectives, network architectures, and methods of injecting the latent code. Our proposed method encourages bijective consistency between the latent encoding and output modes. We present a systematic comparison of our method and other variants on both perceptual realism and diversity.},
+  urldate = {2018-04-30},
+  date = {2017-11-30},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Statistics - Machine Learning,Computer Science - Graphics},
+  author = {Zhu, Jun-Yan and Zhang, Richard and Pathak, Deepak and Darrell, Trevor and Efros, Alexei A. and Wang, Oliver and Shechtman, Eli},
+  file = {/Users/sonynka/Zotero/storage/PZCA7WN6/Zhu et al. - 2017 - Toward Multimodal Image-to-Image Translation.pdf;/Users/sonynka/Zotero/storage/ZYT7IV2E/1711.html},
+  annotation = {BiCycleGAN
+
+Comment: NIPS 2017 Final paper. v2 adds implementation details; Website: https://junyanz.github.io/BicycleGAN/
+
+UC Berkeley and Adobe Research}
+}
+
+@article{choi_stargan_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1711.09020},
+  primaryClass = {cs},
+  title = {{{StarGAN}}: {{Unified Generative Adversarial Networks}} for {{Multi}}-{{Domain Image}}-to-{{Image Translation}}},
+  url = {http://arxiv.org/abs/1711.09020},
+  shorttitle = {{{StarGAN}}},
+  abstract = {Recent studies have shown remarkable success in image-to-image translation for two domains. However, existing approaches have limited scalability and robustness in handling more than two domains, since different models should be built independently for every pair of image domains. To address this limitation, we propose StarGAN, a novel and scalable approach that can perform image-to-image translations for multiple domains using only a single model. Such a unified model architecture of StarGAN allows simultaneous training of multiple datasets with different domains within a single network. This leads to StarGAN's superior quality of translated images compared to existing models as well as the novel capability of flexibly translating an input image to any desired target domain. We empirically demonstrate the effectiveness of our approach on a facial attribute transfer and a facial expression synthesis tasks.},
+  urldate = {2018-04-30},
+  date = {2017-11-24},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Choi, Yunjey and Choi, Minje and Kim, Munyoung and Ha, Jung-Woo and Kim, Sunghun and Choo, Jaegul},
+  file = {/Users/sonynka/Zotero/storage/XSNV9EXA/Choi et al. - 2017 - StarGAN Unified Generative Adversarial Networks f.pdf;/Users/sonynka/Zotero/storage/7WYL85FA/1711.html}
+}
+
+@incollection{lample_fader_2017,
+  title = {Fader {{Networks}}:{{Manipulating Images}} by {{Sliding Attributes}}},
+  url = {http://papers.nips.cc/paper/7178-fader-networksmanipulating-images-by-sliding-attributes.pdf},
+  booktitle = {Advances in {{Neural Information Processing Systems}} 30},
+  publisher = {{Curran Associates, Inc.}},
+  date = {2017},
+  pages = {5967--5976},
+  author = {Lample, Guillaume and Zeghidour, Neil and Usunier, Nicolas and Bordes, Antoine and DENOYER, Ludovic and Ranzato, Marc$\backslash$textquotesingle Aurelio},
+  editor = {Guyon, I. and Luxburg, U. V. and Bengio, S. and Wallach, H. and Fergus, R. and Vishwanathan, S. and Garnett, R.},
+  file = {/Users/sonynka/Zotero/storage/VZWRCWRC/Lample et al. - 2017 - Fader Networks Manipulating Images by Sliding Att.pdf;/Users/sonynka/Zotero/storage/HUE7PKZM/1706.html},
+  annotation = {facebookresearch
+
+~}
+}
+
+@article{jetchev_conditional_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1709.04695},
+  primaryClass = {cs, stat},
+  title = {The {{Conditional Analogy GAN}}: {{Swapping Fashion Articles}} on {{People Images}}},
+  url = {http://arxiv.org/abs/1709.04695},
+  shorttitle = {The {{Conditional Analogy GAN}}},
+  abstract = {We present a novel method to solve image analogy problems : it allows to learn the relation between paired images present in training data, and then generalize and generate images that correspond to the relation, but were never seen in the training set. Therefore, we call the method Conditional Analogy Generative Adversarial Network (CAGAN), as it is based on adversarial training and employs deep convolutional neural networks. An especially interesting application of that technique is automatic swapping of clothing on fashion model photos. Our work has the following contributions. First, the definition of the end-to-end trainable CAGAN architecture, which implicitly learns segmentation masks without expensive supervised labeling data. Second, experimental results show plausible segmentation masks and often convincing swapped images, given the target article. Finally, we discuss the next steps for that technique: neural network architecture improvements and more advanced applications.},
+  urldate = {2018-05-06},
+  date = {2017-09-14},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Statistics - Machine Learning,Computer Science - Artificial Intelligence},
+  author = {Jetchev, Nikolay and Bergmann, Urs},
+  file = {/Users/sonynka/Zotero/storage/URKHU8SB/Jetchev and Bergmann - 2017 - The Conditional Analogy GAN Swapping Fashion Arti.pdf;/Users/sonynka/Zotero/storage/WBBX74JL/1709.html},
+  annotation = {Comment: To appear at the International Conference on Computer Vision, ICCV 2017, Workshop on Computer Vision for Fashion}
+}
+
+@article{zhu_be_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1710.07346},
+  primaryClass = {cs},
+  title = {Be {{Your Own Prada}}: {{Fashion Synthesis}} with {{Structural Coherence}}},
+  url = {http://arxiv.org/abs/1710.07346},
+  shorttitle = {Be {{Your Own Prada}}},
+  abstract = {We present a novel and effective approach for generating new clothing on a wearer through generative adversarial learning. Given an input image of a person and a sentence describing a different outfit, our model "redresses" the person as desired, while at the same time keeping the wearer and her/his pose unchanged. Generating new outfits with precise regions conforming to a language description while retaining wearer's body structure is a new challenging task. Existing generative adversarial networks are not ideal in ensuring global coherence of structure given both the input photograph and language description as conditions. We address this challenge by decomposing the complex generative process into two conditional stages. In the first stage, we generate a plausible semantic segmentation map that obeys the wearer's pose as a latent spatial arrangement. An effective spatial constraint is formulated to guide the generation of this semantic segmentation map. In the second stage, a generative model with a newly proposed compositional mapping layer is used to render the final image with precise regions and textures conditioned on this map. We extended the DeepFashion dataset [8] by collecting sentence descriptions for 79K images. We demonstrate the effectiveness of our approach through both quantitative and qualitative evaluations. A user study is also conducted. The codes and the data are available at http://mmlab.ie.cuhk. edu.hk/projects/FashionGAN/.},
+  urldate = {2018-05-06},
+  date = {2017-10-19},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Zhu, Shizhan and Fidler, Sanja and Urtasun, Raquel and Lin, Dahua and Loy, Chen Change},
+  file = {/Users/sonynka/Zotero/storage/UW9SI5AP/Zhu et al. - 2017 - Be Your Own Prada Fashion Synthesis with Structur.pdf;/Users/sonynka/Zotero/storage/2GVEVVQF/1710.html},
+  annotation = {Comment: This is the updated version of our original paper appeared in ICCV 2017 proceedings}
+}
+
+@article{zhang_self-attention_2018,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1805.08318},
+  primaryClass = {cs, stat},
+  title = {Self-{{Attention Generative Adversarial Networks}}},
+  url = {http://arxiv.org/abs/1805.08318},
+  abstract = {In this paper, we propose the Self-Attention Generative Adversarial Network (SAGAN) which allows attention-driven, long-range dependency modeling for image generation tasks. Traditional convolutional GANs generate high-resolution details as a function of only spatially local points in lower-resolution feature maps. In SAGAN, details can be generated using cues from all feature locations. Moreover, the discriminator can check that highly detailed features in distant portions of the image are consistent with each other. Furthermore, recent work has shown that generator conditioning affects GAN performance. Leveraging this insight, we apply spectral normalization to the GAN generator and find that this improves training dynamics. The proposed SAGAN achieves the state-of-the-art results, boosting the best published Inception score from 36.8 to 52.52 and reducing Frechet Inception distance from 27.62 to 18.65 on the challenging ImageNet dataset. Visualization of the attention layers shows that the generator leverages neighborhoods that correspond to object shapes rather than local regions of fixed shape.},
+  urldate = {2018-05-30},
+  date = {2018-05-21},
+  keywords = {Computer Science - Learning,Statistics - Machine Learning},
+  author = {Zhang, Han and Goodfellow, Ian and Metaxas, Dimitris and Odena, Augustus},
+  file = {/Users/sonynka/Zotero/storage/UDI7Z5HP/Zhang et al. - 2018 - Self-Attention Generative Adversarial Networks.pdf;/Users/sonynka/Zotero/storage/W5XGNJ3U/1805.html}
+}
+
+@article{gulrajani_improved_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1704.00028},
+  primaryClass = {cs, stat},
+  title = {Improved {{Training}} of {{Wasserstein GANs}}},
+  url = {http://arxiv.org/abs/1704.00028},
+  abstract = {Generative Adversarial Networks (GANs) are powerful generative models, but suffer from training instability. The recently proposed Wasserstein GAN (WGAN) makes progress toward stable training of GANs, but sometimes can still generate only low-quality samples or fail to converge. We find that these problems are often due to the use of weight clipping in WGAN to enforce a Lipschitz constraint on the critic, which can lead to undesired behavior. We propose an alternative to clipping weights: penalize the norm of gradient of the critic with respect to its input. Our proposed method performs better than standard WGAN and enables stable training of a wide variety of GAN architectures with almost no hyperparameter tuning, including 101-layer ResNets and language models over discrete data. We also achieve high quality generations on CIFAR-10 and LSUN bedrooms.},
+  urldate = {2018-06-14},
+  date = {2017-03-31},
+  keywords = {Computer Science - Learning,Statistics - Machine Learning},
+  author = {Gulrajani, Ishaan and Ahmed, Faruk and Arjovsky, Martin and Dumoulin, Vincent and Courville, Aaron},
+  file = {/Users/sonynka/Zotero/storage/EDFS32UC/Gulrajani et al. - 2017 - Improved Training of Wasserstein GANs.pdf;/Users/sonynka/Zotero/storage/3JBGT5VN/1704.html},
+  annotation = {Comment: NIPS camera-ready}
+}
+
+@article{barnett_convergence_2018,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1806.11382},
+  primaryClass = {cs, stat},
+  title = {Convergence {{Problems}} with {{Generative Adversarial Networks}} ({{GANs}})},
+  url = {http://arxiv.org/abs/1806.11382},
+  abstract = {Generative adversarial networks (GANs) are a novel approach to generative modelling, a task whose goal it is to learn a distribution of real data points. They have often proved difficult to train: GANs are unlike many techniques in machine learning, in that they are best described as a two-player game between a discriminator and generator. This has yielded both unreliability in the training process, and a general lack of understanding as to how GANs converge, and if so, to what. The purpose of this dissertation is to provide an account of the theory of GANs suitable for the mathematician, highlighting both positive and negative results. This involves identifying the problems when training GANs, and how topological and game-theoretic perspectives of GANs have contributed to our understanding and improved our techniques in recent years.},
+  urldate = {2018-07-07},
+  date = {2018-06-29},
+  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
+  author = {Barnett, Samuel A.},
+  file = {/Users/sonynka/Zotero/storage/V7KAW6SZ/Barnett - 2018 - Convergence Problems with Generative Adversarial N.pdf;/Users/sonynka/Zotero/storage/NNWM38TG/1806.html},
+  annotation = {Comment: 47 pages, 4 figures}
+}
+
+@incollection{goodfellow_generative_2014,
+  title = {Generative {{Adversarial Nets}}},
+  url = {http://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf},
+  booktitle = {Advances in {{Neural Information Processing Systems}} 27},
+  publisher = {{Curran Associates, Inc.}},
+  date = {2014},
+  pages = {2672--2680},
+  author = {Goodfellow, Ian and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+  editor = {Ghahramani, Z. and Welling, M. and Cortes, C. and Lawrence, N. D. and Weinberger, K. Q.}
+}
+
+@online{giles_ganfather_nodate,
+  langid = {english},
+  title = {The {{GANfather}}: {{The}} Man Who’s given Machines the Gift of Imagination},
+  url = {https://www.technologyreview.com/s/610253/the-ganfather-the-man-whos-given-machines-the-gift-of-imagination/},
+  shorttitle = {The {{GANfather}}},
+  abstract = {By pitting neural networks against one another, Ian Goodfellow has created a powerful AI tool. Now he, and the rest of us, must face the consequences.},
+  journaltitle = {MIT Technology Review},
+  urldate = {2018-07-22},
+  author = {Giles, Martin},
+  file = {/Users/sonynka/Zotero/storage/HH7CUGYR/the-ganfather-the-man-whos-given-machines-the-gift-of-imagination.html}
+}
+
+@article{radford_unsupervised_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1511.06434},
+  primaryClass = {cs},
+  title = {Unsupervised {{Representation Learning}} with {{Deep Convolutional Generative Adversarial Networks}}},
+  url = {http://arxiv.org/abs/1511.06434},
+  abstract = {In recent years, supervised learning with convolutional networks (CNNs) has seen huge adoption in computer vision applications. Comparatively, unsupervised learning with CNNs has received less attention. In this work we hope to help bridge the gap between the success of CNNs for supervised learning and unsupervised learning. We introduce a class of CNNs called deep convolutional generative adversarial networks (DCGANs), that have certain architectural constraints, and demonstrate that they are a strong candidate for unsupervised learning. Training on various image datasets, we show convincing evidence that our deep convolutional adversarial pair learns a hierarchy of representations from object parts to scenes in both the generator and discriminator. Additionally, we use the learned features for novel tasks - demonstrating their applicability as general image representations.},
+  urldate = {2018-07-22},
+  date = {2015-11-19},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+  author = {Radford, Alec and Metz, Luke and Chintala, Soumith},
+  file = {/Users/sonynka/Zotero/storage/SN3CU6HX/Radford et al. - 2015 - Unsupervised Representation Learning with Deep Con.pdf;/Users/sonynka/Zotero/storage/48ZI3J7L/1511.html},
+  annotation = {Comment: Under review as a conference paper at ICLR 2016}
+}
+
+@article{isola_image--image_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1611.07004},
+  primaryClass = {cs},
+  title = {Image-to-{{Image Translation}} with {{Conditional Adversarial Networks}}},
+  url = {http://arxiv.org/abs/1611.07004},
+  abstract = {We investigate conditional adversarial networks as a general-purpose solution to image-to-image translation problems. These networks not only learn the mapping from input image to output image, but also learn a loss function to train this mapping. This makes it possible to apply the same generic approach to problems that traditionally would require very different loss formulations. We demonstrate that this approach is effective at synthesizing photos from label maps, reconstructing objects from edge maps, and colorizing images, among other tasks. Indeed, since the release of the pix2pix software associated with this paper, a large number of internet users (many of them artists) have posted their own experiments with our system, further demonstrating its wide applicability and ease of adoption without the need for parameter tweaking. As a community, we no longer hand-engineer our mapping functions, and this work suggests we can achieve reasonable results without hand-engineering our loss functions either.},
+  urldate = {2018-07-22},
+  date = {2016-11-21},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A.},
+  file = {/Users/sonynka/Zotero/storage/ET9UM9H7/Isola et al. - 2016 - Image-to-Image Translation with Conditional Advers.pdf;/Users/sonynka/Zotero/storage/DZIGDPG6/1611.html},
+  annotation = {Comment: Website: https://phillipi.github.io/pix2pix/}
+}
+
+@online{_gan_2018,
+  langid = {russian},
+  title = {GAN paper list and review},
+  url = {http://spark-in.me/post/gan-paper-review},
+  abstract = {In this I list useful / influential GAN papers and papers related to sparse unsupervised data CNN training / latent space operations
+Статьи автора - http://spark-in.me/author/snakers41
+Блог - http://spark-in.me},
+  journaltitle = {Spark in me},
+  urldate = {2018-07-22},
+  year = {2018-01-04T01:23:27.727119},
+  author = {Вейсов, Александр},
+  file = {/Users/sonynka/Zotero/storage/4XS9LET6/gan-paper-review.html}
+}
+
+@article{zhu_unpaired_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1703.10593},
+  primaryClass = {cs},
+  title = {Unpaired {{Image}}-to-{{Image Translation}} Using {{Cycle}}-{{Consistent Adversarial Networks}}},
+  url = {http://arxiv.org/abs/1703.10593},
+  abstract = {Image-to-image translation is a class of vision and graphics problems where the goal is to learn the mapping between an input image and an output image using a training set of aligned image pairs. However, for many tasks, paired training data will not be available. We present an approach for learning to translate an image from a source domain \$X\$ to a target domain \$Y\$ in the absence of paired examples. Our goal is to learn a mapping \$G: X $\backslash$rightarrow Y\$ such that the distribution of images from \$G(X)\$ is indistinguishable from the distribution \$Y\$ using an adversarial loss. Because this mapping is highly under-constrained, we couple it with an inverse mapping \$F: Y $\backslash$rightarrow X\$ and introduce a cycle consistency loss to push \$F(G(X)) $\backslash$approx X\$ (and vice versa). Qualitative results are presented on several tasks where paired training data does not exist, including collection style transfer, object transfiguration, season transfer, photo enhancement, etc. Quantitative comparisons against several prior methods demonstrate the superiority of our approach.},
+  urldate = {2018-07-22},
+  date = {2017-03-30},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Zhu, Jun-Yan and Park, Taesung and Isola, Phillip and Efros, Alexei A.},
+  file = {/Users/sonynka/Zotero/storage/IGFIF5WG/Zhu et al. - 2017 - Unpaired Image-to-Image Translation using Cycle-Co.pdf;/Users/sonynka/Zotero/storage/D5Y228LY/1703.html},
+  annotation = {Comment: An extended version of our ICCV 2017 paper, v4 updates the implementation details in the appendix}
+}
+
+@article{salimans_improved_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1606.03498},
+  primaryClass = {cs},
+  title = {Improved {{Techniques}} for {{Training GANs}}},
+  url = {http://arxiv.org/abs/1606.03498},
+  abstract = {We present a variety of new architectural features and training procedures that we apply to the generative adversarial networks (GANs) framework. We focus on two applications of GANs: semi-supervised learning, and the generation of images that humans find visually realistic. Unlike most work on generative models, our primary goal is not to train a model that assigns high likelihood to test data, nor do we require the model to be able to learn well without using any labels. Using our new techniques, we achieve state-of-the-art results in semi-supervised classification on MNIST, CIFAR-10 and SVHN. The generated images are of high quality as confirmed by a visual Turing test: our model generates MNIST samples that humans cannot distinguish from real data, and CIFAR-10 samples that yield a human error rate of 21.3\%. We also present ImageNet samples with unprecedented resolution and show that our methods enable the model to learn recognizable features of ImageNet classes.},
+  urldate = {2018-07-22},
+  date = {2016-06-10},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  author = {Salimans, Tim and Goodfellow, Ian and Zaremba, Wojciech and Cheung, Vicki and Radford, Alec and Chen, Xi},
+  file = {/Users/sonynka/Zotero/storage/J8SHLTP8/Salimans et al. - 2016 - Improved Techniques for Training GANs.pdf;/Users/sonynka/Zotero/storage/Y9GPSCD2/1606.html}
+}
+
+@article{yoo_pixel-level_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1603.07442},
+  primaryClass = {cs},
+  title = {Pixel-{{Level Domain Transfer}}},
+  url = {http://arxiv.org/abs/1603.07442},
+  abstract = {We present an image-conditional image generation model. The model transfers an input domain to a target domain in semantic level, and generates the target image in pixel level. To generate realistic target images, we employ the real/fake-discriminator as in Generative Adversarial Nets, but also introduce a novel domain-discriminator to make the generated image relevant to the input image. We verify our model through a challenging task of generating a piece of clothing from an input image of a dressed person. We present a high quality clothing dataset containing the two domains, and succeed in demonstrating decent results.},
+  urldate = {2018-07-22},
+  date = {2016-03-24},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Artificial Intelligence},
+  author = {Yoo, Donggeun and Kim, Namil and Park, Sunggyun and Paek, Anthony S. and Kweon, In So},
+  file = {/Users/sonynka/Zotero/storage/ASIUFWL5/Yoo et al. - 2016 - Pixel-Level Domain Transfer.pdf;/Users/sonynka/Zotero/storage/UU36UD4B/1603.html},
+  annotation = {Comment: Published in ECCV 2016. Code and dataset available at dgyoo.github.io}
+}
+
+@article{arjovsky_towards_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1701.04862},
+  primaryClass = {cs, stat},
+  title = {Towards {{Principled Methods}} for {{Training Generative Adversarial Networks}}},
+  url = {http://arxiv.org/abs/1701.04862},
+  abstract = {The goal of this paper is not to introduce a single algorithm or method, but to make theoretical steps towards fully understanding the training dynamics of generative adversarial networks. In order to substantiate our theoretical analysis, we perform targeted experiments to verify our assumptions, illustrate our claims, and quantify the phenomena. This paper is divided into three sections. The first section introduces the problem at hand. The second section is dedicated to studying and proving rigorously the problems including instability and saturation that arize when training generative adversarial networks. The third section examines a practical and theoretically grounded direction towards solving these problems, while introducing new tools to study them.},
+  urldate = {2018-07-28},
+  date = {2017-01-17},
+  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
+  author = {Arjovsky, Martin and Bottou, Léon},
+  file = {/Users/sonynka/Zotero/storage/EKD5AWR5/Arjovsky and Bottou - 2017 - Towards Principled Methods for Training Generative.pdf;/Users/sonynka/Zotero/storage/S2IWIDNW/1701.html}
+}
+
+@online{hesse_image--image_2017,
+  title = {Image-to-{{Image Translation}} in {{Tensorflow}} - {{Affine Layer}}},
+  url = {https://affinelayer.com/pix2pix/},
+  journaltitle = {Image-to-Image Translation in Tensorflow},
+  urldate = {2018-07-28},
+  date = {2017-01-25},
+  author = {Hesse, Christopher},
+  file = {/Users/sonynka/Zotero/storage/G4U4L4MM/pix2pix.html;/Users/sonynka/Zotero/storage/NH7D8TT6/pix2pix.html}
+}
+
+@article{mirza_conditional_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1411.1784},
+  primaryClass = {cs, stat},
+  title = {Conditional {{Generative Adversarial Nets}}},
+  url = {http://arxiv.org/abs/1411.1784},
+  abstract = {Generative Adversarial Nets [8] were recently introduced as a novel way to train generative models. In this work we introduce the conditional version of generative adversarial nets, which can be constructed by simply feeding the data, y, we wish to condition on to both the generator and discriminator. We show that this model can generate MNIST digits conditioned on class labels. We also illustrate how this model could be used to learn a multi-modal model, and provide preliminary examples of an application to image tagging in which we demonstrate how this approach can generate descriptive tags which are not part of training labels.},
+  urldate = {2018-07-28},
+  date = {2014-11-06},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
+  author = {Mirza, Mehdi and Osindero, Simon},
+  file = {/Users/sonynka/Zotero/storage/64LSPCFZ/Mirza and Osindero - 2014 - Conditional Generative Adversarial Nets.pdf;/Users/sonynka/Zotero/storage/RKZMWAI7/1411.html}
+}
+
+@article{zhu_generative_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1609.03552},
+  primaryClass = {cs},
+  title = {Generative {{Visual Manipulation}} on the {{Natural Image Manifold}}},
+  url = {http://arxiv.org/abs/1609.03552},
+  abstract = {Realistic image manipulation is challenging because it requires modifying the image appearance in a user-controlled way, while preserving the realism of the result. Unless the user has considerable artistic skill, it is easy to "fall off" the manifold of natural images while editing. In this paper, we propose to learn the natural image manifold directly from data using a generative adversarial neural network. We then define a class of image editing operations, and constrain their output to lie on that learned manifold at all times. The model automatically adjusts the output keeping all edits as realistic as possible. All our manipulations are expressed in terms of constrained optimization and are applied in near-real time. We evaluate our algorithm on the task of realistic photo manipulation of shape and color. The presented method can further be used for changing one image to look like the other, as well as generating novel imagery from scratch based on user's scribbles.},
+  urldate = {2018-07-28},
+  date = {2016-09-12},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Zhu, Jun-Yan and Krähenbühl, Philipp and Shechtman, Eli and Efros, Alexei A.},
+  file = {/Users/sonynka/Zotero/storage/UISHLDB9/Zhu et al. - 2016 - Generative Visual Manipulation on the Natural Imag.pdf;/Users/sonynka/Zotero/storage/VY742C44/1609.html},
+  annotation = {Comment: In European Conference on Computer Vision (ECCV 2016)}
+}
+
+@article{pathak_context_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1604.07379},
+  primaryClass = {cs},
+  title = {Context {{Encoders}}: {{Feature Learning}} by {{Inpainting}}},
+  url = {http://arxiv.org/abs/1604.07379},
+  shorttitle = {Context {{Encoders}}},
+  abstract = {We present an unsupervised visual feature learning algorithm driven by context-based pixel prediction. By analogy with auto-encoders, we propose Context Encoders -- a convolutional neural network trained to generate the contents of an arbitrary image region conditioned on its surroundings. In order to succeed at this task, context encoders need to both understand the content of the entire image, as well as produce a plausible hypothesis for the missing part(s). When training context encoders, we have experimented with both a standard pixel-wise reconstruction loss, as well as a reconstruction plus an adversarial loss. The latter produces much sharper results because it can better handle multiple modes in the output. We found that a context encoder learns a representation that captures not just appearance but also the semantics of visual structures. We quantitatively demonstrate the effectiveness of our learned features for CNN pre-training on classification, detection, and segmentation tasks. Furthermore, context encoders can be used for semantic inpainting tasks, either stand-alone or as initialization for non-parametric methods.},
+  urldate = {2018-07-28},
+  date = {2016-04-25},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Graphics,Computer Science - Artificial Intelligence,Computer Science - Machine Learning},
+  author = {Pathak, Deepak and Krahenbuhl, Philipp and Donahue, Jeff and Darrell, Trevor and Efros, Alexei A.},
+  file = {/Users/sonynka/Zotero/storage/AJT3A22A/Pathak et al. - 2016 - Context Encoders Feature Learning by Inpainting.pdf;/Users/sonynka/Zotero/storage/RB9Y92II/1604.html},
+  annotation = {Comment: New results on ImageNet Generation}
+}
+
+@online{noauthor_picsbuffet_nodate,
+  title = {Picsbuffet},
+  url = {https://picsbuffet.com/fotolia/#0,147,1576},
+  urldate = {2018-07-29},
+  file = {/Users/sonynka/Zotero/storage/TWFWA39L/fotolia.html}
+}
+
+@online{sonnenberg_akiwi_nodate,
+  title = {Akiwi - a Keywording Tool},
+  url = {http://www.akiwi.eu},
+  abstract = {www.akiwi.eu - a web page suggesting keywords for uploaded images},
+  journaltitle = {akiwi},
+  urldate = {2018-07-29},
+  author = {Sonnenberg, Prof Dr Kai-Uwe Barthel; Jonas Hartmann; Nico Hezel; Mike Krause; Anja},
+  file = {/Users/sonynka/Zotero/storage/7RZVV6BB/www.akiwi.eu.html}
+}
+
+@online{zalando_damenmode_nodate,
+  title = {Damenmode \& {{Damenschuhe}} Bei {{ZALANDO}} | {{Frauenmode}} Online Kaufen},
+  url = {https://www.zalando.de/damen-home/},
+  urldate = {2018-07-29},
+  author = {{Zalando}},
+  file = {/Users/sonynka/Zotero/storage/6SV8VYVM/damen-home.html}
+}
+
+@online{about_you_mode_nodate,
+  title = {Mode Online von Mehr Als 1.000 {{Top}}-{{Marken}} | {{ABOUT YOU}}},
+  url = {https://www.aboutyou.de/},
+  urldate = {2018-07-29},
+  author = {{ABOUT YOU}},
+  file = {/Users/sonynka/Zotero/storage/PSSFYPUC/www.aboutyou.de.html}
+}
+
+@online{pc_damen_nodate,
+  title = {Damen {{Sommermode}} von {{P}}\&{{C}}*: {{Die}} Neuesten {{Trends}} Für {{Frauen Online Shop}} | {{FASHION ID Online Shop}}},
+  url = {https://www.fashionid.de/damen/},
+  urldate = {2018-07-29},
+  author = {{P\&C}},
+  file = {/Users/sonynka/Zotero/storage/3LPWMYRG/damen.html}
+}
+
+@article{odena_conditional_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1610.09585},
+  primaryClass = {cs, stat},
+  title = {Conditional {{Image Synthesis With Auxiliary Classifier GANs}}},
+  url = {http://arxiv.org/abs/1610.09585},
+  abstract = {Synthesizing high resolution photorealistic images has been a long-standing challenge in machine learning. In this paper we introduce new methods for the improved training of generative adversarial networks (GANs) for image synthesis. We construct a variant of GANs employing label conditioning that results in 128x128 resolution image samples exhibiting global coherence. We expand on previous work for image quality assessment to provide two new analyses for assessing the discriminability and diversity of samples from class-conditional image synthesis models. These analyses demonstrate that high resolution samples provide class information not present in low resolution samples. Across 1000 ImageNet classes, 128x128 samples are more than twice as discriminable as artificially resized 32x32 samples. In addition, 84.7\% of the classes have samples exhibiting diversity comparable to real ImageNet data.},
+  urldate = {2018-07-30},
+  date = {2016-10-29},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Statistics - Machine Learning},
+  author = {Odena, Augustus and Olah, Christopher and Shlens, Jonathon},
+  file = {/Users/sonynka/Zotero/storage/J2L7FTJN/Odena et al. - 2016 - Conditional Image Synthesis With Auxiliary Classif.pdf;/Users/sonynka/Zotero/storage/QIIK8SZR/1610.html}
+}
+
+@article{wang_high-resolution_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1711.11585},
+  primaryClass = {cs},
+  title = {High-{{Resolution Image Synthesis}} and {{Semantic Manipulation}} with {{Conditional GANs}}},
+  url = {http://arxiv.org/abs/1711.11585},
+  abstract = {We present a new method for synthesizing high-resolution photo-realistic images from semantic label maps using conditional generative adversarial networks (conditional GANs). Conditional GANs have enabled a variety of applications, but the results are often limited to low-resolution and still far from realistic. In this work, we generate 2048x1024 visually appealing results with a novel adversarial loss, as well as new multi-scale generator and discriminator architectures. Furthermore, we extend our framework to interactive visual manipulation with two additional features. First, we incorporate object instance segmentation information, which enables object manipulations such as removing/adding objects and changing the object category. Second, we propose a method to generate diverse results given the same input, allowing users to edit the object appearance interactively. Human opinion studies demonstrate that our method significantly outperforms existing methods, advancing both the quality and the resolution of deep image synthesis and editing.},
+  urldate = {2018-07-30},
+  date = {2017-11-30},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Graphics,Computer Science - Machine Learning},
+  author = {Wang, Ting-Chun and Liu, Ming-Yu and Zhu, Jun-Yan and Tao, Andrew and Kautz, Jan and Catanzaro, Bryan},
+  file = {/Users/sonynka/Zotero/storage/XE8V6KF4/Wang et al. - 2017 - High-Resolution Image Synthesis and Semantic Manip.pdf;/Users/sonynka/Zotero/storage/YT4QSHFR/1711.html}
+}
+
+@online{noauthor_transfer_nodate,
+  title = {Transfer {{Learning}} Tutorial — {{PyTorch Tutorials}} 0.4.1 Documentation},
+  url = {https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html#sphx-glr-beginner-transfer-learning-tutorial-py},
+  urldate = {2018-08-10},
+  file = {/Users/sonynka/Zotero/storage/SRCVJVNG/transfer_learning_tutorial.html}
+}
+
+@article{reinhard_color_2001,
+  langid = {english},
+  title = {Color {{Transfer}} between {{Images}}},
+  journaltitle = {IEEE Computer Graphics and Applications},
+  date = {2001},
+  pages = {8},
+  author = {Reinhard, Erik and Ashikhmin, Michael and Gooch, Bruce and Shirley, Peter},
+  file = {/Users/sonynka/Zotero/storage/IUJJ6TIM/Reinhard et al. - 2001 - Color Transfer between Images.pdf}
+}
+
+@online{lecun_mnist_nodate,
+  title = {{{MNIST}} Handwritten Digit Database},
+  url = {http://yann.lecun.com/exdb/mnist/},
+  urldate = {2018-08-20},
+  author = {LeCun, Yann and Cortes, Corinna and Burges, Chris},
+  file = {/Users/sonynka/Zotero/storage/I3PPHJNX/mnist.html}
+}
+
+@software{kim_dcgan-tensorflow_2018,
+  title = {{{DCGAN}}-Tensorflow: {{A}} Tensorflow Implementation of "{{Deep Convolutional Generative Adversarial Networks}}"},
+  url = {https://github.com/carpedm20/DCGAN-tensorflow},
+  shorttitle = {{{DCGAN}}-Tensorflow},
+  urldate = {2018-08-20},
+  date = {2018-08-20T09:24:17Z},
+  keywords = {dcgan,gan,generative-model,tensorflow},
+  author = {Kim, Taehoon},
+  origdate = {2015-12-11T02:06:40Z}
+}
+
+@online{hesse_image--image_nodate,
+  title = {Image-to-{{Image Demo}} - {{Affine Layer}}},
+  url = {https://affinelayer.com/pixsrv/},
+  journaltitle = {Image-to-Image Demo},
+  urldate = {2018-08-20},
+  author = {Hesse, Christopher},
+  file = {/Users/sonynka/Zotero/storage/NJM29BCU/pixsrv.html}
+}
+
+@software{rkjones4_gangogh_2018,
+  title = {{{GANGogh}}: {{Using GANs}} to Create {{Art}}},
+  url = {https://github.com/rkjones4/GANGogh},
+  shorttitle = {{{GANGogh}}},
+  urldate = {2018-08-20},
+  date = {2018-08-06T22:36:34Z},
+  author = {{rkjones4}},
+  origdate = {2017-06-18T01:47:11Z}
+}
+
+@article{karras_progressive_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1710.10196},
+  primaryClass = {cs, stat},
+  title = {Progressive {{Growing}} of {{GANs}} for {{Improved Quality}}, {{Stability}}, and {{Variation}}},
+  url = {http://arxiv.org/abs/1710.10196},
+  abstract = {We describe a new training methodology for generative adversarial networks. The key idea is to grow both the generator and discriminator progressively: starting from a low resolution, we add new layers that model increasingly fine details as training progresses. This both speeds the training up and greatly stabilizes it, allowing us to produce images of unprecedented quality, e.g., CelebA images at 1024\^2. We also propose a simple way to increase the variation in generated images, and achieve a record inception score of 8.80 in unsupervised CIFAR10. Additionally, we describe several implementation details that are important for discouraging unhealthy competition between the generator and discriminator. Finally, we suggest a new metric for evaluating GAN results, both in terms of image quality and variation. As an additional contribution, we construct a higher-quality version of the CelebA dataset.},
+  urldate = {2018-08-20},
+  date = {2017-10-27},
+  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  author = {Karras, Tero and Aila, Timo and Laine, Samuli and Lehtinen, Jaakko},
+  file = {/Users/sonynka/Zotero/storage/T4MP8R2P/Karras et al. - 2017 - Progressive Growing of GANs for Improved Quality, .pdf;/Users/sonynka/Zotero/storage/MFC2BNPA/1710.html},
+  annotation = {Comment: Final ICLR 2018 version}
+}
+
+@article{lecun_convolutional_1995,
+  title = {Convolutional {{Networks}} for {{Images}}, {{Speech}}, and {{Time}}-{{Series}}},
+  journaltitle = {The Handbook of Brain Theory and Neural Networks},
+  date = {1995},
+  author = {LeCun, Y. and Bengio, Y.},
+  editor = {Arbib, M. A.}
+}
+
+@article{gauthier_conditional_2015,
+  title = {Conditional Generative Adversarial Nets for Convolutional Face Generation},
+  date = {2015},
+  author = {Gauthier, Jon}
+}
+
+@article{reed_generative_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1605.05396},
+  primaryClass = {cs},
+  title = {Generative {{Adversarial Text}} to {{Image Synthesis}}},
+  url = {http://arxiv.org/abs/1605.05396},
+  abstract = {Automatic synthesis of realistic images from text would be interesting and useful, but current AI systems are still far from this goal. However, in recent years generic and powerful recurrent neural network architectures have been developed to learn discriminative text feature representations. Meanwhile, deep convolutional generative adversarial networks (GANs) have begun to generate highly compelling images of specific categories, such as faces, album covers, and room interiors. In this work, we develop a novel deep architecture and GAN formulation to effectively bridge these advances in text and image model- ing, translating visual concepts from characters to pixels. We demonstrate the capability of our model to generate plausible images of birds and flowers from detailed text descriptions.},
+  urldate = {2018-08-20},
+  date = {2016-05-17},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Neural and Evolutionary Computing},
+  author = {Reed, Scott and Akata, Zeynep and Yan, Xinchen and Logeswaran, Lajanugen and Schiele, Bernt and Lee, Honglak},
+  file = {/Users/sonynka/Zotero/storage/NES6U7TC/Reed et al. - 2016 - Generative Adversarial Text to Image Synthesis.pdf;/Users/sonynka/Zotero/storage/AKKFA4HZ/1605.html},
+  annotation = {Comment: ICML 2016}
+}
+
+@article{springenberg_striving_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1412.6806},
+  primaryClass = {cs},
+  title = {Striving for {{Simplicity}}: {{The All Convolutional Net}}},
+  url = {http://arxiv.org/abs/1412.6806},
+  shorttitle = {Striving for {{Simplicity}}},
+  abstract = {Most modern convolutional neural networks (CNNs) used for object recognition are built using the same principles: Alternating convolution and max-pooling layers followed by a small number of fully connected layers. We re-evaluate the state of the art for object recognition from small images with convolutional networks, questioning the necessity of different components in the pipeline. We find that max-pooling can simply be replaced by a convolutional layer with increased stride without loss in accuracy on several image recognition benchmarks. Following this finding -- and building on other recent work for finding simple network structures -- we propose a new architecture that consists solely of convolutional layers and yields competitive or state of the art performance on several object recognition datasets (CIFAR-10, CIFAR-100, ImageNet). To analyze the network we introduce a new variant of the "deconvolution approach" for visualizing features learned by CNNs, which can be applied to a broader range of network structures than existing approaches.},
+  urldate = {2018-08-20},
+  date = {2014-12-21},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  author = {Springenberg, Jost Tobias and Dosovitskiy, Alexey and Brox, Thomas and Riedmiller, Martin},
+  file = {/Users/sonynka/Zotero/storage/QBNWGLLL/Springenberg et al. - 2014 - Striving for Simplicity The All Convolutional Net.pdf;/Users/sonynka/Zotero/storage/ICBLVD52/1412.html},
+  annotation = {Comment: accepted to ICLR-2015 workshop track; no changes other than style}
+}
+
+@article{ioffe_batch_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1502.03167},
+  primaryClass = {cs},
+  title = {Batch {{Normalization}}: {{Accelerating Deep Network Training}} by {{Reducing Internal Covariate Shift}}},
+  url = {http://arxiv.org/abs/1502.03167},
+  shorttitle = {Batch {{Normalization}}},
+  abstract = {Training Deep Neural Networks is complicated by the fact that the distribution of each layer's inputs changes during training, as the parameters of the previous layers change. This slows down the training by requiring lower learning rates and careful parameter initialization, and makes it notoriously hard to train models with saturating nonlinearities. We refer to this phenomenon as internal covariate shift, and address the problem by normalizing layer inputs. Our method draws its strength from making normalization a part of the model architecture and performing the normalization for each training mini-batch. Batch Normalization allows us to use much higher learning rates and be less careful about initialization. It also acts as a regularizer, in some cases eliminating the need for Dropout. Applied to a state-of-the-art image classification model, Batch Normalization achieves the same accuracy with 14 times fewer training steps, and beats the original model by a significant margin. Using an ensemble of batch-normalized networks, we improve upon the best published result on ImageNet classification: reaching 4.9\% top-5 validation error (and 4.8\% test error), exceeding the accuracy of human raters.},
+  urldate = {2018-08-20},
+  date = {2015-02-10},
+  keywords = {Computer Science - Machine Learning},
+  author = {Ioffe, Sergey and Szegedy, Christian},
+  file = {/Users/sonynka/Zotero/storage/HMQ4LM4R/Ioffe and Szegedy - 2015 - Batch Normalization Accelerating Deep Network Tra.pdf;/Users/sonynka/Zotero/storage/S6ZK256Q/1502.html}
+}
+
+@inproceedings{nair_rectified_2010,
+  location = {{USA}},
+  title = {Rectified {{Linear Units Improve Restricted Boltzmann Machines}}},
+  isbn = {978-1-60558-907-7},
+  url = {http://dl.acm.org/citation.cfm?id=3104322.3104425},
+  abstract = {Restricted Boltzmann machines were developed using binary stochastic hidden units. These can be generalized by replacing each binary unit by an infinite number of copies that all have the same weights but have progressively more negative biases. The learning and inference rules for these "Stepped Sigmoid Units" are unchanged. They can be approximated efficiently by noisy, rectified linear units. Compared with binary units, these units learn features that are better for object recognition on the NORB dataset and face verification on the Labeled Faces in the Wild dataset. Unlike binary units, rectified linear units preserve information about relative intensities as information travels through multiple layers of feature detectors.},
+  booktitle = {Proceedings of the 27th {{International Conference}} on {{International Conference}} on {{Machine Learning}}},
+  series = {ICML'10},
+  publisher = {{Omnipress}},
+  urldate = {2018-08-20},
+  date = {2010},
+  pages = {807--814},
+  author = {Nair, Vinod and Hinton, Geoffrey E.}
+}
+
+@inproceedings{liu2016deepfashion,
+  title = {{{DeepFashion}}: {{Powering Robust Clothes Recognition}} and {{Retrieval}} with {{Rich Annotations}}},
+  url = {http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/AttributePrediction.html},
+  booktitle = {Proceedings of {{IEEE Conference}} on {{Computer Vision}} and {{Pattern Recognition}} ({{CVPR}})},
+  date = {2016-06},
+  author = {Liu, Ziwei and Luo, Ping and Qiu, Shi and Wang, Xiaogang and Tang, Xiaoou}
+}
+
+@article{ronneberger_u-net_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1505.04597},
+  primaryClass = {cs},
+  title = {U-{{Net}}: {{Convolutional Networks}} for {{Biomedical Image Segmentation}}},
+  url = {http://arxiv.org/abs/1505.04597},
+  shorttitle = {U-{{Net}}},
+  abstract = {There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net .},
+  urldate = {2018-08-22},
+  date = {2015-05-18},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+  file = {/Users/sonynka/Zotero/storage/GKR5NTA7/Ronneberger et al. - 2015 - U-Net Convolutional Networks for Biomedical Image.pdf;/Users/sonynka/Zotero/storage/3YJZL5PL/1505.html},
+  annotation = {Comment: conditionally accepted at MICCAI 2015}
+}
+
+@article{johnson_perceptual_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1603.08155},
+  primaryClass = {cs},
+  title = {Perceptual {{Losses}} for {{Real}}-{{Time Style Transfer}} and {{Super}}-{{Resolution}}},
+  url = {http://arxiv.org/abs/1603.08155},
+  abstract = {We consider image transformation problems, where an input image is transformed into an output image. Recent methods for such problems typically train feed-forward convolutional neural networks using a $\backslash$emph\{per-pixel\} loss between the output and ground-truth images. Parallel work has shown that high-quality images can be generated by defining and optimizing $\backslash$emph\{perceptual\} loss functions based on high-level features extracted from pretrained networks. We combine the benefits of both approaches, and propose the use of perceptual loss functions for training feed-forward networks for image transformation tasks. We show results on image style transfer, where a feed-forward network is trained to solve the optimization problem proposed by Gatys et al in real-time. Compared to the optimization-based method, our network gives similar qualitative results but is three orders of magnitude faster. We also experiment with single-image super-resolution, where replacing a per-pixel loss with a perceptual loss gives visually pleasing results.},
+  urldate = {2018-08-22},
+  date = {2016-03-26},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+  author = {Johnson, Justin and Alahi, Alexandre and Fei-Fei, Li},
+  file = {/Users/sonynka/Zotero/storage/BHZRZHEG/Johnson et al. - 2016 - Perceptual Losses for Real-Time Style Transfer and.pdf;/Users/sonynka/Zotero/storage/RREDFPLQ/1603.html}
+}
+
+@article{li_precomputed_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1604.04382},
+  primaryClass = {cs},
+  title = {Precomputed {{Real}}-{{Time Texture Synthesis}} with {{Markovian Generative Adversarial Networks}}},
+  url = {http://arxiv.org/abs/1604.04382},
+  abstract = {This paper proposes Markovian Generative Adversarial Networks (MGANs), a method for training generative neural networks for efficient texture synthesis. While deep neural network approaches have recently demonstrated remarkable results in terms of synthesis quality, they still come at considerable computational costs (minutes of run-time for low-res images). Our paper addresses this efficiency issue. Instead of a numerical deconvolution in previous work, we precompute a feed-forward, strided convolutional network that captures the feature statistics of Markovian patches and is able to directly generate outputs of arbitrary dimensions. Such network can directly decode brown noise to realistic texture, or photos to artistic paintings. With adversarial training, we obtain quality comparable to recent neural texture synthesis methods. As no optimization is required any longer at generation time, our run-time performance (0.25M pixel images at 25Hz) surpasses previous neural texture synthesizers by a significant margin (at least 500 times faster). We apply this idea to texture synthesis, style transfer, and video stylization.},
+  urldate = {2018-08-22},
+  date = {2016-04-15},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Li, Chuan and Wand, Michael},
+  file = {/Users/sonynka/Zotero/storage/6VHA226H/Li and Wand - 2016 - Precomputed Real-Time Texture Synthesis with Marko.pdf;/Users/sonynka/Zotero/storage/6F39FIN9/1604.html},
+  annotation = {Comment: 17 pages, 15 figures}
+}
+
+@inproceedings{pmlr-v70-arjovsky17a,
+  location = {{International Convention Centre, Sydney, Australia}},
+  title = {Wasserstein {{Generative Adversarial Networks}}},
+  volume = {70},
+  url = {http://proceedings.mlr.press/v70/arjovsky17a.html},
+  abstract = {We introduce a new algorithm named WGAN, an alternative to traditional GAN training. In this new model, we show that we can improve the stability of learning, get rid of problems like mode collapse, and provide meaningful learning curves useful for debugging and hyperparameter searches. Furthermore, we show that the corresponding optimization problem is sound, and provide extensive theoretical work highlighting the deep connections to different distances between distributions.},
+  booktitle = {Proceedings of the 34th {{International Conference}} on {{Machine Learning}}},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {{PMLR}},
+  date = {2017-08-06/2017-08-11},
+  pages = {214-223},
+  author = {Arjovsky, Martin and Chintala, Soumith and Bottou, Léon},
+  editor = {Precup, Doina and Teh, Yee Whye}
+}
+
+@inreference{noauthor_k-means_2018,
+  langid = {english},
+  title = {K-Means Clustering},
+  url = {https://en.wikipedia.org/w/index.php?title=K-means_clustering&oldid=855299299},
+  abstract = {k-means clustering is a method of vector quantization, originally from signal processing, that is popular for cluster analysis in data mining. k-means clustering aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster. This results in a partitioning of the data space into Voronoi cells.
+The problem is computationally difficult (NP-hard); however, there are efficient heuristic algorithms that are commonly employed and converge quickly to a local optimum. These are usually similar to the expectation-maximization algorithm for mixtures of Gaussian distributions via an iterative refinement approach employed by both k-means and Gaussian mixture modeling. Additionally, they both use cluster centers to model the data; however, k-means clustering tends to find clusters of comparable spatial extent, while the expectation-maximization mechanism allows clusters to have different shapes.
+The algorithm has a loose relationship to the k-nearest neighbor classifier, a popular machine learning technique for classification that is often confused with k-means due to the k in the name. One can apply the 1-nearest neighbor classifier on the cluster centers obtained by k-means to classify new data into the existing clusters. This is known as nearest centroid classifier or Rocchio algorithm.},
+  booktitle = {Wikipedia},
+  urldate = {2018-08-22},
+  date = {2018-08-17T08:56:06Z},
+  file = {/Users/sonynka/Zotero/storage/CV9IATIH/index.html},
+  note = {Page Version ID: 855299299}
+}
+
+@online{noauthor_welcome_nodate,
+  langid = {english},
+  title = {Welcome to {{Python}}.Org},
+  url = {https://www.python.org/},
+  abstract = {The official home of the Python Programming Language},
+  journaltitle = {Python.org},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/NTG5KZPT/www.python.org.html}
+}
+
+@online{noauthor_pytorch_nodate,
+  langid = {english},
+  title = {{{PyTorch}}},
+  url = {https://pytorch.org/},
+  abstract = {Tensors and Dynamic neural networks in Python
+                    with strong GPU acceleration.},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/2M5T5NBN/pytorch.org.html}
+}
+
+@online{noauthor_python_nodate,
+  title = {Python {{Data Analysis Library}} — Pandas: {{Python Data Analysis Library}}},
+  url = {https://pandas.pydata.org/},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/D3ZTMJJC/pandas.pydata.org.html}
+}
+
+@online{noauthor_numpy_nodate,
+  title = {{{NumPy}} — {{NumPy}}},
+  url = {http://www.numpy.org/},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/GGCTZFKU/www.numpy.org.html}
+}
+
+@online{noauthor_scikit-learn_nodate,
+  title = {Scikit-Learn: Machine Learning in {{Python}} — Scikit-Learn 0.19.2 Documentation},
+  url = {http://scikit-learn.org/stable/},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/89NQNC74/stable.html}
+}
+
+@online{noauthor_matplotlib_nodate,
+  title = {Matplotlib: {{Python}} Plotting — {{Matplotlib}} 2.2.3 Documentation},
+  url = {https://matplotlib.org/},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/IHWF49F3/matplotlib.org.html}
+}
+
+@online{noauthor_pillow_nodate,
+  title = {Pillow — {{Pillow}} ({{PIL Fork}}) 5.3.0.Dev0 Documentation},
+  url = {https://pillow.readthedocs.io/en/latest/#},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/PY5A3SQV/latest.html}
+}
+
+@online{noauthor_sklearn.cluster.kmeans_nodate,
+  title = {Sklearn.Cluster.{{KMeans}} — Scikit-Learn 0.19.2 Documentation},
+  url = {http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html},
+  urldate = {2018-08-22},
+  file = {/Users/sonynka/Zotero/storage/WJD2LAB7/sklearn.cluster.KMeans.html}
+}
+
+@software{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate,
+  title = {Junyanz/Pytorch-{{CycleGAN}}-and-Pix2pix: {{Image}}-to-Image Translation in {{PyTorch}} (e.g., Horse2zebra, Edges2cats, and More)},
+  url = {https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix},
+  urldate = {2018-08-25},
+  file = {/Users/sonynka/Zotero/storage/TXCQKNZT/pytorch-CycleGAN-and-pix2pix.html}
+}
+
+@article{kingma_adam_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1412.6980},
+  primaryClass = {cs},
+  title = {Adam: {{A Method}} for {{Stochastic Optimization}}},
+  url = {http://arxiv.org/abs/1412.6980},
+  shorttitle = {Adam},
+  abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
+  urldate = {2018-08-25},
+  date = {2014-12-22},
+  keywords = {Computer Science - Machine Learning},
+  author = {Kingma, Diederik P. and Ba, Jimmy},
+  file = {/Users/sonynka/Zotero/storage/SVHUP7UT/Kingma and Ba - 2014 - Adam A Method for Stochastic Optimization.pdf;/Users/sonynka/Zotero/storage/WKC55VNN/1412.html},
+  annotation = {Comment: Published as a conference paper at the 3rd International Conference for Learning Representations, San Diego, 2015}
+}
+
+@incollection{NIPS2012_4824,
+  title = {{{ImageNet Classification}} with {{Deep Convolutional Neural Networks}}},
+  url = {http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf},
+  booktitle = {Advances in {{Neural Information Processing Systems}} 25},
+  publisher = {{Curran Associates, Inc.}},
+  date = {2012},
+  pages = {1097-1105},
+  author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  editor = {Pereira, F. and Burges, C. J. C. and Bottou, L. and Weinberger, K. Q.},
+  file = {/Users/sonynka/Zotero/storage/LAGVXXHR/Krizhevsky et al. - 2017 - ImageNet classification with deep convolutional ne.pdf}
+}
+
+@inproceedings{razavian_cnn_2014-2,
+  title = {{{CNN Features Off}}-the-{{Shelf}}: {{An Astounding Baseline}} for {{Recognition}}},
+  volume = {1403},
+  doi = {10.1109/CVPRW.2014.131},
+  shorttitle = {{{CNN Features Off}}-the-{{Shelf}}},
+  abstract = {Recent results indicate that the generic descriptors extracted from the convolutional neural networks are very powerful. This paper adds to the mounting evidence that this is indeed the case. We report on a series of experiments conducted for different recognition tasks using the publicly available code and model of the OverFeat network which was trained to perform object classification on ILSVRC13. We use features extracted from the OverFeat network as a generic image representation to tackle the diverse range of recognition tasks of object image classification, scene recognition, fine grained recognition, attribute detection and image retrieval applied to a diverse set of datasets. We selected these tasks and datasets as they gradually move further away from the original task and data the OverFeat network was trained to solve. Remarkably we report better or competitive results compared to the state-of-the-art in all the tasks on various datasets. The results are achieved using a linear SVM classifier applied to a feature representation of size 4096 extracted from a layer in the net. The results strongly suggest that features obtained from deep learning with convolutional nets should be the primary candidate in most visual classification tasks.},
+  booktitle = {2014 {{IEEE}} Conference on Computer Vision and Pattern Recognition Workshops},
+  date = {2014-03-23},
+  author = {Razavian, Ali and Azizpour, Hossein and Sullivan, Josephine and Carlsson, Stefan},
+  file = {/Users/sonynka/Zotero/storage/TXKK5BWH/Razavian et al. - 2014 - CNN Features Off-the-Shelf An Astounding Baseline.pdf}
+}
+
+@article{barthel_visually_nodate,
+  langid = {english},
+  title = {Visually {{Exploring Millions}} of {{Images Using Image Maps}} and {{Graphs}}},
+  abstract = {Humans can easily understand complex pictures, but they have great difficulties to deal with large amounts of unorganized individual images. Users are confronted with large image sets when searching photos in image archives or when trying to find particular scenes in a video collection. In these cases, searching for particular images can be very time consuming. As human perception is limited, overview is quickly lost if too many images are shown at the same time. Up to now very large image and video archives do not offer visual browsing or exploration of the entire collection.},
+  pages = {26},
+  author = {Barthel, Kai Uwe and Hezel, Nico},
+  file = {/Users/sonynka/Zotero/storage/5NS8TBZP/Barthel and Hezel - Visually Exploring Millions of Images Using Image .pdf}
+}
+
+@article{deselaers_features_2008,
+  langid = {english},
+  title = {Features for Image Retrieval: An Experimental Comparison},
+  volume = {11},
+  issn = {1386-4564, 1573-7659},
+  url = {http://link.springer.com/10.1007/s10791-007-9039-3},
+  doi = {10.1007/s10791-007-9039-3},
+  shorttitle = {Features for Image Retrieval},
+  abstract = {An experimental comparison of a large number of different image descriptors for content-based image retrieval is presented. Many of the papers describing new techniques and descriptors for content-based image retrieval describe their newly proposed methods as most appropriate without giving an in-depth comparison with all methods that were proposed earlier. In this paper, we ﬁrst give an overview of a large variety of features for content-based image retrieval and compare them quantitatively on four different tasks: stock photo retrieval, personal photo collection retrieval, building retrieval, and medical image retrieval. For the experiments, ﬁve different, publicly available image databases are used and the retrieval performance of the features is analyzed in detail. This allows for a direct comparison of all features considered in this work and furthermore will allow a comparison of newly proposed features to these in the future. Additionally, the correlation of the features is analyzed, which opens the way for a simple and intuitive method to ﬁnd an initial set of suitable features for a new task. The article concludes with recommendations which features perform well for what type of data. Interestingly, the often used, but very simple, color histogram performs well in the comparison and thus can be recommended as a simple baseline for many applications.},
+  number = {2},
+  journaltitle = {Information Retrieval},
+  urldate = {2018-08-28},
+  date = {2008-04},
+  pages = {77-107},
+  author = {Deselaers, Thomas and Keysers, Daniel and Ney, Hermann},
+  file = {/Users/sonynka/Zotero/storage/6IAZH3ST/Deselaers et al. - 2008 - Features for image retrieval an experimental comp.pdf}
+}
+
+@online{mackowiak_picsbuffet_nodate,
+  title = {Picsbuffet - {{IKEA}}},
+  url = {https://picsbuffet.com/ikea/#1,28,43},
+  journaltitle = {picsbuffet},
+  urldate = {2018-08-28},
+  author = {Mackowiak, Radek and Hezel, Nico and Barthel, Kai Uwe},
+  file = {/Users/sonynka/Zotero/storage/PGEVIIFQ/ikea.html}
+}
+
+@inproceedings{Barthel:2017:VBM:3078971.3079016,
+  location = {{Bucharest, Romania}},
+  title = {Visually {{Browsing Millions}} of {{Images Using Image Graphs}}},
+  isbn = {978-1-4503-4701-3},
+  url = {http://doi.acm.org/10.1145/3078971.3079016},
+  doi = {10.1145/3078971.3079016},
+  booktitle = {Proceedings of the 2017 {{ACM}} on {{International Conference}} on {{Multimedia Retrieval}}},
+  series = {ICMR '17},
+  publisher = {{ACM}},
+  date = {2017},
+  pages = {475-479},
+  keywords = {browsing,cbir,convolutional neural networks,exploration,image graph,navigation,visualization},
+  author = {Barthel, Kai Uwe and Hezel, Nico and Jung, Klaus},
+  file = {/Users/sonynka/Zotero/storage/JZBRIE8Y/Barthel et al. - 2017 - Visually Browsing Millions of Images Using Image G.pdf},
+  numpages = {5},
+  acmid = {3079016}
+}
+
+@article{Torres_content-basedimage,
+  title = {Content-{{Based Image Retrieval}}: {{Theory}} and {{Applications}}},
+  volume = {13},
+  journaltitle = {Revista de Informática Teórica e Aplicada},
+  pages = {161-185},
+  author = {Torres, Ricardo Da Silva and Falcão, Alexandre Xavier},
+  file = {/Users/sonynka/Zotero/storage/R2WMYYRI/download\;jsessionid=055CA0CA0E971DABB1D0BD10DF77E8B4.pdf}
+}
+
+@article{Swain1991,
+  title = {Color Indexing},
+  volume = {7},
+  issn = {1573-1405},
+  url = {https://doi.org/10.1007/BF00130487},
+  doi = {10.1007/BF00130487},
+  abstract = {Computer vision is embracing a new research focus in which the aim is to develop visual skills for robots that allow them to interact with a dynamic, realistic environment. To achieve this aim, new kinds of vision algorithms need to be developed which run in real time and subserve the robot's goals. Two fundamental goals are determining the location of a known object. Color can be successfully used for both tasks.},
+  number = {1},
+  journaltitle = {International Journal of Computer Vision},
+  date = {1991-11},
+  pages = {11-32},
+  author = {Swain, Michael J. and Ballard, Dana H.},
+  file = {/Users/sonynka/Zotero/storage/GYDX5U9N/10.1007BF00130487.pdf},
+  day = {01}
+}
+
+@online{barthel_3d_nodate,
+  title = {{{3D Color Inspector}}/{{Color Histogram}}},
+  url = {https://imagej.nih.gov/ij/plugins/color-inspector.html},
+  urldate = {2018-08-28},
+  author = {Barthel, Kai Uwe},
+  file = {/Users/sonynka/Zotero/storage/5NZMFNF3/color-inspector.html}
+}
+
+@article{zhang2004review,
+  title = {Review of Shape Representation and Description Techniques},
+  volume = {37},
+  number = {1},
+  journaltitle = {Pattern recognition},
+  date = {2004},
+  pages = {1-19},
+  author = {Zhang, Dengsheng and Lu, Guojun},
+  file = {/Users/sonynka/Zotero/storage/WUINCKC8/Zhang and Lu - 2004 - Review of shape representation and description tec.pdf},
+  publisher = {{Elsevier}}
+}
+
+@article{bober_mpeg-7_2001,
+  langid = {english},
+  title = {{{MPEG}}-7 Visual Shape Descriptors},
+  volume = {11},
+  issn = {10518215},
+  url = {http://ieeexplore.ieee.org/document/927426/},
+  doi = {10.1109/76.927426},
+  abstract = {This paper describes techniques and tools for shape representation and matching, developed in the context of MPEG-7 standardization. The application domains for each descriptor are considered, and the contour-based shape descriptor is presented in some detail. Example applications are also shown.},
+  number = {6},
+  journaltitle = {IEEE Transactions on Circuits and Systems for Video Technology},
+  urldate = {2018-08-30},
+  date = {2001-06},
+  pages = {716-719},
+  author = {Bober, M.},
+  file = {/Users/sonynka/Zotero/storage/ANXIREHF/Bober - 2001 - MPEG-7 visual shape descriptors.pdf}
+}
+
+@article{tamura1978textural,
+  title = {Textural Features Corresponding to Visual Perception},
+  volume = {8},
+  number = {6},
+  journaltitle = {IEEE Transactions on Systems, man, and cybernetics},
+  date = {1978},
+  pages = {460-473},
+  author = {Tamura, Hideyuki and Mori, Shunji and Yamawaki, Takashi},
+  publisher = {{IEEE}}
+}
+
+@article{haralick_textural_1973,
+  langid = {english},
+  title = {Textural {{Features}} for {{Image Classification}}},
+  volume = {SMC-3},
+  issn = {0018-9472, 2168-2909},
+  url = {http://ieeexplore.ieee.org/document/4309314/},
+  doi = {10.1109/TSMC.1973.4309314},
+  abstract = {Texture is one of the important characteristics used in identifying objects or regions of interest in an image, whether the image be a photomicrograph, an aerial photograph, or a satellite image. This paper describes some easily computable textural features based on graytone spatial dependancies, and illustrates their application in categoryidentification tasks of three different kinds of image data: photomicrographs of five kinds of sandstones, 1:20 000 panchromatic aerial photographs of eight land-use categories, and Earth Resources Technology Satellite (ERTS) multispecial imagery containing seven land-use categories. We use two kinds of decision rules: one for which the decision regions are convex polyhedra (a piecewise linear decision rule), and one for which the decision regions are rectangular parallelpipeds (a min-max decision rule). In each experiment the data set was divided into two parts, a training set and a test set. Test set identification accuracy is 89 percent for the photomicrographs, 82 percent for the aerial photographic imagery, and 83 percent for the satellite imagery. These results indicate that the easily computable textural features probably have a general applicability for a wide variety of image-classification applications.},
+  number = {6},
+  journaltitle = {IEEE Transactions on Systems, Man, and Cybernetics},
+  urldate = {2018-08-30},
+  date = {1973-11},
+  pages = {610-621},
+  author = {Haralick, Robert M. and Shanmugam, K. and Dinstein, Its'Hak},
+  file = {/Users/sonynka/Zotero/storage/248M27RX/Haralick et al. - 1973 - Textural Features for Image Classification.pdf}
+}
+
+@article{shih-fu_chang_overview_2001,
+  langid = {english},
+  title = {Overview of the {{MPEG}}-7 Standard},
+  volume = {11},
+  issn = {10518215},
+  url = {http://ieeexplore.ieee.org/document/927421/},
+  doi = {10.1109/76.927421},
+  abstract = {MPEG-7, formally known as Multimedia Content Description Interface, includes standardized tools (descriptors, description schemes, and language) enabling structural, detailed descriptions of audio–visual information at different granularity levels (region, image, video segment, collection) and in different areas (content description, management, organization, navigation, and user interaction). It aims to support and facilitate a wide range of applications, such as media portals, content broadcasting, and ubiquitous multimedia. In this paper, we present a high-level overview of the MPEG-7 standard. We first discuss the scope, basic terminology, and potential applications. Next, we discuss the constituent components. Then, we compare the relationship with other standards to highlight its capabilities. Some parts of the standard are also covered in depth in this Special Issue.},
+  number = {6},
+  journaltitle = {IEEE Transactions on Circuits and Systems for Video Technology},
+  urldate = {2018-08-30},
+  date = {2001-06},
+  pages = {688-695},
+  author = {{Shih-Fu Chang} and Sikora, T. and Purl, A.},
+  file = {/Users/sonynka/Zotero/storage/7F7J3UEX/Shih-Fu Chang et al. - 2001 - Overview of the MPEG-7 standard.pdf}
+}
+
+@inproceedings{howarth_evaluation_2004,
+  title = {Evaluation of Texture Features for Content-Based Image Retrieval},
+  shorttitle = {S.},
+  abstract = {Abstract. We have carried out a detailed evaluation of the use of texture features in a query-by-example approach to image retrieval. We used 3 radically different texture feature types motivated by i) statistical, ii) psychological and iii) signal processing points of view. The features were evaluated and tested on retrieval tasks from the Corel and TRECVID2003 image collections. For the latter we also looked at the effects of combining texture features with a colour feature. 1},
+  booktitle = {In: {{Proceedings}} of the {{International Conference}} on {{Image}} and {{Video Retrieval}}, {{Springer}}-{{Verlag}}},
+  date = {2004},
+  author = {Howarth, Peter and Rüger, Stefan},
+  file = {/Users/sonynka/Zotero/storage/9IPKA8SG/Howarth and Rüger - 2004 - S. Evaluation of texture features for content-bas.pdf;/Users/sonynka/Zotero/storage/LY85QDTG/summary.html}
+}
+
+@online{noauthor_visual_nodate,
+  title = {Visual | {{MPEG}}},
+  url = {https://mpeg.chiariglione.org/standards/mpeg-7/visual},
+  urldate = {2018-08-30},
+  file = {/Users/sonynka/Zotero/storage/ZHYHE2FI/visual.html}
+}
+
+@article{sonderby_amortised_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1610.04490},
+  primaryClass = {cs, stat},
+  title = {Amortised {{MAP Inference}} for {{Image Super}}-Resolution},
+  url = {http://arxiv.org/abs/1610.04490},
+  abstract = {Image super-resolution (SR) is an underdetermined inverse problem, where a large number of plausible high-resolution images can explain the same downsampled image. Most current single image SR methods use empirical risk minimisation, often with a pixel-wise mean squared error (MSE) loss. However, the outputs from such methods tend to be blurry, over-smoothed and generally appear implausible. A more desirable approach would employ Maximum a Posteriori (MAP) inference, preferring solutions that always have a high probability under the image prior, and thus appear more plausible. Direct MAP estimation for SR is non-trivial, as it requires us to build a model for the image prior from samples. Furthermore, MAP inference is often performed via optimisation-based iterative algorithms which don't compare well with the efficiency of neural-network-based alternatives. Here we introduce new methods for amortised MAP inference whereby we calculate the MAP estimate directly using a convolutional neural network. We first introduce a novel neural network architecture that performs a projection to the affine subspace of valid SR solutions ensuring that the high resolution output of the network is always consistent with the low resolution input. We show that, using this architecture, the amortised MAP inference problem reduces to minimising the cross-entropy between two distributions, similar to training generative models. We propose three methods to solve this optimisation problem: (1) Generative Adversarial Networks (GAN) (2) denoiser-guided SR which backpropagates gradient-estimates from denoising to train the network, and (3) a baseline method using a maximum-likelihood-trained image prior. Our experiments show that the GAN based approach performs best on real image data. Lastly, we establish a connection between GANs and amortised variational inference as in e.g. variational autoencoders.},
+  urldate = {2018-08-30},
+  date = {2016-10-14},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
+  author = {Sønderby, Casper Kaae and Caballero, Jose and Theis, Lucas and Shi, Wenzhe and Huszár, Ferenc},
+  file = {/Users/sonynka/Zotero/storage/YHT74KRT/Sønderby et al. - 2016 - Amortised MAP Inference for Image Super-resolution.pdf;/Users/sonynka/Zotero/storage/BAPRL9FU/1610.html}
+}
+
+@software{chintala_starter_2018,
+  title = {Starter from "{{How}} to {{Train}} a {{GAN}}?" At {{NIPS2016}}. {{Contribute}} to Soumith/Ganhacks Development by Creating an Account on {{GitHub}}},
+  url = {https://github.com/soumith/ganhacks},
+  shorttitle = {Starter from "{{How}} to {{Train}} a {{GAN}}?},
+  urldate = {2018-08-30},
+  date = {2018-08-30T14:45:55Z},
+  author = {Chintala, Soumith},
+  origdate = {2016-12-09T16:09:27Z}
+}
+
+@article{roth_stabilizing_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1705.09367},
+  primaryClass = {cs, stat},
+  title = {Stabilizing {{Training}} of {{Generative Adversarial Networks}} through {{Regularization}}},
+  url = {http://arxiv.org/abs/1705.09367},
+  abstract = {Deep generative models based on Generative Adversarial Networks (GANs) have demonstrated impressive sample quality but in order to work they require a careful choice of architecture, parameter initialization, and selection of hyper-parameters. This fragility is in part due to a dimensional mismatch or non-overlapping support between the model distribution and the data distribution, causing their density ratio and the associated f-divergence to be undefined. We overcome this fundamental limitation and propose a new regularization approach with low computational cost that yields a stable GAN training procedure. We demonstrate the effectiveness of this regularizer across several architectures trained on common benchmark image generation tasks. Our regularization turns GAN models into reliable building blocks for deep learning.},
+  urldate = {2018-08-30},
+  date = {2017-05-25},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  author = {Roth, Kevin and Lucchi, Aurelien and Nowozin, Sebastian and Hofmann, Thomas},
+  file = {/Users/sonynka/Zotero/storage/4Z6NSM3J/Roth et al. - 2017 - Stabilizing Training of Generative Adversarial Net.pdf;/Users/sonynka/Zotero/storage/TD5WFQ3F/1705.html}
+}
+
+@online{noauthor_alternative_2016,
+  langid = {english},
+  title = {An {{Alternative Update Rule}} for {{Generative Adversarial Networks}}},
+  url = {https://www.inference.vc/an-alternative-update-rule-for-generative-adversarial-networks/},
+  abstract = {It is mentioned in the original GAN paper (Goodfellow et al, 2014) that the algorithm can be interpreted as minimising Jensen-Shannon divergence under some ideal conditions. This note is about a way to modify GANs slightly, so that they minimise \$$\backslash$operatorname\{KL\}[Q$\backslash$|P]\$ divergence instead of JS divergence. I},
+  journaltitle = {inFERENCe},
+  urldate = {2018-08-30},
+  date = {2016-03-21T16:16:00.000Z},
+  file = {/Users/sonynka/Zotero/storage/Z7QB7UCB/an-alternative-update-rule-for-generative-adversarial-networks.html}
+}
+
+@online{noauthor_instance_2016,
+  langid = {english},
+  title = {Instance {{Noise}}: {{A}} Trick for Stabilising {{GAN}} Training},
+  url = {https://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/},
+  shorttitle = {Instance {{Noise}}},
+  abstract = {with Casper Kaae Sønderby Generative Adversarial Networks (GANs) are notoriously hard to train. In a recent paper, we presented an idea that might help remedy this. Our intern Casper spent the summer working with GANs, resulting in a paper which appeared on arXiv this week. One particular technique did us},
+  journaltitle = {inFERENCe},
+  urldate = {2018-08-30},
+  date = {2016-10-20T13:57:43.000Z},
+  file = {/Users/sonynka/Zotero/storage/U9FRHD69/instance-noise-a-trick-for-stabilising-gan-training.html}
+}
+
+@article{zeiler_visualizing_2013,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1311.2901},
+  primaryClass = {cs},
+  title = {Visualizing and {{Understanding Convolutional Networks}}},
+  url = {http://arxiv.org/abs/1311.2901},
+  abstract = {Large Convolutional Network models have recently demonstrated impressive classification performance on the ImageNet benchmark. However there is no clear understanding of why they perform so well, or how they might be improved. In this paper we address both issues. We introduce a novel visualization technique that gives insight into the function of intermediate feature layers and the operation of the classifier. We also perform an ablation study to discover the performance contribution from different model layers. This enables us to find model architectures that outperform Krizhevsky $\backslash$etal on the ImageNet classification benchmark. We show our ImageNet model generalizes well to other datasets: when the softmax classifier is retrained, it convincingly beats the current state-of-the-art results on Caltech-101 and Caltech-256 datasets.},
+  urldate = {2018-08-30},
+  date = {2013-11-12},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Zeiler, Matthew D. and Fergus, Rob},
+  file = {/Users/sonynka/Zotero/storage/AHFVVUWM/Zeiler and Fergus - 2013 - Visualizing and Understanding Convolutional Networ.pdf;/Users/sonynka/Zotero/storage/PH6IHUBT/1311.html}
+}
+
+@online{gandhi_build_2018,
+  title = {Build {{Your Own Convolution Neural Network}} in 5 Mins},
+  url = {https://towardsdatascience.com/build-your-own-convolution-neural-network-in-5-mins-4217c2cf964f},
+  abstract = {An introduction to CNN and code (Keras)},
+  journaltitle = {Towards Data Science},
+  urldate = {2018-08-30},
+  date = {2018-05-18T20:55:13.604Z},
+  author = {Gandhi, Rohith},
+  file = {/Users/sonynka/Zotero/storage/FXUCP588/build-your-own-convolution-neural-network-in-5-mins-4217c2cf964f.html}
+}
+
+@article{simonyan_very_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1409.1556},
+  primaryClass = {cs},
+  title = {Very {{Deep Convolutional Networks}} for {{Large}}-{{Scale Image Recognition}}},
+  url = {http://arxiv.org/abs/1409.1556},
+  abstract = {In this work we investigate the effect of the convolutional network depth on its accuracy in the large-scale image recognition setting. Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3x3) convolution filters, which shows that a significant improvement on the prior-art configurations can be achieved by pushing the depth to 16-19 weight layers. These findings were the basis of our ImageNet Challenge 2014 submission, where our team secured the first and the second places in the localisation and classification tracks respectively. We also show that our representations generalise well to other datasets, where they achieve state-of-the-art results. We have made our two best-performing ConvNet models publicly available to facilitate further research on the use of deep visual representations in computer vision.},
+  urldate = {2018-09-01},
+  date = {2014-09-04},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Simonyan, Karen and Zisserman, Andrew},
+  file = {/Users/sonynka/Zotero/storage/LIEZ3AZH/Simonyan and Zisserman - 2014 - Very Deep Convolutional Networks for Large-Scale I.pdf;/Users/sonynka/Zotero/storage/ZF5P5NHN/1409.html}
+}
+
+@article{szegedy_rethinking_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1512.00567},
+  primaryClass = {cs},
+  title = {Rethinking the {{Inception Architecture}} for {{Computer Vision}}},
+  url = {http://arxiv.org/abs/1512.00567},
+  abstract = {Convolutional networks are at the core of most state-of-the-art computer vision solutions for a wide variety of tasks. Since 2014 very deep convolutional networks started to become mainstream, yielding substantial gains in various benchmarks. Although increased model size and computational cost tend to translate to immediate quality gains for most tasks (as long as enough labeled data is provided for training), computational efficiency and low parameter count are still enabling factors for various use cases such as mobile vision and big-data scenarios. Here we explore ways to scale up networks in ways that aim at utilizing the added computation as efficiently as possible by suitably factorized convolutions and aggressive regularization. We benchmark our methods on the ILSVRC 2012 classification challenge validation set demonstrate substantial gains over the state of the art: 21.2\% top-1 and 5.6\% top-5 error for single frame evaluation using a network with a computational cost of 5 billion multiply-adds per inference and with using less than 25 million parameters. With an ensemble of 4 models and multi-crop evaluation, we report 3.5\% top-5 error on the validation set (3.6\% error on the test set) and 17.3\% top-1 error on the validation set.},
+  urldate = {2018-09-01},
+  date = {2015-12-01},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Szegedy, Christian and Vanhoucke, Vincent and Ioffe, Sergey and Shlens, Jonathon and Wojna, Zbigniew},
+  file = {/Users/sonynka/Zotero/storage/BP3PXAKR/Szegedy et al. - 2015 - Rethinking the Inception Architecture for Computer.pdf;/Users/sonynka/Zotero/storage/3PBM3E2A/1512.html}
+}
+
+@article{he_deep_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1512.03385},
+  primaryClass = {cs},
+  title = {Deep {{Residual Learning}} for {{Image Recognition}}},
+  url = {http://arxiv.org/abs/1512.03385},
+  abstract = {Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8x deeper than VGG nets but still having lower complexity. An ensemble of these residual nets achieves 3.57\% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers. The depth of representations is of central importance for many visual recognition tasks. Solely due to our extremely deep representations, we obtain a 28\% relative improvement on the COCO object detection dataset. Deep residual nets are foundations of our submissions to ILSVRC \& COCO 2015 competitions, where we also won the 1st places on the tasks of ImageNet detection, ImageNet localization, COCO detection, and COCO segmentation.},
+  urldate = {2018-09-01},
+  date = {2015-12-10},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  file = {/Users/sonynka/Zotero/storage/SZBQUM7K/He et al. - 2015 - Deep Residual Learning for Image Recognition.pdf;/Users/sonynka/Zotero/storage/KIYGDANA/1512.html},
+  annotation = {Comment: Tech report}
+}
+
+@online{noauthor_resnet-152_nodate,
+  title = {{{ResNet}}-152},
+  url = {https://www.kaggle.com/pytorch/resnet152},
+  abstract = {ResNet-152 Pre-trained Model for PyTorch},
+  urldate = {2018-09-01},
+  file = {/Users/sonynka/Zotero/storage/8ADIM5SG/home.html}
+}
+
+@inproceedings{MacQueen1967SomeMF,
+  title = {Some {{Methods}} for {{Classification}} and {{Analysis}} of {{Multivariate Observations}}},
+  date = {1967},
+  author = {MacQueen, J.},
+  file = {/Users/sonynka/Zotero/storage/D69JL4DJ/Macqueen - SOME METHODS FOR CLASSIFICATION AND ANALYSIS OF MU.pdf}
+}
+
+@article{szegedy_rethinking_2015-1,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1512.00567},
+  primaryClass = {cs},
+  title = {Rethinking the {{Inception Architecture}} for {{Computer Vision}}},
+  url = {http://arxiv.org/abs/1512.00567},
+  abstract = {Convolutional networks are at the core of most state-of-the-art computer vision solutions for a wide variety of tasks. Since 2014 very deep convolutional networks started to become mainstream, yielding substantial gains in various benchmarks. Although increased model size and computational cost tend to translate to immediate quality gains for most tasks (as long as enough labeled data is provided for training), computational efficiency and low parameter count are still enabling factors for various use cases such as mobile vision and big-data scenarios. Here we explore ways to scale up networks in ways that aim at utilizing the added computation as efficiently as possible by suitably factorized convolutions and aggressive regularization. We benchmark our methods on the ILSVRC 2012 classification challenge validation set demonstrate substantial gains over the state of the art: 21.2\% top-1 and 5.6\% top-5 error for single frame evaluation using a network with a computational cost of 5 billion multiply-adds per inference and with using less than 25 million parameters. With an ensemble of 4 models and multi-crop evaluation, we report 3.5\% top-5 error on the validation set (3.6\% error on the test set) and 17.3\% top-1 error on the validation set.},
+  urldate = {2018-09-04},
+  date = {2015-12-01},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  author = {Szegedy, Christian and Vanhoucke, Vincent and Ioffe, Sergey and Shlens, Jonathon and Wojna, Zbigniew},
+  file = {/Users/sonynka/Zotero/storage/A65ZA4G4/Szegedy et al. - 2015 - Rethinking the Inception Architecture for Computer.pdf;/Users/sonynka/Zotero/storage/78ZU6GIS/1512.html}
+}
+
+@video{preserve_knowledge_how_nodate,
+  title = {How to Train a {{GAN}}, {{NIPS}} 2016 | {{Soumith Chintala}}, {{Facebook AI Research}}},
+  url = {https://www.youtube.com/watch?v=myGAju4L7O8},
+  urldate = {2018-09-04},
+  keywords = {AI,Alphago,Andrej Kaparthy,Andrew Ng,Artificial intelligence,Big data,Bitcoin,Blockchain,CMU,computer science,Convolution,data science,Deep learning,Facebook,GANs,generative,Geoffrey Hinton,Google,Google Brain,Ian Goodfellow,lecture,machine learning,mathematics,Microsoft,neural networks,programming,Research,Robot,Self driving cars,Terry Tao,Yann LeCunn,Yoshua Benjio},
+  director = {{Preserve Knowledge}}
+}
+
+@software{noauthor_tensorflows_2018,
+  title = {{{TensorFlow}}'s {{Visualization Toolkit}}. {{Contribute}} to Tensorflow/Tensorboard Development by Creating an Account on {{GitHub}}},
+  url = {https://github.com/tensorflow/tensorboard/blob/9b893832df812a0d0ffab67021fd370ba1ff8911/tensorboard/components/vz_line_chart/vz-line-chart.ts#L81},
+  organization = {{tensorflow}},
+  urldate = {2018-09-04},
+  date = {2018-09-04T13:45:49Z},
+  origdate = {2017-05-15T20:08:07Z}
+}
+
+
