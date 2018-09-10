@@ -112,7 +112,7 @@ The gradient of this loss function is back-propagated through the networks in re
 % ==============================================================
 \subsubsection{Training Difficulties} \label{sec:gan_diff}
 
-In theory, the minimax game described in Equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. In reality, the training of a GAN can prove to be unstable and finding the right balance between the two networks is difficult.
+In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. In reality, the training of a GAN can prove to be unstable and finding the right balance between the two networks is difficult.
 
 It can for example happen, that the gradient descent gets stuck in a cycle, where a modification to the discriminator weights reduces the discriminator loss and increases the generator loss, while the following modification of generator weights does the opposite \cite{salimans_improved_2016}. In this scenario, the gradient descent is not able to converge.
 
@@ -985,6 +985,6 @@ More examples of results of the image retrieval with different outputs can be fo
 
 
 \newpage
-\bibliographystyle{abbrvnat}
+\bibliographystyle{unsrtnat}
 \bibliography{zotero}
 \end{document}
