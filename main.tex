@@ -25,13 +25,6 @@
 \hypersetup{}
 \urlstyle{same}
 
-% page numbering
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{\slshape\nouppercase{\rightmark}}
-\rhead{ \thepage}
-\renewcommand{\headrulewidth}{.5pt}
-
 % chapter titles
 \usepackage{titlesec}
 \titleformat{\chapter}[hang] 
@@ -48,18 +41,30 @@
 
 \maketitle
 
-\newpage
-\tableofcontents
-
-\newpage
+\pagenumbering{roman}
+\addcontentsline{toc}{chapter}{Abstract}
 \chapter*{Abstract}
 Blablabla
+\clearpage
 
-\newpage
+\pagestyle{plain}
+\pagenumbering{gobble}
+\tableofcontents
+\clearpage
+
 % ==============================================================
 % Introduction
 % ==============================================================
+
+% page numbering
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\slshape\nouppercase{\rightmark}}
+\rhead{ \thepage}
+\renewcommand{\headrulewidth}{.5pt}
+\pagenumbering{arabic}
 \chapter{Introduction}
+
 
 \newpage
 % ==============================================================
@@ -997,8 +1002,21 @@ More examples of results of the image retrieval with different outputs can be fo
 \bibliographystyle{unsrtnat}
 \renewcommand{\refname}{Bibliography}
 \bibliography{zotero}
+\clearpage
 
 
+%
+\pagestyle{plain}
+\pagenumbering{gobble}
+\chapter*{Statutory Declaration}
+I assure that this thesis is a result of my personal work and that no other than the indicated aids have been used for its completion. Furthermore I assure that all quotations and statements that have been inferred literally or in a general manner from published or unpublished writings are marked as such. Beyond this I assure that the work has not been used, neither completely nor in parts, to pass any previous examination.
+
+\vspace{2cm}
+\noindent
+Berlin, 29 September 2018
+\hfill
+Sona Pecenakova
+\clearpage
 
 
 
