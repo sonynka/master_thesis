@@ -1,11 +1,23 @@
-\documentclass{article}
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\title{
+	{Thesis Title}\\
+	{\large Institution Name}\\ \vspace{1cm}
+	{\includegraphics{HTW_logo}}
+}
+\author{Author Name}
+\date{Day Month Year}
+
 
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{amsfonts}
-\usepackage[utf8]{inputenc}
-\usepackage{graphicx}
+
+
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{subcaption}
@@ -13,6 +25,7 @@
 \hypersetup{}
 \urlstyle{same}
 
+% page numbering
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{ \rightmark}
@@ -28,32 +41,31 @@
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \setlength{\parskip}{1em}
-\graphicspath{ {./images/} }
-
-\title{Thesis Title}
-\author{Author Name}
-\date{Day Month Year}
 
 
 \begin{document}
 
 \maketitle
+
+\newpage
 \tableofcontents
 
 \newpage
+\section*{Abstract}
+Blablabla
 
+\newpage
 % ==============================================================
 % Introduction
 % ==============================================================
 \section{Introduction}
 
+\newpage
 % ==============================================================
 % GANS
 % ==============================================================
 \section{Background}
 % ==============================================================
-
-\pagebreak
 % ==============================================================
 \subsection{Generative Adversarial Networks}
 % ==============================================================
@@ -964,27 +976,29 @@ When using ratio 1:1, as shown in first row, the results still include some outl
 \caption{\label{fig:search_weights} \textbf{Image retrieval results with different combinations of ResNet and Akiwi50 features.} Displaying the results for two different input images, the first row shows an equal ratio, second row shows 1:2 ratio and third row shows 1:3 ratio when combining ResNet and Akiwi50 features respectively.}.
 \end{figure}
 
+When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
+When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
+When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
+When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
 
 More examples of results of the image retrieval with different outputs can be found in attachments.
 
 \subsubsection{Generated Images}
 
+\appendix
+\newpage
+\listoffigures
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+\newpage
+\listoftables
 
 \newpage
 \bibliographystyle{unsrtnat}
+\renewcommand{\refname}{Bibliography}
 \bibliography{zotero}
+
+
+
+
+
 \end{document}
