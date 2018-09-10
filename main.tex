@@ -3,14 +3,6 @@
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
 
-\title{
-	{Thesis Title}\\
-	{\large Institution Name}\\ \vspace{1cm}
-	{\includegraphics{HTW_logo}}
-}
-\author{Author Name}
-\date{Day Month Year}
-
 
 \usepackage{amsmath}
 \usepackage{fancyhdr}
@@ -30,7 +22,7 @@
 \titleformat{\chapter}[hang] 
 {\normalfont\huge\bfseries}{\thechapter}{1em}{} 
 
-% paragraph titles
+% paragraph titles1
 \titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{}{}
 \titlespacing*{\paragraph}
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
@@ -43,7 +35,7 @@
 
 \begin{document}
 
-\maketitle
+\input{titlepage}
 
 \pagenumbering{roman}
 \addcontentsline{toc}{chapter}{Abstract}
@@ -773,7 +765,7 @@ I re-trained the network's last hidden layer on the fashion dataset, to classify
 % ==============================================================
 \chapter{Experiments}
 % ==============================================================
-The objective of the experiments is to improve image retrieval of fashion products, by allowing the user to perform a series of modifications on the given product image. Unless indicated differently, the experiments were performed on the data category of dresses to reduce the complexity of the experiments and the algorithms and simplify the evaluation process.
+The objective of the experiments is to improve image retrieval of fashion products, by allowing the user to perform a series of modifications on the given product image. Unless indicated differently, the experiments were performed on the data category of dresses to reduce the complexity of the experiments and simplify the evaluation process.
 
 The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodate}, using the machine learning framework \textit{PyTorch} \cite{noauthor_pytorch_nodate} and several common python packages, such as: \textit{pandas} \cite{noauthor_python_nodate}, \textit{numpy} \cite{noauthor_numpy_nodate}, \textit{scikit-learn} \cite{noauthor_scikit-learn_nodate}, \textit{matplotlib} \cite{noauthor_matplotlib_nodate}, \textit{PIL} \cite{noauthor_pillow_nodate} and others. 
 
