@@ -45,7 +45,9 @@ Blablabla
 
 \pagestyle{plain}
 \pagenumbering{gobble}
+\renewcommand{\baselinestretch}{0.75}\normalsize
 \tableofcontents
+\renewcommand{\baselinestretch}{1.0}\normalsize
 \clearpage
 
 % ==============================================================
@@ -197,23 +199,24 @@ The idea of content-based image retrieval systems, also called CBIR, is to find 
 
 CBIR is a field of computer vision that has seen a lot of changes since the rise of fast and available deep learning algorithms. While the first CBIR implementations have relied on low-level features such as color and texture to identify similar images, today the state-of-art techniques rely on high-dimensional descriptors produced by convolutional neural networks.
 
-The systems are used for many specific applications in different fields, e.g: medicine, retail or archives. Many CBIR systems are also freely available online, such as the visual image search on Google, or a tool for exploring large amounts of images based on their similarities \cite{Barthel:2017:VBM:3078971.3079016}.
+The systems are used for many specific applications in different fields, e.g: medicine, retail or archives. Many CBIR systems are also freely available online, such as the visual image search on Google, or a tool for exploring large amounts of images based on their similarities called \textit{PicsBuffet} \cite{mackowiak_picsbuffet_nodate}.
 
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{02_background/CBIR/cnn_cbir}}
-\caption{\label{fig:conv_cbir} \textbf{Image Retrieval with CNN Features}. The test image on the left is compared to images from the train set to find most similar matches. The images are compared based on 4028-dimensional feature vectors extracted from the last hidden layer of a convolutional neural network. Figure reprinted from \cite{NIPS2012_4824}.}
+\caption{\label{fig:conv_cbir} \textbf{Image Retrieval with CNN Features}. The image on the left is compared to images from a training set to find most similar matches. The images are compared based on 4028-dimensional feature vectors extracted from the last hidden layer of a convolutional neural network. Figure reprinted from \cite{NIPS2012_4824}.}
 \end{figure}
 
 
 \pagebreak
 \subsection{Low-Level Visual Features}
+The implementations of CBIR systems that do not use deep learning algorithms are mostly based on low-level features. Feature that describe the color, texture or shapes in the image are usually combined together to to create image descriptors that can be compared to retrieve the most similar images.
 
 \paragraph{Color Features}
 Color is one of the most basic features of an image. While there are many possibilities to describe the color of an image, such as average color or selecting a few dominant colors, the color histogram has proven to be a robust choice and is often used as a baseline when comparing other color features \cite{Torres_content-basedimage}.
 
-To create a color histogram, the number each color (described by the image's discrete color space, such as RGB) occurs in the image is counted. The counts can be grouped into various amount of bins and represented as relative frequencies \cite{Swain1991}.
+To create a color histogram, the occurence of each color, as described by the image color space such as RGB, is counted. These counts can then be grouped into bins and represented as relative frequencies \cite{Swain1991}.
 
 \begin{figure}[h]
 \centering
@@ -223,6 +226,17 @@ To create a color histogram, the number each color (described by the image's dis
 \end{figure}
 
 The main advantage of color features is that they are invariant to image transformations such as rotation. However, basing the retrieval only on colors is insufficient, since images that share similar color histograms do not necessarily display the same content and images showing the same content can have different color palettes.
+
+\paragraph{Texture Features}
+Although texture can be perceived equally important to color, it is more difficult to define it. There are several methods for extracting texture that can be based on statistics, such as the co-occurence matrix, human perception, such as Tamura features, or signal processing, such as Gabor filters or Fourier transformations.
+
+Figure \ref{fig:texture_feat} shows examples of textures with their respective Tamura texture descriptors \cite{tamura1978textural}. They use six terms to describe a given texture: coarseness, contrast, directionality, line-likeness, regularity and roughness. 
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=0.7\linewidth]{02_background/CBIR/texture_features}}
+\caption{\label{fig:texture_feat} \textbf{Tamura Texture Descriptors}. Each texture is classified based on the six Tamura descriptors. Figure reprinted from \cite{LIN20032255}.}
+\end{figure}
 
 
 \paragraph{Shape Features}
@@ -236,11 +250,6 @@ Various methods for shape extraction have been developed, however, most of them 
 \caption{\label{fig:shape_feat} \textbf{Shape Features}. The highlighted row shows images considered similar based on region shape feature, and the highlighted column shows contour-based similarity. Figure reprinted from \cite{bober_mpeg-7_2001}}.
 \end{figure}
 
-\paragraph{Texture Features}
-Although texture can be perceived equally important to color, it is more difficult to define it.  Some of the terms to describe texture, as defined by Tamura et al \cite{tamura1978textural}, are contrast, directionality, line-likeness, and regularity.
-
-There are several methods for extracting texture that can be based on statistics, such as the co-occurence matrix, human perception, such as Tamura features, or signal processing, such as Gabor filters or Fourier transformations.
-
 \paragraph{MPEG-7}
 The MPEG-7 standards were developed to describe the contents of images, audio and video independently from their format. They provide various low-level feature descriptors of color, shape, texture, motion and others, that enable fast and efficient multimedia search \cite{noauthor_visual_nodate}.
 
@@ -248,11 +257,11 @@ Many of these descriptors are widely used in CBIR systems, such as the color lay
 
 \pagebreak
 \subsection{CNN Features}
-Convolutional Neural Networks, also known as ConvNets or CNNs, are the state-of-the-art neural networks for most computer vision tasks, such as image classification and object detection or face recognition. Various research has also shown that a ConvNet can produce very powerful image descriptors, which can be used for image retrieval \cite{razavian_cnn_2014-2}, \cite{NIPS2012_4824}.
+Convolutional Neural Networks, also known as ConvNets or CNNs, are the state-of-the-art neural networks for most computer vision tasks, such as image classification or object detection. Various research has also shown that a ConvNet can produce very powerful image descriptors, which can be used for image retrieval \cite{razavian_cnn_2014-2}, \cite{NIPS2012_4824}.
 
-Unlike regular feed-forward neural networks based on fully-connected layers of neurons, ConvNets are trained to learn relatively small filter kernels, that can extract valuable information from different areas of an image. Therefore, they reduce the amount of training parameters significantly and are able to train also on large images.
+Unlike regular feed-forward neural networks based on fully-connected layers of neurons, ConvNets are trained to learn relatively small filter kernels, that can extract relevant information from different areas of an image. Therefore, they reduce the amount of training parameters significantly and are able to train also on large images.
 
-As shown in Figure \ref{fig:conv_feats}, in the early layers of the network, the filters learn to recognize simple visual features, such as horizontal edges or colors. The filters recognize more complex structures as the network's layers get deeper. In the last layers of the network, the filters are trained to recognize high-level features. 
+As shown in Figure \ref{fig:conv_feats}, in the early layers of the network, the filters learn to recognize simple visual features, such as horizontal edges or colors. These low-level feature are combined and create more complex structures as the network's layers get deeper. In the last layers of the network, the filters are trained to recognize high-level features, which can be used not only to classify the image, but also to describe it.
 
 \begin{figure}[h]
 \centering
@@ -268,7 +277,9 @@ Krizhevsky et al. \cite{NIPS2012_4824} use a ConvNet, trained to classify more t
 
 \pagebreak
 \subsection{Distance Metrics}
-To retrieve relevant images, distances between the extracted image features need to be evaluated based on a metric. The most commonly used metrics is the \textit{L1 norm}, also called \textit{Manhattan distance}, and \textit{L2 norm}, also known as \textit{Euclidean distance}.
+To retrieve relevant images, distances between the extracted image features need to be evaluated based on a metric. The distance between two images should be small, if the images are similar and vice versa. 
+
+The most commonly used metrics is the \textit{L1 norm}, also called \textit{Manhattan distance}, and \textit{L2 norm}, also known as \textit{Euclidean distance}.
 
 Given two $n$-dimensional vectors vector $x = (x_1, x_2, ..., x_n)$ and $y = (y_1, y_2, ..., y_n)$, the L1 distance is computed by summing up the absolute values of the difference between the respective coordinates of the vectors:
 \begin{equation}
@@ -280,7 +291,7 @@ L2 distance is the squared root of sum of squared distances between respective v
 L_2(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}.
 \end{equation}
 
-There are also other possible metrics like the \textit{Chebychev metric} or the \textit{Minkowski Metric}.
+There are also other possible metrics like the \textit{Chebychev metric} or the \textit{Minkowski Metric}, however these metrics are not used for the purpose of this thesis. 
 
 
 \pagebreak
