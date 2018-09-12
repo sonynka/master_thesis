@@ -265,9 +265,9 @@ As shown in Figure \ref{fig:conv_feats}, in the early layers of the network, the
 
 \begin{figure}[h]
 \centering
-\subcaptionbox{Low-Level Features}{\includegraphics[height=3.5cm]{02_background/CBIR/feat_low}}\hspace{.3cm}
-\subcaptionbox{Mid-Level Features}{\includegraphics[height=3.5cm]{02_background/CBIR/feat_mid}}\hspace{.3cm}
-\subcaptionbox{High-Level Features}{\includegraphics[height=3.5cm]{02_background/CBIR/feat_high}}
+\subcaptionbox{Low-Level Features}{\includegraphics[height=4cm]{02_background/CBIR/feat_low}}\hspace{.3cm}
+\subcaptionbox{Mid-Level Features}{\includegraphics[height=4cm]{02_background/CBIR/feat_mid}}\hspace{.3cm}
+\subcaptionbox{High-Level Features}{\includegraphics[height=4cm]{02_background/CBIR/feat_high}}
 \caption{\label{fig:conv_feats} \textbf{Convolutional Feature Maps}. Each image displays a sample of feature maps (filters) from different layers of the networks. The early layer feature maps recognize simple patterns, while the last layers recognize more complex structures. Figure adapted from \cite{gandhi_build_2018}.}
 \end{figure}
 
@@ -325,7 +325,7 @@ I have defined these requirements based on my previous experience with generativ
 \pagebreak
 \subsection{Existing Fashion Datasets}
 \paragraph{DeepFashion}
-The Deep Fashion Set \cite{liu2016deepfashion} includes more than 200.000 images of clothing images, labeled with 1.000 attributes. However, this dataset does not fulfill the first requirement of the dataset - its clothing items are photographed on people in various poses and backgrounds, as shown in Figure \ref{fig:deepfashion}. This type of variation might be too complex for the algorithms and can lead to unsatisfactory results.
+The DeepFashion dataset \cite{liu2016deepfashion} includes more than 200.000 images of clothing images, labeled with 1.000 attributes. However, this dataset does not fulfill the first requirement of the dataset - its clothing items are photographed on people in various poses and backgrounds, as shown in Figure \ref{fig:deepfashion}. This type of variation might be too complex for the algorithms and can lead to unsatisfactory results.
 
 \begin{figure}[h]
 \centering
@@ -334,9 +334,9 @@ The Deep Fashion Set \cite{liu2016deepfashion} includes more than 200.000 images
 \end{figure}
 
 \paragraph{Fotolia}
-Another available option, that has been provided by Prof. Dr. Barthel, is the Fotolia image dataset, which can be explored on the picsbuffet website \cite{noauthor_picsbuffet_nodate}. 
+Another available option, that has been provided by my supervisors, is the Fotolia  dataset \cite{noauthor_fotolia_nodate}. It contains more than 20 million tagged images with large variety of objects and can be explored on the PicsBuffet website \cite{mackowiak_picsbuffet_nodate}.
 
-To test the dataset, I have chosen all images with keywords ,,dress'' and ,,isolated'' and compared them to a template image, based on the distance between their 64-dimensional feature vectors calculated via Akiwi API \cite{sonnenberg_akiwi_nodate}. Figure \ref{fig:fotolia} shows the results of this search. 
+To test the dataset, I have chosen all images with keywords ,,dress'' and ,,isolated'' and compared them to a template image, based on the distance between their 64-dimensional feature vectors (calculated via Akiwi API \cite{sonnenberg_akiwi_nodate}). Figure \ref{fig:fotolia} shows the results of this search. 
 
 Additionally to an undesired low resolution of the returned images - around 100 x 160 pixels - the results also have too much variety, such as different model poses, different zoom levels and backgrounds. The description of the images did not include many useful attributes, with most pictures being labeled with words such as: ,,beauty'', ,,young'', ,,person'', and lacking information about colors, shapes and pattern.
 
@@ -353,11 +353,11 @@ Additionally to an undesired low resolution of the returned images - around 100 
 % ==============================================================
 \subsection{Scraped Dataset}
 % ==============================================================
-Based on the evaluation of existing fashion datasets, I have identified a need for creating a new dataset specifically for the requirements of the application. I evaluated several fashion e-shops, from which images of the products and their descriptions could be downloaded. 
+Based on the evaluation of existing fashion datasets, I have identified a need for creating a new dataset specifically for the requirements of the application. I evaluated several fashion e-shops that provide downloadable product images and easily parsable descriptions. 
 
-I chose 3 websites, based on the structure and amount of information they provide: \href{https://www.zalando.de/damen-home/}{zalando.de}, \href{https://www.aboutyou.de/}{aboutyou.de} and \href{https://www.fashionid.de/damen/}{fashionid.de}. Each of them provides several thousand fashion products for women and men, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc. For simplicity, I have limited the dataset to women's clothes, excluding products like accessories and shoes.
+I chose 3 websites, based on the structure and amount of information they provide: \href{https://www.zalando.de/damen-home/}{zalando.de}, \href{https://www.aboutyou.de/}{aboutyou.de} and \href{https://www.fashionid.de/damen/}{fashionid.de}. Each of them offer several thousand fashion products for women and men, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc. For simplicity, I have limited the dataset to women's clothes, excluding products like accessories and shoes.
 
-The \textit{Fashion Scraper} is a python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, and description translating. This project was part of my Independent Coursework and the documentation of the project can be found in Attachments, or on \href{https://github.com/sonynka/fashion_scraper}{github.com/sonynka/fashion\_scraper}.
+The \textit{Fashion Scraper} is a python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, and description translating. This project was part of my Independent Coursework and the documentation of the project can be found in Appendix, or on \href{https://github.com/sonynka/fashion_scraper}{github.com/sonynka/fashion\_scraper}.
 
 \begin{figure}[h]
 \centering
@@ -389,7 +389,7 @@ In addition to the website data, there are columns that contain processed and tr
 \end{itemize}
 
 \paragraph{Model Images}
-For some experiments I also downloaded an extra dataset of images of products worn by models from the scraped websites. The model images are of size $256\times256$ pixels in JPEG format and the file names correspond to the file names of the product images. Each product has variable amount of corresponding model images, varying in model poses, zoom level and detail level of the photo (see Figure \ref{fig:models}).
+For each scraped product, I also downloaded images of the product worn by models. The model images are of size $256\times256$ pixels in JPEG format and the file names correspond to the file names of the product images. Each product has variable amount of corresponding model images, varying in model poses, zoom level and detail level of the photo (see Figure \ref{fig:models}).
 
 \begin{figure}[h]
 \centering
@@ -403,7 +403,7 @@ For some experiments I also downloaded an extra dataset of images of products wo
 % ==============================================================
 Image-To-Image Translation using GANs has been widely researched in the past few years, with creative approaches and models published regularly. For the purpose of this thesis, I have reviewed and tested some of these projects, to evaluate what results can be achieved on the fashion dataset and which GAN is best suited for what task.
 
-Table \ref{tab:gan_comp} shows the comparison of 5 evaluated networks: \textit{pix2pix} \cite{isola_image--image_2016}, \textit{CycleGAN} \cite{zhu_unpaired_2017}, \textit{StarGAN} \cite{choi_stargan_2017}, \textit{MUNIT} \cite{huang_multimodal_2018} and \textit{FaderNetworks} \cite{lample_fader_2017}, for which I compared the following attributes:
+Table \ref{tab:gan_comp} shows the comparison of 5 evaluated networks: pix2pix \cite{isola_image--image_2016}, CycleGAN \cite{zhu_unpaired_2017}, StarGAN \cite{choi_stargan_2017}, MUNIT \cite{huang_multimodal_2018} and FaderNetworks \cite{lample_fader_2017}, for which I compared the following attributes:
 \begin{itemize}
 \item \textbf{Supervised}: Does the network need a dataset consisting of paired images, such as the same skirt in a short and long version.
 \item \textbf{Multi-Domain}: Is the network able to train one model for different domains translations, or does each domain pair require its own trained generator.
@@ -434,7 +434,7 @@ The so-called Pi2Pix networks were first introduced by Isola et al. \cite{isola_
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{03_analysis/gans/pix2pix_example}}
-\caption{\label{fig:pix2pix_example} \textbf{Pix2Pix: Examples of translation between various domains.} Use cases of the pix2pix framework include translating day images to night or colorizing grayscale images. Figure reprinted from \cite{hesse_image--image_nodate-1}.}
+\caption{\label{fig:pix2pix_example} \textbf{Pix2Pix: Examples of translation between various domains.} Use cases of the pix2pix framework include translating day images to night or colorizing grayscale images. Figure reprinted from \cite{hesse_image--image_2017}.}
 \end{figure}
 
 Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (described in Section \ref{sec:cond_gan}) to influence the network's output by providing a condition. In case of Pix2Pix, the condition is an image that is to be translated to another domain. To translate images from an input domain to a target domain, the model requires a dataset of paired images $(x_{input}, x_{target})$, such as a grayscale image and a corresponding color image. 
@@ -443,7 +443,7 @@ Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (desc
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{03_analysis/gans/pix2pix}}
-\caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} Dataset consists of paired input and target images. Generator takes input image as condition to output a generated image. Discriminator tries to predict, given the input image, if the target image comes from dataset or from generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_nodate-1}.}
+\caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} Dataset consists of paired input and target images. Generator takes input image as condition to output a generated image. Discriminator tries to predict, given the input image, if the target image comes from dataset or from generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_2017}.}
 \end{figure}
 
 As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{input}$ and tries to map it to the target domain $\hat{x}_{target}$, such as: $G: (x_{input}, z) \rightarrow \hat{x}_{target}$. The discriminator, also conditioned on the input image $x_{input}$, tries to predict if the target image comes from the data distribution or if it was generated. The discriminator tries to improve these classifications, while the generator tries to prevent correct classification.
@@ -589,7 +589,7 @@ The generator objective is to generate images, that fool the auxiliary classifie
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{03_analysis/gans/stargan}}
-\caption{\label{fig:stargan_topo} \textbf{StarGAN Training Process.} The discriminator classifies the input as real or fake and outputs it's domain class prediction. The generator encodes the image with a target domain, and then decodes the output with the original domain, to calculate the cycle consistency distance. Figure reprinted from \cite{choi_stargan_2017}.}
+\caption{\label{fig:stargan_training} \textbf{StarGAN Training Process.} The discriminator classifies the input as real or fake and outputs it's domain class prediction. The generator encodes the image with a target domain, and then decodes the output with the original domain, to calculate the cycle consistency distance. Figure reprinted from \cite{choi_stargan_2017}.}
 \end{figure}
 
 \paragraph{Adversarial Loss}
@@ -717,7 +717,7 @@ However, since paired image training data is not available, the invariance canno
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{03_analysis/gans/fader}}
-\caption{\label{fig:fader_ex} \textbf{FaderNetworks Model.} Given a training pair of input image and attribute value, the image is encoded to a latent code. The decoder learns to reconstruct the image based on its latent code and attribute value, while the discriminator tries to predict the attribute based on the latent code. Figure adapted from \cite{lample_fader_2017}.}
+\caption{\label{fig:fader_model} \textbf{FaderNetworks Model.} Given a training pair of input image and attribute value, the image is encoded to a latent code. The decoder learns to reconstruct the image based on its latent code and attribute value, while the discriminator tries to predict the attribute based on the latent code. Figure adapted from \cite{lample_fader_2017}.}
 \end{figure}
 
 
@@ -760,7 +760,7 @@ Currently, the best scoring pre-trained model offered by PyTorch is the \textit{
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{02_background/CBIR/resnet_arch}}
-\caption{\label{fig:search_pink} \textbf{Resnet34 Architecture.} An example of the ResNet architecture with 34 layers. Figure reprinted from \cite{noauthor_resnet-152_nodate}}.
+\caption{\label{fig:resnet34} \textbf{Resnet34 Architecture.} An example of the ResNet architecture with 34 layers. Figure reprinted from \cite{noauthor_resnet-152_nodate}}.
 \end{figure}
 
 The extraction of the image feature happens at the last hidden layer of the network, which in case of ResNet152, is a 2048-dimensional layer. For each image, the output of this layer is its unique descriptor, which can be used to compare distances between images.
