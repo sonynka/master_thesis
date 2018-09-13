@@ -35,7 +35,7 @@
 \setlength{\parskip}{1em}
 
 % line breaking
-\widowpenalties 1 10000
+\widowpenalties 1 1000000
 \raggedbottom
 
 
@@ -328,7 +328,6 @@ In order to generate high-quality outputs using GANs, the collected dataset shou
 \end{enumerate}
 I have defined these requirements based on my previous experience with generative algorithms. It is generally easier for the algorithm to focus on the important attributes of the images, if there are no distractions in terms of different model poses, backgrounds, etc. And since the main point of the project is to modify different attributes of the products, the images need to be labeled.
 
-\pagebreak
 \subsection{Existing Fashion Datasets}
 \paragraph{DeepFashion}
 The DeepFashion dataset \cite{liu2016deepfashion} includes more than 200.000 images of clothing images, labeled with 1.000 attributes. However, this dataset does not fulfill the first requirement of the dataset - its clothing items are photographed on people in various poses and backgrounds, as shown in Figure \ref{fig:deepfashion}. This type of variation might be too complex for the algorithms and can lead to unsatisfactory results.
@@ -346,16 +345,16 @@ To test the dataset, I have chosen all images with keywords ,,dress'' and ,,isol
 
 Additionally to an undesired low resolution of the returned images - around 100 x 160 pixels - the results also have too much variety, such as different model poses, different zoom levels and backgrounds. The description of the images did not include many useful attributes, with most pictures being labeled with words such as: ,,beauty'', ,,young'', ,,person'', and lacking information about colors, shapes and pattern.
 
-\begin{figure}[t]
+\begin{figure}[h]
 \centering
 \subcaptionbox{Template Image}{\fbox{\includegraphics[height=3.5cm]{03_analysis/data/dress_template}}}\hspace{1cm}
 \subcaptionbox{Fotolia Images}{\fbox{\includegraphics[height=3.5cm]{03_analysis/data/fotolia_ex1}}
 \fbox{\includegraphics[height=3.5cm]{03_analysis/data/fotolia_ex2}}
 \fbox{\includegraphics[height=3.5cm]{03_analysis/data/fotolia_ex3}}}
-\caption{\label{fig:fotolia} \textbf{Fotolia images} The retrieved Fotolia images (b) with keywords ,,dress'' and ,,isolated'' with smallest feature vector distance from the template image (a).}
+\caption{\label{fig:fotolia} \textbf{Fotolia images.} The retrieved Fotolia images (b) with keywords ,,dress'' and ,,isolated'' with smallest feature vector distance from the template image (a).}
 \end{figure}
 
-\pagebreak
+
 % ==============================================================
 \subsection{Scraped Dataset}
 % ==============================================================
@@ -371,17 +370,17 @@ The \textit{Fashion Scraper} is a python project, that scrapes images and data f
 \caption{\label{fig:dataset} \textbf{Examples of images in the final dataset.} Each column contains images from different category as follows: blouses, dresses, jackets, knitwear, pants, skirts, tops.}
 \end{figure}
 
-The scraped dataset consists of 92.200 images of size $256\times256$ pixels in JPEG format. The images are split into folders by categories and the whole dataset is described in a CSV file, which includes the following information:
-\begin{itemize}
-\item \textbf{id}: ID of the product as defined by the website (SKU)
-\item \textbf{img\_path}: relative local file path to the saved product image
-\item \textbf{img\_url}: URL to the product image file hosted on the seller website
-\item \textbf{model\_img\_urls}: URLs to the images of the product worn by models
-\item \textbf{product\_url}: if given, the URL to the product listing on the website
-\item \textbf{brand}: product brand as displayed on the website
-\item \textbf{name}: product name as displayed on the website
-\item \textbf{attributes}: list of product attributes listed on the website in German, such as shape, length, material, size etc.
-\end{itemize}
+The scraped dataset consists of 92.200 images of size $256\times256$ pixels in JPEG format. The images are split into folders by categories and the whole dataset is described in a CSV file, which includes information such as: ID of the product,  path to the image file, URLs to image files hosted on the website, product brand etc.
+%\begin{itemize}
+%\item \textbf{id}: ID of the product as defined by the website (SKU)
+%\item \textbf{img\_path}: relative local file path to the saved product image
+%\item \textbf{img\_url}: URL to the product image file hosted on the seller website
+%\item \textbf{model\_img\_urls}: URLs to the images of the product worn by models
+%\item \textbf{product\_url}: if given, the URL to the product listing on the website
+%\item \textbf{brand}: product brand as displayed on the website
+%\item \textbf{name}: product name as displayed on the website
+%\item \textbf{attributes}: list of product attributes listed on the website in German, such as shape, length, material, size etc.
+%\end{itemize}
 
 In addition to the website data, there are columns that contain processed and translated data. Below is the list of the column names and the values they can take.
 \begin{itemize}
@@ -394,6 +393,7 @@ In addition to the website data, there are columns that contain processed and tr
 \item \textbf{neckline}: back, deep, lines, round, v, wide or no value
 \end{itemize}
 
+\pagebreak
 \paragraph{Model Images}
 For each scraped product, I also downloaded images of the product worn by models. The model images are of size $256\times256$ pixels in JPEG format and the file names correspond to the file names of the product images. Each product has variable amount of corresponding model images, varying in model poses, zoom level and detail level of the photo (see Figure \ref{fig:models}).
 
@@ -462,6 +462,7 @@ The adversarial objective, which $G$ is trained to minimize and $D$ is trained t
 \label{eq:pix2pix_minimax_cond}
 \end{equation}
 
+\pagebreak
 Based on the results of previous conditional GAN approaches \cite{pathak_context_2016}, Isola et. al \cite{isola_image--image_2016} have also shown, that enforcing the generated output to be closer to the ground truth target by adding a second objective reduces artifacts in the results. They therefore suggest to use the L1 distance as reconstruction loss function for the generator to optimize.
 \begin{equation}
 \mathcal{L}_{rec}(G) = \mathbb{E}_{x_{in},x_{trg},z}[||x_{trg}-G(x_{in},z)||_{1}]
@@ -972,12 +973,12 @@ Theoretically, StarGAN should be able to learn one generator mapping for all the
 \subsection{Unsupervised Training}
 I have used the original implementation of the StarGAN, which yielded good results on the fashion dataset. I have noticed however, that the outputs of the original model contains a lot of checkerboard-like artifacts. This is a quite common effect when upsampling images with transposed convolution, or ,,deconvolution'', caused by uneven overlapping of the output values \cite{odena2016deconvolution}. 
 
-The simplest solution to avoid this, is to upsample using an interpolation and then applying a deconvolution which keeps the size of the image and only reduces the number of channels. This results in smoother outputs with less artifacts, as shown in Figure \ref{fig:stargan_checkerboard}.
+The simplest solution to avoid this, is to upsample using an interpolation and then applying a ,,deconvolution'' which keeps the size of the image and only reduces the number of channels. This results in smoother outputs with less artifacts, as shown in Figure \ref{fig:stargan_checkerboard}.
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=.7\linewidth]{04_experiments/stargan/checkerboard}}
-\caption{\label{fig:stargan_checkerboard} \textbf{Checkerboard Artifacts.} On the left is the output of the original StarGAN model with visible checkerboard-like artifacts. On the right is output of a modified model which uses bilinear interpolation instead of transposed convolution to resize the image.}
+\caption{\label{fig:stargan_checkerboard} \textbf{Checkerboard Artifacts.} Left: output of the original StarGAN model with visible checkerboard-like artifacts. Right: output of a modified model which uses bilinear interpolation instead of transposed convolution to resize the image.}
 \end{figure}
 
 
