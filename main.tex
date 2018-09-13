@@ -3,6 +3,12 @@
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
 
+%margins
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ margin=3cm
+ }
 
 \usepackage{amsmath}
 \usepackage{fancyhdr}
@@ -669,7 +675,7 @@ The same losses are also applied to image domain $Y$.
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{03_analysis/gans/munit_adv}}
-\caption{\label{fig:munit_adv} \textbf{MUNIT cross-domain translation.} The content code of image from domain Y is combined with style from domain X to generate a fake image X. The discriminator decides if the image was translated or comes from the original image domain based on which the adversarial objective is calculated. Figure adapted from \cite{huang_multimodal_2018}.}
+\caption{\label{fig:munit_adv} \textbf{MUNIT cross-domain translation.} The content code of image from domain Y is combined with style from domain X to generate a fake image X. The discriminator decides if the image was translated or comes from the original image domain based on which the adversarial objective is calculated.}
 \end{figure}
 
 \paragraph{Adversarial Loss}
@@ -928,25 +934,9 @@ The fashion dataset contains multiple attributes that can be modified to allow t
 
 This task requires an unsupervised approach, as there are no image pairs of the same product in a sleeveless and a long-sleeved version. Moreover, the task is multi-domain, meaning that the shape attribute is not binary, but has multiple domains, such as short sleeves, long sleeves or sleeveless. 
 
-Based on these requirements, the obvious choice is the StarGAN, for its unsupervised and multi-domain nature. I have used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}.
+Based on these requirements, the obvious choice is the StarGAN, for its unsupervised and multi-domain nature. I have used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
 
-I have experimented with various shape attributes from the dataset, summarized in Table \ref{tab:shape_attr}. Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per reach attribute.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{*{2}{l}}
-Attribute & Possible Values \\
-\hline
-Sleeve Length			& long, half, short, sleeveless \\
-Neckline  				& back, deep, lined, round, v, wide \\
-Length					& long, 3/4, knee, normal, short \\
-Fit			 			& normal, loose, tight \\
-\end{tabular}
-\caption{\label{tab:shape_attr}\textbf{Shape attributes of the fashion dataset and their values.} %Supervised training means that the dataset consists of image pairs, e.g: a dress and a person wearing the dress. Multi-Domain networks are able to train one model to change multiple attributes. Multi-Modal networks are able to generate more than one possible output. Networks with latent representations try to model the training data in a latent space, as opposed to pixel space.
-}
-\end{table}
-
-
+\vspace{0.5cm}
 \begin{figure}[h]
 \centering
 \subcaptionbox{Discriminator}{\includegraphics[width=\linewidth]{04_experiments/stargan/dis_arch}}\vspace{.5cm}
@@ -955,7 +945,93 @@ Fit			 			& normal, loose, tight \\
 \end{figure}
 
 
+\subsection{Data}
+I experimented with various shape attributes from the dataset, summarized in Table \ref{tab:shape_attr}. Since all the experiments were trained using only the image category ,,dresses'', I have only chosen to train on attribute values that are well-represented within the category. 
+
+For example, only 11 dress images from the dataset are assigned the attribute value ,,normal length''. This length is usually associated with categories such as blouses and tops in the dataset. Therefore I have excluded this attribute value from the training set.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{*{2}{l}{c}}
+\hline
+Attribute & Possible Values & Attribute Images \\
+\hline
+Sleeve Length			& long, half, short, sleeveless 		& 13.329\\
+Fit			 			& normal, loose, tight 				& 14.661\\
+Neckline  				& round, v, wide 					& 10.573\\
+Length					& short, knee, long					& 11.362\\
+\hline
+\end{tabular}
+\caption{\label{tab:shape_attr}\textbf{Shape attributes summary}. Different shape attributes of the fashion dataset and their possible values for category dresses with the respective amounts of images that have one of the possible values assigned.}
+\end{table}
+
+
+Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute.
+
+\pagebreak
+\subsection{Unsupervised Training}
+I have used the original implementation of the StarGAN, which yielded good results on the fashion dataset. I have noticed however, that the outputs of the original model contains a lot of checkerboard-like artifacts. This is a quite common effect when upsampling images with transposed convolution, or ,,deconvolution'', caused by uneven overlapping of the output values \cite{odena2016deconvolution}. 
+
+The simplest solution to avoid this, is to upsample using an interpolation and then applying a deconvolution which keeps the size of the image and only reduces the number of channels. This results in smoother outputs with less artifacts, as shown in Figure \ref{fig:stargan_checkerboard}.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.7\linewidth]{04_experiments/stargan/checkerboard}}
+\caption{\label{fig:stargan_checkerboard} \textbf{Checkerboard Artifacts.} On the left is the output of the original StarGAN model with visible checkerboard-like artifacts. On the right is output of a modified model which uses bilinear interpolation instead of transposed convolution to resize the image.}
+\end{figure}
+
+
+
+
 \paragraph{Sleeve Length}
+
+
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_none}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_short}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_half}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_long}}
+\caption{\label{fig:sleeve_data} \textbf{Sleeve-length attribute data.} Examples of images with different sleeve lengths, from left to right: sleeveless, short sleeves, half sleeves, long sleeves.}
+\end{figure}
+
+\pagebreak
+\paragraph{Fit}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.23\linewidth]{03_analysis/data/fit_tight}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/fit_normal}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/fit_loose}}
+\caption{\label{fig:fit_data} \textbf{Fit attribute data.} Examples of images with different fits, from left to right: tight fit, normal fit, loose fit.}
+\end{figure}
+
+\pagebreak
+\paragraph{Neckline}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_v}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_round}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_wide}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_deep}}
+\caption{\label{fig:neckline_data} \textbf{Neckline attribute data.} Examples of images with different necklines, from left to right: v-neck, round neckline, wide neckline and deep neckline.}
+\end{figure}
+
+\pagebreak
+\paragraph{Length}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.23\linewidth]{03_analysis/data/length_short}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/length_knee}}
+{\includegraphics[width=.23\linewidth]{03_analysis/data/length_long}}
+\caption{\label{fig:length_data} \textbf{Length attribute data.} Examples of dress images with different lengths, from left to right: short, knee-long, long.}
+\end{figure}
+
+
+
 
 
 % ==============================================================
