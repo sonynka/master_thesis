@@ -68,7 +68,13 @@ Blablabla
 \renewcommand{\headrulewidth}{.5pt}
 \pagenumbering{arabic}
 \chapter{Introduction}
+According to Yann LeCun, a machine learning pioneer, generative adversarial models are one of the most relevant recent developments in deep learning \cite{yann_lecun_what_2016}. These models opened countless possibilities of generating realistic new content by making two neural networks compete with each other. In the past few years, researchers developed various adversarial implementations, for example enabling users to generate a Monet painting from a photograph or generate a high-resolution face of a fake celebrity.
 
+One of the fields of computer vision that can benefit from the application of generative models is image retrieval. Most of image retrieval systems available today already rely on machine learning algorithms to retrieve images with similar content.  But the questions is, if this retrieval can further benefit from generating realistic new content by applying generative models.
+
+A suitable area to test this hypothesis is fashion retail due to the vast amount of visual content, as well as textual descriptions of various products. At the same time, fashion is very individual. Navigating through all the possibilities to find a  product that fits the requirements of an individual is time-consuming, and also highly dependent on the filtering and search possibilities that a given online shop offers. 
+
+The goal of this thesis is to evaluate existing generative models suitable for user-driven modification of fashion data, and implement a system that enables the user to influence and improve retrieval of similar products.
 
 \newpage
 % ==============================================================
@@ -137,15 +143,15 @@ The gradient of this loss function is back-propagated through the networks in re
 
 In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. In reality, the training of a GAN can prove to be unstable and finding the right balance between the two networks is difficult.
 
-It can for example happen, that the gradient descent gets stuck in a cycle, where a modification to the discriminator weights reduces the discriminator loss and increases the generator loss, while the following modification of generator weights does the opposite \cite{salimans_improved_2016}. In this scenario, the gradient descent is not able to converge.
+It can happen, for example, that the gradient descent gets stuck in a cycle, where a modification to the discriminator weights reduces the discriminator loss and increases the generator loss, while the following modification of generator weights does the opposite \cite{salimans_improved_2016}. In this scenario, the gradient descent is not able to converge.
 
-One of the common causes of instability is the vanishing gradient problem: when the discriminator gets confident at classifying the generated samples as fake early on, the generator gradient vanishes and the generator has no chance to improve. 
+One of the common causes of instability is the vanishing gradient problem: when the discriminator gets confident at classifying the generated samples as fake early on, the generator gradient vanishes and the generator has no opportunity to improve. 
 
-In the original GAN paper, Goodfellow et al. \cite{goodfellow_generative_2014} suggest $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$, instead of the original term used in Equation \ref{eq:minimax}, to avoid vanishing gradients. 
+In the seminal GAN paper, Goodfellow et al. \cite{goodfellow_generative_2014} suggest $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$, instead of the original term used in Equation \ref{eq:minimax}, to avoid vanishing gradients. 
 
-Since then, other research on how to stabilize GAN training has been published \cite{arjovsky_towards_2017}\cite{roth_stabilizing_2017}\cite{salimans_improved_2016}. The recommended techniques to prevent the vanishing gradient problem mostly try to to confuse the discriminator, to give the generator an advantage in the training. 
+Since then, other research on how to stabilize GAN training has been published \cite{arjovsky_towards_2017}\cite{roth_stabilizing_2017}\cite{salimans_improved_2016}. The recommended techniques to prevent the vanishing gradient problem mostly are mostly focused on confusing the discriminator, to give the generator an advantage in the training. 
 
-One of the techniques that can be applied is to add noise to the labels that define if the image is real (1.0) or fake (0.0). As shown by Saliman et al. \cite{salimans_improved_2016}, varying the labels with a slight noise can help to stabilize the training. To further confuse the discriminator, we can also occassionally flip the labels. 
+One of the techniques that can be applied is to add noise to the labels that define whether the image is real (1.0) or fake (0.0). As shown by Saliman et al. \cite{salimans_improved_2016}, varying the labels with a slight noise can help to stabilize the training. To further confuse the discriminator, we can also occassionally flip the labels. 
 
 % ==============================================================
 % Deep Convolutional GANs
@@ -153,7 +159,7 @@ One of the techniques that can be applied is to add noise to the labels that def
 \subsection{Deep Convolutional GANs} \label{sec:dcgan}
 
 
-Many GAN implementations base their network architecture on Deep Convolutional GANs, described by \cite{radford_unsupervised_2015}. The authors introduced architectural guidelines for convolutional networks used in GANs, that stabilize the training and result in more realistic outputs.
+Many GAN implementations base their network architecture on Deep Convolutional GANs (DCGAN), described by Radford et al. \cite{radford_unsupervised_2015}. The authors introduced architectural guidelines for convolutional networks used in GANs, that stabilize the training and result in more realistic outputs.
 
 \begin{figure}[h]
 \centering
@@ -165,18 +171,18 @@ Many GAN implementations base their network architecture on Deep Convolutional G
 After experimenting with CNN architectures commonly used in computer vision tasks, Radford et al. \cite{radford_unsupervised_2015} have found that this set of architecture modifications has a positive effect on the stability and convergence speed of the models:
 \begin{itemize}
 \item \textbf{All Convolutional Net}: A common practice in convolutional neural networks are \textit{Pooling Layers}, which reduce the number of parameters by filtering the convolution outputs, taking maximum or average of a given region. However, the authors have found that using an All Convolutional Network \cite{springenberg_striving_2014}, which replaces all pooling layers with a strided convolution, leads to more stable results.
-\item \textbf{Fully-Connected Layers}: The authors argue, that avoiding fully-connected layers deeper in the network stabilizes the network. They keep fully-connected layers only in the discriminator output layer and generator input layer, as removing these would slow down the convergence.
+\item \textbf{Fully-Connected Layers}: The authors argue \cite{radford_unsupervised_2015}, that avoiding fully-connected layers deeper in the network stabilizes the network. They keep fully-connected layers only in the discriminator output layer and generator input layer, as they found that removing all fully-connected layers would slow down the convergence.
 \item \textbf{Batch Normalization}: Batch Normalization \cite{ioffe_batch_2015} has been introduced in common image-classification to make models more robust to parameter initialization and speed up training. The DCGAN paper shows that including a batch-norm layer in all GAN layers (except discriminator output and generator input), helps generators start learning and produce diverse outputs.
 \item \textbf{Activation Functions}: As opposed to maxout activation suggested by the original GAN paper \cite{goodfellow_generative_2014}, GANs seem to benefit from \textit{Leaky ReLU} activation function in discriminator, and \textit{ReLU} activation function for generator, except last generator layer, which uses a \textit{tanh} activation function.
 \end{itemize}
 
-The DCGAN architecture established itself as the state-of-the-art architecture and is the model for most of the GAN implementations mentioned in this thesis.
+The DCGAN architecture has been established as the state-of-the-art architecture and is the model for most of the GAN implementations mentioned in this thesis.
 
 % ==============================================================
 % Conditional GANs
 % ==============================================================
 \subsection{Conditional GANs} \label{sec:cond_gan}
-Mirza and Osindero \cite{mirza_conditional_2014} introduced the Conditional Generative Adversarial Networks to be able to influence the output of a GAN. By conditioning both the discriminator and the generator on additional information, the generator learns to output realistic samples based on given input.
+Mirza and Osindero \cite{mirza_conditional_2014} introduced the Conditional Generative Adversarial Networks to influence the output of a GAN. By conditioning both the discriminator and the generator on additional information, the generator learns to output realistic samples based on given input.
 
 Considering the previous example of MNIST hand-written digits synthesis, one can condition the networks using the digits as class labels, and control the network to generate an image of a specific digit. There have also been experiments with text-to-image translation \cite{reed_generative_2016}, where the network is conditioned on a text description of an image, and various image-to-image translation GANs \cite{yoo_pixel-level_2016}\cite{yoo_pixel-level_2016}\cite{pathak_context_2016}.
 
@@ -201,7 +207,7 @@ The conditioning information $c$, such as a class label, text, or another image,
 % Image Retrieval
 % ==============================================================
 \section{Content-Based Image Retrieval}
-The idea of content-based image retrieval systems, also called CBIR, is to find semantically similar images without depending on textual meta-data, such as tags or descriptions. Instead these systems only rely on the pixel values and try to find similarities based on visual features that can be extracted from the content of the images.
+The idea of content-based image retrieval systems (CBIR) is to find semantically similar images without depending on textual meta-data, such as tags or descriptions. Instead these systems only rely on the pixel values and try to find similarities based on visual features that can be extracted from the content of the images.
 
 CBIR is a field of computer vision that has seen a lot of changes since the rise of fast and available deep learning algorithms. While the first CBIR implementations have relied on low-level features such as color and texture to identify similar images, today the state-of-art techniques rely on high-dimensional descriptors produced by convolutional neural networks.
 
@@ -211,7 +217,7 @@ The systems are used for many specific applications in different fields, e.g: me
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{02_background/CBIR/cnn_cbir}}
-\caption{\label{fig:conv_cbir} \textbf{Image Retrieval with CNN Features}. The image on the left is compared to images from a training set to find most similar matches. The images are compared based on 4028-dimensional feature vectors extracted from the last hidden layer of a convolutional neural network. Figure reprinted from \cite{NIPS2012_4824}.}
+\caption{\label{fig:conv_cbir} \textbf{Image Retrieval with CNN Features}. Images in the left column are compared to images from a training set to find most similar matches. The images are compared based on 4028-dimensional feature vectors extracted from the last hidden layer of a convolutional neural network. Figure reprinted from \cite{NIPS2012_4824}.}
 \end{figure}
 
 
@@ -231,7 +237,7 @@ To create a color histogram, the occurence of each color, as described by the im
 \caption{\label{fig:color_hist} \textbf{Color Histogram}. A 3-D visualization of the color histogram with 200 color bins for an RGB image. Histogram visualization created with 3D Color Inspector \cite{barthel_3d_nodate}.}
 \end{figure}
 
-The main advantage of color features is that they are invariant to image transformations such as rotation. However, basing the retrieval only on colors is insufficient, since images that share similar color histograms do not necessarily display the same content and images showing the same content can have different color palettes.
+The main advantage of color features is that they are invariant to image transformations such as rotation. However, founding the retrieval only on colors is insufficient, since images that share similar color histograms do not necessarily display the same content and images showing the same content can have different color palettes.
 
 \paragraph{Texture Features}
 Although texture can be perceived equally important to color, it is more difficult to define it. There are several methods for extracting texture that can be based on statistics, such as the co-occurence matrix, human perception, such as Tamura features, or signal processing, such as Gabor filters or Fourier transformations.
@@ -304,6 +310,7 @@ There are also other possible metrics like the \textit{Chebychev metric} or the 
 % ==============================================================
 \chapter{Analysis}
 % ==============================================================
+This chapter firstly introduces the fashion dataset used in this thesis, its requirements and comparison to other available datasets. Next, it compares five existing image-to-image translation GANs that are well-suited for the purpose of this thesis, describes their architecture and usage and specific characteristics. Finally, it introduces several features for image retrieval, from low-level features and features produced by a convolutional neural network. It also points out some of the existing implementations of GANs specifically for a fashion use case.
 
 % ==============================================================
 % DATA
@@ -434,7 +441,7 @@ Latent Space 			& No & No & No & Yes & Yes \\
 \end{table}
 
 \pagebreak
-\subsection{Pix2Pix}
+\subsection{Pix2Pix} \label{sec:pix2pix}
 The so-called Pi2Pix networks were first introduced by Isola et al. \cite{isola_image--image_2016} as a framework for image-to-image translations. Some of the applications of Pix2Pix include mapping day photographs to night, sketches of shoes to realistic shoe images or colorizing black-and-white photos (Figure \ref{fig:pix2pix_example}).
 
 \begin{figure}[h]
@@ -756,6 +763,7 @@ The Akiwi website \cite{sonnenberg_akiwi_nodate} provides an API, where user can
 
 The API provides various descriptors: the 50-dimensional feature is based on low-level feature descriptors such as a color histogram and edge detection of the image. The 64-dimensional feature is a feature produced by the last hidden layer of a ResNet network, which was normalized and reduced to 64 dimensions \cite{Barthel:2017:VBM:3078971.3079016}.
 
+It is also possible to combine these features together, resulting in a 114-dimensional feature vector.
 
 \subsection{ResNet}
 Nowadays, almost every deep learning framework offers a variety of pre-trained convolutional networks. The deep learning framework PyTorch offers 6 different pre-trained CNN architectures, such as the \textit{VGG Network} \cite{simonyan_very_2014}, \textit{Inception Network} \cite{szegedy_rethinking_2015} or the \textit{ResNet} \cite{he_deep_2015}. 
@@ -774,16 +782,45 @@ The extraction of the image feature happens at the last hidden layer of the netw
 
 Since the ResNet152 was trained on a dataset with a big variety of objects, most of the product images most likely fall to one category and therefore could have very similar feature vectors, which do not magnify the differences between the products enough.
 
-Training of such a deep network from scratch can be very time consuming and requires a big enough dataset. Therefore I used the so-called \textit{Transfer Learning}, where one can use a network trained on a big dataset, such as the ImageNet dataset, and only re-train the last few layers of the network to classify a new dataset.
+Training such a deep network from scratch can be very time consuming and requires a big enough dataset. The so-called \textit{Transfer Learning} enables one to use a network trained on a big dataset, such as the ImageNet dataset, and only re-train the last few layers of the network to classify a new dataset.
 
-I re-trained the network's last hidden layer on the fashion dataset, to classify the 7 categories of the products, such as blouses, dresses, pants etc. 
+This retrained network, for example to classify the categories of the fashion dataset products, can produce more diverse image descriptors for the given dataset.
+
+\pagebreak
+\section{Related Work}
+Using GANs to generate new fashion is not a novel idea. Although most of the GANs explored in this analysis are general models designed to work with many various datasets, there have also been models published for fashion-specific tasks, such as modifying a person's outfit or translating image of a person wearing a product to a product image.
+
+Using text-to-image translation, ,,Be Your Own Prada'' \cite{zhu_be_2017} explores the possibility of modifying an outfit a person in an image is wearing by simply describing it with words. They first use segmentation to extract the person's pose and then apply a mapping that translated the segment into a new garment based on the text description. The model is trained on the DeepFashion dataset, described in Section \ref{sec:data}. The results are shown in Figure \ref{fig:fashiongan}.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{03_analysis/related/fashiongan}}
+\caption{\label{fig:fashiongan} \textbf{FashionGAN.} An original image of a person wearing an outfit is modified based on text description. Figure reprinted from \cite{zhu_be_2017}.}
+\end{figure}
+
+A similar approach was also implemented in an image-to-image translation matter by the Conditional Analogy GAN \cite{jetchev_conditional_2017}. Instead of describing the modified outfit with words, they provide an image of a product. The network learns how to swap the current outfit of the person in the image for the given product. The model was trained on dataset provided by Zalando SE \cite{zalando_damenmode_nodate}, a fashion e-commerce retailer, and is not publicly available.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.8\linewidth]{03_analysis/related/cagan}}
+\caption{\label{fig:swapgan} \textbf{CAGAN.} Outfit swapping with the Conditional Analogy GAN. On the left is the image training pair and on the right is the generated  image of the input person wearing the target product (on the right). Figure reprinted from \cite{jetchev_conditional_2017}.}
+\end{figure}
+
+\pagebreak
+A different approach is to translate images of people wearing a product to a white-background product image. \cite{yoo_pixel-level_2016} translate the image from source domain to target domain in pixel-space while preserving the semantic relation between the domains. The results of their research are shown in Figure \ref{fig:pixeldtgan}. Apart from the model, the research also produced a fashion dataset collected from several online fashion stores, consisting of product images and respective images of people wearing the products.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{03_analysis/related/pixeldtgan}}
+\caption{\label{fig:pixeldtgan} \textbf{Pixel-Level Domain Transfer.} Results of translation between person domain and product domain with the Pixel-Level Domain Transfer GAn \cite{yoo_pixel-level_2016}. Left: input image, right: generated product image.}
+\end{figure}
 
 
 \pagebreak
 % ==============================================================
 \chapter{Experiments}
 % ==============================================================
-The objective of the experiments is to improve image retrieval of fashion products, by allowing the user to perform a series of modifications on the given product image. Unless indicated differently, the experiments were performed on the data category of dresses to reduce the complexity of the experiments and simplify the evaluation process.
+The objective of the experiments is to improve image retrieval of fashion products, by allowing the user to perform a series of modifications on the given product image. The experiments were performed on the data category of dresses to reduce the complexity of the experiments and simplify the evaluation process.
 
 The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodate}, using the machine learning framework \textit{PyTorch} \cite{noauthor_pytorch_nodate} and several common python packages, such as: \textit{pandas} \cite{noauthor_python_nodate}, \textit{numpy} \cite{noauthor_numpy_nodate}, \textit{scikit-learn} \cite{noauthor_scikit-learn_nodate}, \textit{matplotlib} \cite{noauthor_matplotlib_nodate}, \textit{PIL} \cite{noauthor_pillow_nodate} and others. 
 
@@ -838,7 +875,7 @@ Figure \ref{fig:cluster_gray} shows the results of K-Means clustering with 4 clu
 Therefore grayscale features do not fit the requirement for the clustering process to disregard color as a feature.
 
 
-\paragraph{Edges}
+\subsubsection{Edges}
 In order to avoid the problem of separating dark and light colors into different clusters, I used the \textit{Canny Edge Detection} algorithm on the model images. This feature only considers the contours of the object in the image and is invariant to color.
 
 As part of the data collection process, all images were resized to a uniform size of $256\times256$, extending the shorter side with white color. However, some models are photographed on a darker background and the edge detection algorithms can detect this transition of light-grey background to white as an edge.
@@ -853,7 +890,7 @@ Some clustering experiments were affected by this detection and tended to group 
 
 Overall, clustering with edges did not prove to be effective, as the edges are very thin and therefore the measured distance between two images, which are quite similar, but a little bit shifted, would be very big. The detection is also quite sensitive to patterns in the dresses, as seen in Figure \ref{fig:cluster_edges_data}.
 
-\paragraph{Threshold Mask}
+\subsubsection{Threshold Mask}
 To avoid the difficulties with thin edges, I applied a thresholding technique to the images, in order to fill the person's contour with white color and background with black. Figure \ref{fig:cluster_outline_data} shows the steps applied to each image to get a binary threshold mask.
 
 \begin{figure}[h]
@@ -886,7 +923,7 @@ Based on these results, I selected cluster center \textbf{A} from Figure \ref{fi
 
 % --------------------------------------------------------------------------------------------
 \pagebreak
-\subsection{Supervised Training}
+\subsection{Training}
 The only network from the evaluated models that translates images in a supervised matter is Pix2Pix \cite{isola_image--image_2016}. I have modified the official PyTorch implementation of the paper \cite{noauthor_junyanz/pytorch-cyclegan-and-pix2pix_nodate}, in order to work with the fashion data structure: \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}.
 
 Figure \ref{fig:pix2pix_arch} describes the used architecture of the network. In all experiments, I have used image size 256 and batch size 8. The learning rate starts at 0.0002 and is decreased gradually towards 0 throughout the training. Both networks are optimized using Adam optimizer. Most of the experiments were trained for around 20 hours.
@@ -935,23 +972,14 @@ The fashion dataset contains multiple attributes that can be modified to allow t
 
 This task requires an unsupervised approach, as there are no image pairs of the same product in a sleeveless and a long-sleeved version. Moreover, the task is multi-domain, meaning that the shape attribute is not binary, but has multiple domains, such as short sleeves, long sleeves or sleeveless. 
 
-Based on these requirements, the obvious choice is the StarGAN, for its unsupervised and multi-domain nature. I have used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
-
-\vspace{0.5cm}
-\begin{figure}[h]
-\centering
-\subcaptionbox{Discriminator}{\includegraphics[width=\linewidth]{04_experiments/stargan/dis_arch}}\vspace{.5cm}
-\subcaptionbox{Generator}{\includegraphics[width=\linewidth]{04_experiments/stargan/gen_arch}}
-\caption{\label{fig:stargan_arch} \textbf{Experiment StarGAN Architecture.} The architecture of the trained  discriminator and generator. CONV denotes a convolutional layer, IN denotes instance normalization, LRELU denotes leaky relu with slope 0.2.}
-\end{figure}
-
+Based on these requirements, the obvious choice is the StarGAN, for its unsupervised and multi-domain nature.
 
 \subsection{Data}
 I experimented with various shape attributes from the dataset, summarized in Table \ref{tab:shape_attr}. Since all the experiments were trained using only the image category ,,dresses'', I have only chosen to train on attribute values that are well-represented within the category. 
 
 For example, only 11 dress images from the dataset are assigned the attribute value ,,normal length''. This length is usually associated with categories such as blouses and tops in the dataset. Therefore I have excluded this attribute value from the training set.
 
-\begin{table}[t]
+\begin{table}[h]
 \centering
 \begin{tabular}{*{2}{l}{c}}
 \hline
@@ -966,71 +994,115 @@ Length					& short, knee, long					& 11.362\\
 \caption{\label{tab:shape_attr}\textbf{Shape attributes summary}. Different shape attributes of the fashion dataset and their possible values for category dresses with the respective amounts of images that have one of the possible values assigned.}
 \end{table}
 
+Figures \ref{fig:sleeve_data} - \ref{fig:length_data} show example images of each attribute and its values.
 
-Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute.
-
-\pagebreak
-\subsection{Unsupervised Training}
-I have used the original implementation of the StarGAN, which yielded good results on the fashion dataset. I have noticed however, that the outputs of the original model contains a lot of checkerboard-like artifacts. This is a quite common effect when upsampling images with transposed convolution, or ,,deconvolution'', caused by uneven overlapping of the output values \cite{odena2016deconvolution}. 
-
-The simplest solution to avoid this, is to upsample using an interpolation and then applying a ,,deconvolution'' which keeps the size of the image and only reduces the number of channels. This results in smoother outputs with less artifacts, as shown in Figure \ref{fig:stargan_checkerboard}.
-
-\begin{figure}[h]
-\centering
-{\includegraphics[width=.7\linewidth]{04_experiments/stargan/checkerboard}}
-\caption{\label{fig:stargan_checkerboard} \textbf{Checkerboard Artifacts.} Left: output of the original StarGAN model with visible checkerboard-like artifacts. Right: output of a modified model which uses bilinear interpolation instead of transposed convolution to resize the image.}
-\end{figure}
-
-
-
-
-\paragraph{Sleeve Length}
-
-
-
-\begin{figure}[h]
+\begin{figure}[!h]
 \centering
 {\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_none}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_short}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_half}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/sleeves_long}}
-\caption{\label{fig:sleeve_data} \textbf{Sleeve-length attribute data.} Examples of images with different sleeve lengths, from left to right: sleeveless, short sleeves, half sleeves, long sleeves.}
-\end{figure}
+\caption{\label{fig:sleeve_data} \textbf{Sleeve-length attribute data.} From left to right: sleeveless, short sleeves, half sleeves, long sleeves.}
 
-\pagebreak
-\paragraph{Fit}
-
-\begin{figure}[h]
-\centering
 {\includegraphics[width=.23\linewidth]{03_analysis/data/fit_tight}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/fit_normal}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/fit_loose}}
-\caption{\label{fig:fit_data} \textbf{Fit attribute data.} Examples of images with different fits, from left to right: tight fit, normal fit, loose fit.}
-\end{figure}
+\caption{\label{fig:fit_data} \textbf{Fit attribute data.} From left to right: tight fit, normal fit, loose fit.}
 
-\pagebreak
-\paragraph{Neckline}
-
-\begin{figure}[h]
-\centering
 {\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_v}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_round}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_wide}}
-{\includegraphics[width=.23\linewidth]{03_analysis/data/neckline_deep}}
-\caption{\label{fig:neckline_data} \textbf{Neckline attribute data.} Examples of images with different necklines, from left to right: v-neck, round neckline, wide neckline and deep neckline.}
-\end{figure}
+\caption{\label{fig:neckline_data} \textbf{Neckline attribute data.} From left to right: v-neck, round and wide neckline.}
 
-\pagebreak
-\paragraph{Length}
-
-\begin{figure}[h]
-\centering
 {\includegraphics[width=.23\linewidth]{03_analysis/data/length_short}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/length_knee}}
 {\includegraphics[width=.23\linewidth]{03_analysis/data/length_long}}
-\caption{\label{fig:length_data} \textbf{Length attribute data.} Examples of dress images with different lengths, from left to right: short, knee-long, long.}
+\caption{\label{fig:length_data} \textbf{Length attribute data.} From left to right: short, knee-long, long.}
 \end{figure}
 
+\pagebreak
+Attributes such as sleeve-length and length are more distinguishable and should be easier to train than attributes such as fit and neckline, where the changes are more subtle.
+
+\pagebreak
+\subsection{Training}
+I used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
+
+\vspace{0.5cm}
+\begin{figure}[h]
+\centering
+\subcaptionbox{Discriminator}{\includegraphics[width=\linewidth]{04_experiments/stargan/dis_arch}}\vspace{.5cm}
+\subcaptionbox{Generator}{\includegraphics[width=\linewidth]{04_experiments/stargan/gen_arch}}
+\caption{\label{fig:stargan_arch} \textbf{Experiment StarGAN Architecture.} The architecture of the trained  discriminator and generator. CONV denotes a convolutional layer, IN denotes instance normalization, LRELU denotes leaky relu with slope 0.2.}
+\end{figure}
+
+I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to not enough GPU memory. Each experiment was trained for 40 epochs, which took ~5 hours on the GPU Tesla40. 
+
+Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute.
+
+The original architecture without modiciations yielded good results on the fashion dataset. However, the outputs of the original model contain checkerboard-like artifacts - a quite common effect when upsampling images with transposed convolution, or ,,deconvolution'' \cite{odena2016deconvolution}.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.5\linewidth]{04_experiments/stargan/checkerboard}}
+\caption{\label{fig:stargan_checkerboard} \textbf{Checkerboard Artifacts.} Left: Output of the original StarGAN model with visible checkerboard-like artifacts. Right: Output of a modified model which uses bilinear interpolation instead of transposed convolution to resize the image.}
+\end{figure}
+ 
+
+The simplest solution to avoid this is to upsample using an interpolation and then applying ,,deconvolution'' which keeps the size of the image and only reduces the number of channels. This results in smoother outputs with less artifacts, as shown in Figure \ref{fig:stargan_checkerboard}.
+
+I also discovered an instability of the model color understanding - in the first few training iterations, sometimes the generator learns to flip the colors, such as red dress will be generated as blue and vice versa. If this happens early on in the training, the network is not able to recover and keeps outputting flipped colors.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.7\linewidth]{04_experiments/stargan/color_flip}}
+\caption{\label{fig:stargan_color} \textbf{Color-flipped StarGAN outputs.} The generator learns to map images to different domains in opposite color. When reconstructing them back to their original domain, the colors are also flipped back to original.}
+\end{figure}
+
+The reconstruction loss does not penalize this issue, since the generator reconstructs the image back to its original color. I therefore added a simple L1 distance loss between the generated and the real image in order to prevent this behavior.
+
+\pagebreak
+\subsubsection{Sleeve Length Translation}
+This shape modification is one of the most visually obvious from the experiments and StarGAN learns the mapping relatively early on in the training. However, the network generator struggles with dresses that have a strong pattern, or a very light colored, such as shown in Figure \ref{fig:sleeves_results}.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.7\linewidth]{04_experiments/stargan/sleeve_results}}
+\caption{\label{fig:sleeves_results} \textbf{Sleeve-Length Modiciation Results.} The left column shown the input image, while the rest of the columns show the generated outputs with sleeve-length modifications, such as: sleeveless, short sleeves, half sleeves and long sleeves.}
+\end{figure}
+
+I tried to overcome this issue, by modeling the generator as a U-Net, discussed in section \ref{sec:pix2pix}, instead of the original ResNet architecture mentioned in the paper. However, the U-Net generator had difficulties to start learning the domain mappings.
+
+I also tried hyperparameter modifications, such as lowering the generator's learning rate, or changing the relative weights of each loss. None of these experiments have improved the results and usually resulted in the issue of flipping colors discusses earlier.
+
+\subsubsection{Neckline Translation}
+The neckline translation results are more difficult to evaluate since the modifications are more subtle. The network seems to learn round necklines and v-necklines with confidence, while the wide neckline images show artifacts and are not very sharp.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.7\linewidth]{04_experiments/stargan/neckline_results}}
+\caption{\label{fig:neckline_results} \textbf{Neckline Modiciation Results.} The left column shown the input image, while the rest of the columns show the generated outputs with sleeve-length modifications, such as: sleeveless, short sleeves, half sleeves and long sleeves.}
+\end{figure}
+
+\subsubsection{Length Translation}
+
+
+\subsubsection{Fit Translation}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.7\linewidth]{04_experiments/stargan/fit_results}}
+\caption{\label{fig:fit_results} \textbf{Sleeve-Length Modiciation Results.} The left column shown the input image, while the rest of the columns show the generated outputs with sleeve-length modifications, such as: sleeveless, short sleeves, half sleeves and long sleeves.}
+\end{figure}
+
+
+\section{Pattern Modification}
+Unlike the first two experiments where the choice of the fitting GAN was narrow, more of the investigated models are suited for pattern modification. Athough it is a multi-domain task, I decided to test also single-domain models, which can generate a seprate model for each domain translation.
+
+This translation should be multi-modal, however, since a unicolored dress translated into floral pattern can have many different versions. The MUNIT network is the only tested multi-modal approach. Moreover, it also encodes the images to a content and a style code - keeping the content of the image when translating it to a different style. This type of ,,style transfer'' is ideal for this task.
+
+I used the official PyTorch implementation, published by NVidia - with changes to adapt it to the dataset and logging structure. The code can be found here: https://github.com/sonynka/MUNIT.
+
+The MUNIT and FaderNetwork, which don't translate images in pixel-space, but try to learn a latent representations, seem like the best candidates for the task. Both of these networks are something of a ,,style transfer'' networks - they try to keep the content of the image, but change the style of it. This is exactly what I want to achieve with pattern modification.
 
 
 
