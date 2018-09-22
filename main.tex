@@ -316,7 +316,13 @@ There are also other possible metrics like the \textit{Chebychev metric} or the 
 % ==============================================================
 \chapter{Analysis}
 % ==============================================================
-This chapter firstly introduces the fashion dataset used in this thesis, its requirements and comparison to other available datasets. Next, it compares five existing image-to-image translation GANs that are well-suited for the purpose of this thesis, describes their architecture and usage and specific characteristics. Finally, it introduces several features for image retrieval, from low-level features and features produced by a convolutional neural network. It also points out some of the existing implementations of GANs specifically for a fashion use case.
+This chapter firstly introduces the fashion dataset used in this thesis, its requirements and comparison to other available datasets. As mentioned earlier, online fashion retail does not only provide a large amount of visual and textual data, but it is also a field where the search results should fit the style and taste of the user. Therefore, I chose this type of data for the goal of this thesis - to evaluate how user-driven image synthesis can improve image retrieval.
+
+Next, the chapter compares five existing image-to-image translation GANs that can be used for image synthesis, describes their architecture, usage and specific characteristics. I chose image-to-image translation models, since they are based on the concept of conditional generative adversarial networks, and therefore are able to be influenced by image input.
+
+Finally, the chapter introduces several features for image retrieval, from low-level features and features produced by a convolutional neural network, that can be used to retrieve similar images to both original and synthesized images.
+
+Some of the existing implementations of generative adversarial networks specifically for fashion data are also mentioned at the end of the chapter.
 
 % ==============================================================
 % DATA
@@ -456,7 +462,7 @@ The so-called Pi2Pix networks were first introduced by Isola et al. \cite{isola_
 \caption{\label{fig:pix2pix_example} \textbf{Pix2Pix: Examples of translation between various domains.} Use cases of the pix2pix framework include translating day images to night or colorizing grayscale images. Figure reprinted from \cite{hesse_image--image_2017}.}
 \end{figure}
 
-Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (Section \ref{sec:cond_gan}) to influence the network's output by providing a condition. In case of Pix2Pix, the condition is an image that is to be translated to another domain. To translate images from an input domain to a target domain, the model requires a dataset of paired images $(x_{input}, x_{target})$, such as a grayscale image and a corresponding color image. 
+Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (described in Section \ref{sec:cond_gan}) to influence the network's output by providing a condition. In case of Pix2Pix, the condition is an image that should be translated to another domain. To translate images from an input domain to a target domain, the model requires a dataset of paired images $(x_{input}, x_{target})$, such as a grayscale image and a corresponding color image. 
 
 
 \begin{figure}[h]
@@ -465,20 +471,20 @@ Pix2Pix uses the concept of conditional GANs \cite{mirza_conditional_2014} (Sect
 \caption{\label{fig:pix2pix} \textbf{Pix2Pix Training Process.} Dataset consists of paired input and target images. Generator takes input image as condition to output a generated image. Discriminator tries to predict, given the input image, if the target image comes from dataset or from generator. This output is then used to further optimize both networks. Figure adapted from \cite{hesse_image--image_2017}.}
 \end{figure}
 
-As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{input}$ and tries to map it to the target domain $\hat{x}_{target}$, such as: $G: (x_{input}, z) \rightarrow \hat{x}_{target}$. The discriminator, also conditioned on the input image $x_{input}$, tries to predict if the target image comes from the data distribution or if it was generated. The discriminator tries to improve these classifications, while the generator tries to prevent correct classification.
+As shown in Figure \ref{fig:pix2pix}, the generator takes the input image $x_{input}$ and tries to map it to the target domain $\hat{x}_{target}$, such as: $G: (x_{input}) \rightarrow \hat{x}_{target}$. The discriminator, also conditioned on the input image $x_{input}$, tries to predict if the target image comes from the data distribution or if it was generated. The discriminator tries to improve these classifications, while the generator tries to prevent correct classification.
 
 
 \paragraph{Training Objective}
 The adversarial objective, which $G$ is trained to minimize and $D$ is trained to maximize, can be expressed as following:
 \begin{equation}
-\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) = \mathbb{E}_{x_{in},x_{trg}}[\log D(x_{in},x_{trg})] + \mathbb{E}_{x_{in},z}[\log 1 - D(x_{in}, G(x_{in},z))]
+\underset{G}{\mathrm{min}} \ \underset{D}{\mathrm{max}} \ \mathcal{L}_{adv}(D,G) = \mathbb{E}_{x_{in},x_{trg}}[\log D(x_{in},x_{trg})] + \mathbb{E}_{x_{in}}[\log 1 - D(x_{in}, G(x_{in}))]
 \label{eq:pix2pix_minimax_cond}
 \end{equation}
 
 \pagebreak
 Based on the results of previous conditional GAN approaches \cite{pathak_context_2016}, Isola et. al \cite{isola_image--image_2016} have also shown, that enforcing the generated output to be closer to the ground truth target by adding a second objective reduces artifacts in the results. They therefore suggest to use the L1 distance as reconstruction loss function for the generator to optimize.
 \begin{equation}
-\mathcal{L}_{rec}(G) = \mathbb{E}_{x_{in},x_{trg},z}[||x_{trg}-G(x_{in},z)||_{1}]
+\mathcal{L}_{rec}(G) = \mathbb{E}_{x_{in},x_{trg}}[||x_{trg}-G(x_{in})||_{1}]
 \label{eq:pix2pix_loss_rec}
 \end{equation}
 
@@ -492,7 +498,7 @@ where $\lambda$ controls the relative importance of the two loss functions.
 \paragraph{Generator}
 In image translation tasks, it is usual, and even desirable, that the input and target image domains share a common underlying structure. Modeling the generator with a simple encoder-decoder architecture, where all data must pass through a so-called ,,bottleneck'' layer, can therefore result in an undesirable loss of the low-level details that the two domains share. 
 
-The authors therefore suggest to base the generator on a U-Net architecture. U-Net contains so-called skip connections, which pass the output directly from the encoder to the decoder, therefore skipping the bottleneck. The generator is therefore able to include low-level features from the input in the output.
+The authors therefore suggest to base the generator on a U-Net architecture. U-Net contains so-called skip connections, which pass the output directly from the encoder to the decoder, skipping the bottleneck. The generator is therefore able to include low-level features from the input in the output.
 
 \begin{figure}[h]
 \centering
@@ -531,6 +537,7 @@ The adversarial loss is applied to both pairs of networks, $(D_{X}, G_{X})$ and 
 \paragraph{Cycle Consistency Loss}
 Additionally to the adversarial loss, CycleGAN also implements a so-called \emph{Cycle Consistency Loss}, which enforces that an image encoded from one domain to another, can also be reconstructed back to the original domain. The authors argue, that reducing the amount of possible mapping functions can help avoid the network to learn mappings that contradict each other \cite{zhu_unpaired_2017}.
 
+\pagebreak
 The \textit{forward cycle consistency} defines that an image $x$ from domain $X$ and its encoded-decoded version should be approximately the same: $G_{X}(G_{Y}(x)) \approx x$. The \textit{backward cycle consistency} defines the same for an image from domain $Y$.
 \begin{equation}
 \mathcal{L}_{cyc}(G_{X},G_{Y}) = \mathbb{E}_{x}[||G_{X}(G_{Y}(x)) - x||_{1}] + \mathbb{E}_{y}[||G_{Y}(G_{X}(y)) - y||_{1}]
@@ -763,18 +770,41 @@ while the objective of the encoder is for the decoder to be able to reconstruct 
 % ==============================================================
 \section{Image Retrieval Features}
 % ==============================================================
+I analyzed several available image features that can be used to retrieve images of similar products from the fashion dataset. The most significant differences of the analyzed features are summarized in Table \ref{tab:retrieval_com}. 
+
+First set of features comes from the Akiwi API \cite{sonnenberg_akiwi_nodate}, hence an internet connection is necessary to download a feature for a new image. The features are low dimensional and therefore fast to process. The second set of features is created by forwarding the images through a convolutional neural network, which can be done locally. These features are much more high-dimensional - include more information but are also slower to process.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Feature Name}                                          & \textbf{Dimensions} & \textbf{Feature Source}    & \textbf{Dataset Used}                                                            \\ \midrule
+Akiwi-50                                                       & 50                  & Low-level Features         & -                                                                                \\ \midrule
+Akiwi-64                                                       & 64                  & ResNet-200 + Dim. Reduction & ImagNet \\ \midrule
+ResNet-152                                                     & 2048                & ResNet-152                 & ImageNet                                                                         \\ \midrule
+\begin{tabular}[c]{@{}l@{}}ResNet-152\\ Retrained\end{tabular} & 2048                & ResNet-152                 & \begin{tabular}[c]{@{}c@{}}ImageNet\\ retrained with\\ fashion data\end{tabular} \\ \bottomrule
+\end{tabular}
+\caption{\label{tab:retrieval_com}\textbf{Comparison of available image features.}}
+\end{table}
 
 \subsection{Akiwi}
-The Akiwi website \cite{sonnenberg_akiwi_nodate} provides an API, where user can upload an image file and the API returns a feature vector which can be used as the image descriptor to compare similarities with other image features.
+The Akiwi website \cite{sonnenberg_akiwi_nodate} provides an API, where user can upload an image file and the API returns a descriptor of the image. This vector can be used as the image feature to compare similarities with other image features.
 
-The API provides various descriptors: the 50-dimensional feature is based on low-level feature descriptors such as a color histogram and edge detection of the image. The 64-dimensional feature is a feature produced by the last hidden layer of a ResNet network, which was normalized and reduced to 64 dimensions \cite{Barthel:2017:VBM:3078971.3079016}.
+The API provides various descriptors: the 50-dimensional descriptor is based on low-level features of the image, such as color histogram and edge detection. The 64-dimensional descriptor is produced by the last hidden layer of a ResNet-200 network, normalized and reduced to 64 dimensions \cite{Barthel:2017:VBM:3078971.3079016}.
 
-It is also possible to combine these features together, resulting in a 114-dimensional feature vector.
+Figure \ref{fig:akiwi50_feats} shows example of 50-dimensional features visualized as a grayscale color palette of images with smallest and biggest distances.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=.8\linewidth]{03_analysis/cbir/akiwi50_feats}}
+\caption{\label{fig:akiwi50_feats} \textbf{Akiwi 50-dimensional features visualization.} Left column displays the original images. Their respective 50-dimensional feature values are visualized in a grayscale palette.}
+\end{figure}
+
 
 \subsection{ResNet}
-Nowadays, almost every deep learning framework offers a variety of pre-trained convolutional networks. The deep learning framework PyTorch offers 6 different pre-trained CNN architectures, such as the \textit{VGG Network} \cite{simonyan_very_2014}, \textit{Inception Network} \cite{szegedy_rethinking_2015} or the \textit{ResNet} \cite{he_deep_2015}. 
+Almost every deep learning framework nowadays offers a variety of pre-trained convolutional networks. The deep learning framework PyTorch offers 6 different pre-trained CNN architectures, such as the \textit{VGG Network} \cite{simonyan_very_2014}, \textit{Inception Network} \cite{szegedy_rethinking_2015} or the \textit{ResNet} \cite{he_deep_2015}. 
 
-The networks are pre-trained to classify images from the ImageNet dataset, which contains around 14 million images labels with 1.000 classes, and has established itself as a reference for testing convolutional architectures. 
+The networks are pre-trained to classify images from the ImageNet dataset, which contains around 14 million images labeled with 1.000 classes, and has established itself as a reference for testing convolutional architectures. 
 
 Currently, the best scoring pre-trained model offered by PyTorch is the \textit{ResNet152}, which is 152 layers deep and contains so-called \textit{Residual Blocks}. These blocks allow the output of one layer to be added directly to another layer deeper in the network. This technique is useful when training very deep neural networks.
 
@@ -786,17 +816,15 @@ Currently, the best scoring pre-trained model offered by PyTorch is the \textit{
 
 The extraction of the image feature happens at the last hidden layer of the network, which in case of ResNet152, is a 2048-dimensional layer. For each image, the output of this layer is its unique descriptor, which can be used to compare distances between images.
 
-Since the ResNet152 was trained on a dataset with a big variety of objects, most of the product images most likely fall to one category and therefore could have very similar feature vectors, which do not magnify the differences between the products enough.
+Since the ResNet152 was trained on a dataset with a big variety of objects, most of the fashion product images likely fall to one category and therefore could have very similar feature vectors, which do not adequately reflect the differences between the products.
 
-Training such a deep network from scratch can be very time consuming and requires a big enough dataset. The so-called \textit{Transfer Learning} enables one to use a network trained on a big dataset, such as the ImageNet dataset, and only re-train the last few layers of the network to classify a new dataset.
-
-This retrained network, for example to classify the categories of the fashion dataset products, can produce more diverse image descriptors for the given dataset.
+However, training such a deep network on a new dataset can be very time consuming and requires the dataset to be quite large. The so-called \textit{Transfer Learning} enables one to use a network trained on a big dataset, such as the ImageNet dataset, and only re-train the last few layers of the network to classify a new dataset. This retrained network, for example to classify the categories of the fashion dataset products, can produce more diverse image descriptors for the given dataset.
 
 \pagebreak
 \section{Related Work}
-Using GANs to generate new fashion is not a novel idea. Although most of the GANs explored in this analysis are general models designed to work with many various datasets, there have also been models published for fashion-specific tasks, such as modifying a person's outfit or translating image of a person wearing a product to a product image.
+Although most of the GANs analyzed in this thesis are general models designed to work with many various datasets, there have also been publications focusing on GANs for fashion-specific tasks, such as modifying a person's outfit or translating image of a person wearing a product to a product image.
 
-Using text-to-image translation, ,,Be Your Own Prada'' \cite{zhu_be_2017} explores the possibility of modifying an outfit a person in an image is wearing by simply describing it with words. They first use segmentation to extract the person's pose and then apply a mapping that translated the segment into a new garment based on the text description. The model is trained on the DeepFashion dataset, described in Section \ref{sec:data}. The results are shown in Figure \ref{fig:fashiongan}.
+Using text-to-image translation, ,,Be Your Own Prada'' \cite{zhu_be_2017} explores the possibility of modifying a product, worn by a person, by describing it with a short description. They first use segmentation to extract the person's pose and then apply a mapping that translates the segment into a new product based on the text description. The model is trained on the DeepFashion dataset, described in Section \ref{sec:data}. The results are shown in Figure \ref{fig:fashiongan}.
 
 \begin{figure}[h]
 \centering
@@ -804,7 +832,7 @@ Using text-to-image translation, ,,Be Your Own Prada'' \cite{zhu_be_2017} explor
 \caption{\label{fig:fashiongan} \textbf{FashionGAN.} An original image of a person wearing an outfit is modified based on text description. Figure reprinted from \cite{zhu_be_2017}.}
 \end{figure}
 
-A similar approach was also implemented in an image-to-image translation matter by the Conditional Analogy GAN \cite{jetchev_conditional_2017}. Instead of describing the modified outfit with words, they provide an image of a product. The network learns how to swap the current outfit of the person in the image for the given product. The model was trained on dataset provided by Zalando SE \cite{zalando_damenmode_nodate}, a fashion e-commerce retailer, and is not publicly available.
+A similar approach was also implemented in an image-to-image translation approach by the Conditional Analogy GAN \cite{jetchev_conditional_2017}. Instead of describing the modified outfit with words, the network is provided with an image of a product. The network learns how to swap the current outfit of the person for the given product. The model was trained on dataset provided by Zalando SE \cite{zalando_damenmode_nodate}, a fashion e-commerce retailer, and is not publicly available.
 
 \begin{figure}[h]
 \centering
@@ -813,7 +841,7 @@ A similar approach was also implemented in an image-to-image translation matter 
 \end{figure}
 
 \pagebreak
-A different approach is to translate images of people wearing a product to a white-background product image. \cite{yoo_pixel-level_2016} translate the image from source domain to target domain in pixel-space while preserving the semantic relation between the domains. The results of their research are shown in Figure \ref{fig:pixeldtgan}. Apart from the model, the research also produced a fashion dataset collected from several online fashion stores, consisting of product images and respective images of people wearing the products.
+Another published image-to-image translation model translates images of people wearing a product to a white-background product image \cite{yoo_pixel-level_2016}. It maps the image from source domain to target domain in pixel-space while preserving the semantic relation between the domains. The results of their research are shown in Figure \ref{fig:pixeldtgan}. Apart from the model, the research also produced a fashion dataset collected from several online fashion stores, consisting of product images and respective images of people wearing the products.
 
 \begin{figure}[h]
 \centering
@@ -821,20 +849,19 @@ A different approach is to translate images of people wearing a product to a whi
 \caption{\label{fig:pixeldtgan} \textbf{Pixel-Level Domain Transfer.} Results of translation between person domain and product domain with the Pixel-Level Domain Transfer GAn \cite{yoo_pixel-level_2016}. Left: input image, right: generated product image.}
 \end{figure}
 
-
 \pagebreak
 % ==============================================================
 \chapter{Experiments}
 % ==============================================================
-The following chapter contains three types of experiments: (1) product modification, (2) product to model translation and (3) image retrieval experiments.
+The following chapter contains three types of experiments: (1) attribute modification, (2) product to model translation and (3) image retrieval experiments.
 
-The objective of the product modification experiments is to test the analyzed generative models on the fashion dataset and evaluate their ability to output a realistic product image with modified attributes. This attribute modification can either effect the shape of the product, such as sleeve length or neckline, or the style of the product, such as its pattern.
+The objective of the attribute modification experiments is to test the analyzed generative models on the fashion dataset and evaluate their ability to output a realistic product image with modified attributes. This attribute modification can either effect the shape of the product, such as sleeve length or neckline, or the style of the product, such as its pattern.
 
-The product to model image translation experiments with translating the domain of product images to the domain of model images to further expand the possibilities of image retrieval. This section involves data clustering experiments, that were necessary to create a supervised dataset for this task.
+The product to model image translation experiment aims to translate the domain of product images to the domain of model images, to expand the possibilities of image retrieval. This section involves data clustering experiments, that were necessary to create a supervised dataset for this task.
 
 The image retrieval experiments test different image features to evaluate their retrieval quality both on original product images and also on generated images from previous experiments.
 
-All experiments were performed on the data category of dresses (cca 15.000 images) to reduce the complexity of the experiments and simplify the evaluation process. The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodate}, using the machine learning framework \textit{PyTorch} \cite{noauthor_pytorch_nodate} and several common python packages, including \textit{pandas} \cite{noauthor_python_nodate}, \textit{numpy} \cite{noauthor_numpy_nodate} and \textit{scikit-learn} \cite{noauthor_scikit-learn_nodate}.
+All experiments were performed on the data category of dresses (cca 15.000 images) to reduce the complexity of the experiments and simplify the evaluation process. The experiments were conducted in \textit{Python 3} \cite{noauthor_welcome_nodate}, using the machine learning framework \textit{PyTorch} \cite{noauthor_pytorch_nodate} and several common python packages, including \textit{pandas} \cite{noauthor_python_nodate}, \textit{numpy} \cite{noauthor_numpy_nodate} and \textit{scikit-learn} \cite{noauthor_scikit-learn_nodate}. Since the evaluation of the results is mostly visual, I used \textit{TensorBoard} \cite{noauthor_tensorflows_2018} for visualization of the images and learning curves during training.
 
 
 % ==============================================================
@@ -842,14 +869,14 @@ All experiments were performed on the data category of dresses (cca 15.000 image
 % ==============================================================
 \pagebreak
 \section{Attribute Modification}
-The fashion dataset contains multiple attributes that can be modified to allow the user to ,,tailor'' a product according to their taste and trigger a new product search. The experiments in the following section explore the modification of shape and pattern attributes that are assigned to each product in the dataset.
+The products in the fashion dataset are described by multiple attributes. These can be modified to allow the user to ,,tailor'' a product according to their taste and trigger a new product search. The experiments in the following section explore the modification of shape and pattern attributes.
 
-These modifications require an unsupervised approach, as there are no image pairs of the same product in both attribute domains, such a sleeveless and a long-sleeved version of the same dress. Moreover, the modifications are multi-domain, meaning that the attribute is not binary, but has multiple domains, such as short sleeves, long sleeves or sleeveless. 
+These modifications require an unsupervised approach, as there are no image pairs of the same product in both attribute domains, such a sleeveless and a long-sleeved version of the same dress. Moreover, most of the modifications are multi-domain, meaning that the attribute is not binary, but has multiple domains, such as short sleeves, long sleeves or sleeveless. 
 
 \subsection{Data}
-I experimented with various product attributes from the dataset, summarized in Table \ref{tab:data_attr}. Since all the experiments were trained using only the image category ,,dresses'', I have only chosen to train on attribute values that are well-represented within the category. 
+Table \ref{tab:data_attr} summarized the attributes modified by the experiments. Since all the experiments were trained using the image category ,,dresses'', I have only chosen to train on attribute values that are well-represented within the category. 
 
-For example, only 12 dress images from the dataset are assigned the attribute value ,,normal length''. This length is usually associated with categories such as blouses and tops in the dataset. Therefore I have excluded this attribute value from the training set.
+For example, only 12 dress images from the dataset are classified with the attribute value ,,normal length''. This length is usually associated with categories such as blouses and tops in the dataset. Therefore I have excluded this attribute value from the training set.
 
 \begin{table}[h]
 \centering
@@ -901,9 +928,12 @@ Figures \ref{fig:sleeve_data} - \ref{fig:pattern_data} show example images of ea
 
 \pagebreak
 \subsection{Shape Modification}
-Since the shape modification is an unsupervised and multi-domain task, StarGAN is the most suitable network from the evaluated models.I used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
+Since the shape modification is an unsupervised and multi-domain task, StarGAN is the most suitable network from the evaluated models. I used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
 
-The original source code for StarGAN updates the discriminator weights 5 times for 1 generator update. I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to not enough GPU memory. Each experiment was trained for 40 epochs - around 5 hours on a Tesla M40 12GB GPU. 
+%TODO change batch size and image size if experimnets succesffull
+I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to not enough GPU memory. Each experiment was trained for 40 epochs - around 5 hours on a Tesla M40 12GB GPU. The original source code for StarGAN updates the discriminator weights 5 times for 1 generator update. 
+
+Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute: sleeve length, length, fit and neckline.
 
 \vspace{0.5cm}
 \begin{figure}[h]
@@ -912,8 +942,6 @@ The original source code for StarGAN updates the discriminator weights 5 times f
 \subcaptionbox{Generator}{\includegraphics[width=\linewidth]{04_experiments/stargan/gen_arch}}
 \caption{\label{fig:stargan_arch} \textbf{Experiment StarGAN Architecture.} The architecture of the trained  discriminator and generator. CONV denotes a convolutional layer, IN denotes instance normalization, LRELU denotes leaky relu with slope 0.2.}
 \end{figure}
-
-Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute: sleeve length, length, fit and neckline.
 
 The original model without modifications yielded good results on the fashion dataset, but the outputs contained checkerboard-like artifacts - a quite common effect when upsampling images with transposed convolution, or ,,deconvolution'' \cite{odena2016deconvolution}.
 
@@ -927,7 +955,7 @@ To avoid this issue, I inserted an upsampling layer before every ,,deconvolution
 
 I also discovered an instability of the model color understanding - in the first few training iterations, sometimes the generator learns to map the original color to a different one, such as shown in Figure \ref{fig:stargan_color}. If this happens early on in the training, the network is not able to recover and keeps outputting flipped colors.
 
-The reconstruction loss does not penalize this issue, since the generator reconstructs the image back to its original color. I therefore added a simple L1 distance loss between the generated and the real image in order to prevent this behavior.
+The reconstruction loss does not penalize this issue, since the generator reconstructs the image back to its original color. I therefore added a L1 distance term to the loss function, which measures the distance between the generated and the real image in order to prevent color changes.
 
 \begin{figure}[h]
 \centering
@@ -935,8 +963,6 @@ The reconstruction loss does not penalize this issue, since the generator recons
 \caption{\label{fig:stargan_color} \textbf{Color-flipped StarGAN outputs.} The generator learns to map images to different domains to a different color.}
 \end{figure}
 
-\pagebreak
-\subsubsection{Sleeve Length Modification}
 Figure \ref{fig:sleeves_results} shows the results of sleeve length modification. StarGAN learns the mapping relatively early on in the training, however, the network generator struggles with dresses that have a strong pattern, or a very light colored, such as shown in Figure \ref{fig:sleeves_results}.
 
 \begin{figure}[h]
@@ -947,12 +973,11 @@ Figure \ref{fig:sleeves_results} shows the results of sleeve length modification
 
 To solve this issue, I experimented with modeling the generator as a U-Net, discussed in section \ref{sec:pix2pix}, instead of the original ResNet architecture described in the paper \cite{choi_stargan_2017}. However, the U-Net generator failed to start learning the domain mappings.
 
-I also tried hyperparameter modifications, such as lowering the generator's learning rate, or changing the relative weights of each loss. None of these experiments have improved the results and mostly resulted in the issue of flipping colors discussed earlier.
+I also tried hyperparameter modifications, such as lowering the generator's learning rate, or changing the relative weights of each loss. None of these experiments have improved the results.
 
-\subsubsection{Neckline Translation}
-The neckline translation results are more difficult to evaluate since the modifications are more subtle. The network seems to learn round necklines and v-necklines with confidence, while the wide neckline images show artifacts and are not very sharp.
+Figure \ref{fig:neckline_results} shows results for other attribute translations, such as neckline and fit modifications.
 
-\begin{figure}[h]
+\begin{figure}[!h]
 \centering
 \subcaptionbox{Neckline Translation Results}{
 {\includegraphics[width=.45\linewidth]{04_experiments/stargan/neckline_results}}}
@@ -961,19 +986,15 @@ The neckline translation results are more difficult to evaluate since the modifi
 \caption{\label{fig:neckline_results} \textbf{Neckline Modiciation Results.} The left column shown the input image, while the rest of the columns show the generated outputs with sleeve-length modifications, such as: sleeveless, short sleeves, half sleeves and long sleeves.}
 \end{figure}
 
-\subsubsection{Length Translation}
-
-
-\subsubsection{Fit Translation}
 
 \pagebreak
 \subsection{Style Translation}
-To modify the style of the products, I experimented with the translation of the pattern attribute of the images. Since the content of the image, the product shape, should be maintained and only the style should be modified, these experiments can be understood as a style transfer.
+To modify the style of the products, I trained several models to translate the pattern attribute of the images. Since the content of the image - the product shape -  should be maintained and only the style should be modified, these experiments can be understood as a style transfer.
 
 \subsubsection{MUNIT}
-Ideally, the output of this translation should be multi-modal - one unicolored dress should have more than one possible floral-patterned versions and vice versa. MUNIT is the only network from the evaluated ones that offers a multi-modal approach. It also provides a ,,guided'' style transfer, so that the user can ,,guide'' the style of a dress in one domain to style of a specific dress in another domain.
+Ideally, the output of style translation should be multi-modal - one unicolored dress should have more than one possible floral-patterned versions and vice versa. MUNIT is the only network from the evaluated networks that models a multi-modal approach. It also provides a ,,guided'' style transfer, so that the user can ,,guide'' the style of a dress in one domain to style of a specific dress in another domain.
 
-I used the official PyTorch implementation, published by NVidia - with changes to adapt it to the dataset and logging structure. The code can be found here: https://github.com/sonynka/MUNIT. I used batch size 1 to avoid problems with GPU memory and the default training parameters. The network was trained for 50.000 iterations, which took around 12 hours on the used GPU.
+I used the official PyTorch implementation, published by NVidia: \linebreak\hyperlink{https://github.com/sonynka/MUNIT}{github.com/sonynka/MUNIT} - with changes to adapt it to the dataset and logging structure. I used batch size 1 to avoid problems with insufficient GPU memory and the default training parameters. The network was trained for 50.000 iterations, which took around 12 hours on the used GPU.
 
 \begin{figure}[h]
 \centering
@@ -981,14 +1002,14 @@ I used the official PyTorch implementation, published by NVidia - with changes t
 \caption{\label{fig:munit_results} \textbf{MUNIT Pattern Translation Results.} Domain A represents floral-patterned dresses, domain B represents unicolored dresses. Guided style translation translates the input image A to style of input image B and vice versa. Random style translation chooses a random style from each respective domain to apply to the input images. The displayed images are from the test set.}
 \end{figure}
 
-Results of experiments translating the floral pattern to unicolor domain and vicer versa are shown in Figure \ref{fig:munit_results}. The network learns the content encoding correctly and the shape of the dresses is maintained in the translation. it also learns to map floral dresses to unicolor dresses. However, it fails to find the right encoding for the floral style. As shown in the Guided Style example of Figure \ref{fig:munit_results}, the generated image takes the color of the input but not the floral pattern.
+Figure \ref{fig:munit_results} shows the results of experiments translating the floral pattern to unicolor domain and vice versa. The network learns the content encoding correctly and the shape of the dresses is maintained in the translation. it also learns to map floral dresses to unicolor dresses. However, it fails to find the right encoding for the floral style. As shown in the Guided Style example of Figure \ref{fig:munit_results}, the generated image takes the color of the input but not the floral pattern.
 
 I experimented with increasing the dimension of the style encoding from the original 8 dimensions to 16 and 32, as well as tuning hyperparameters of the network such as learning rate and the relative weight of each term in the loss function. However, none of the experiments have resulted in a reasonable interpretation of the floral style.
 
 \subsubsection{CycleGAN}
 Since experiments using MUNIT did not yield the desired result, I experimented with the more simple model of CycleGAN, which does not offer either the multi-modality nor the ,,guided'' style transfer functionality of MUNIT. Instead it trains the translation in pixel-space.
 
-I used the official PyTorch implementation that the authors recommend, which can be found on: ... . It uses a ResNet architecture for the generator and a simple convolutional network for discriminator, as shown in Figure \ref{fig:cyclegan_arch}. The network was trained with image size 128
+I used the official PyTorch implementation by the authors of the paper: \linebreak \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}. The model uses a ResNet architecture for the generator and a simple convolutional network for discriminator, as shown in Figure \ref{fig:cyclegan_arch}.
 
 \begin{figure}[h]
 \centering
@@ -997,12 +1018,43 @@ I used the official PyTorch implementation that the authors recommend, which can
 \caption{\label{fig:cyclegan_arch} \textbf{Experiment CycleGAN Architecture.} The architecture of the trained  discriminator and generator. CONV denotes a convolutional layer, IN denotes instance normalization, LRELU denotes leaky relu with slope 0.2.}
 \end{figure}
 
+The model was trained with batch size 8 and learning rate 0.0001. The image size was 128 $\times$ 128 pixels. I trained one generator for each of the patterns in the dataset: floral, stripes and print, each of them paired with unicolored domain. The models were trained for 150 epochs (cca 12 hours on the used GPU). 
+
+\pagebreak
+Results of floral pattern translation are shown in Figure \ref{fig:cycle_floral_results}. It learns the mapping of both translation directions while keeping the shape of the dresses as well. Some of the outputs contain minor artifacts around the dress.
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{Floral to Unicolors}{\includegraphics[width=.45\linewidth]{04_experiments/cyclegan/floral_from}}
+\subcaptionbox{Unicolors to Floral}{\includegraphics[width=.45\linewidth]{04_experiments/cyclegan/floral_to}}
+\caption{\label{fig:cycle_floral_results} \textbf{CycleGAN Floral Pattern Translation Results.} Results of the translation between floral and unicolor domains in both directions on test set images.}
+\end{figure}
+
+Although CycleGAN does not produce multi-modal outputs, some multi-modality can be introduced by using generators from various epochs towards the end of the training. At this stage of training the pattern translation is already trained well and the changes in the output are more influenced by the current batch of training images. 
+
+As shown in Figure \ref{fig:cycle_floral_multimodal}, the outputs from epochs 120, 130 and 150 are all realistic but vary in the colorfulness and scale of the floral pattern. This approach can be used to introduce some multi-modality. However, this approach can be only used when mapping from unicolored domain, since hte other directions does not vary the output based on the epoch that much.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{04_experiments/cyclegan/floral_multimodal}}
+\caption{\label{fig:cycle_floral_multimodal} \textbf{CycleGAN Multi-Modality.} Results of the translation between floral and unicolor domains on test images. Left image is the input image, the images on the right are outputs of epoch 150, 130 and 120 respectively.}
+\end{figure}
+
+Results for translating stripes pattern are shown in Figures .. . The outputs contain more artifacts and are not as realistic as floral pattern - less training data for this domain can be the cause of worse results. I also experimented with the print pattern, however, the prints in the input images are so diverse - ranging from a simple logo through a full paisley print, that the network had difficulties to recognize the mapping.
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{Stripes to Unicolors}{\includegraphics[width=.45\linewidth]{04_experiments/cyclegan/stripes_from}}
+\subcaptionbox{Unicolors to Stripes}{\includegraphics[width=.45\linewidth]{04_experiments/cyclegan/stripes_to}}
+\caption{\label{fig:cycle_stripes_results} \textbf{CycleGAN Stripes Pattern Translation Results.} Results of the translation between stripes and unicolor domains in both directions on test set images.}
+\end{figure}
+
 % ==============================================================
 % PRODUCTS TO MODLES
 % ==============================================================
 \pagebreak
 \section{Products to Models Translation}
-Some online fashion retailers provide product images that are taken on white background without a person modeling the product. However, there are also countless images online, coming from other retail platforms, social media and blogs of people wearing a certain product, without a corresponding product image. The goal of this experiment was to translate a product image to an image of a person wearing that product, in order to be able to extend the search possibilities.
+Some online fashion retailers provide product images that are taken on white background without a person modeling the product. However, there are also many images online, coming from other retail platforms, social media and blogs of people wearing a certain product, without a corresponding product image. The goal of this experiment was to translate a product image to an image of a person wearing that product, in order to expand the search possibilities.
 
 I first experimented with the MUNIT network - an unsupervised approach, translating between the domain of all product images and the domain of all model images. This approach has not yielded the desired results, since the output was too diverse and it failed to represent the input product.
 
@@ -1011,7 +1063,7 @@ Therefore I have decided to train a network in a supervised manner, such that it
 \subsection{Data Clustering}
 As mentioned in Section \ref{sec:data}, each scraped product has a variable amount of images displaying people modeling the given product. The average amount of images per product is 4, and based on manual screening of the dataset, a product usually has these types of model images: full-body model front-facing, full-body model back-facing, zoom to part of body were product is worn and large zoom on detail.
 
-In order to create a dataset of image pairs, each product must have exactly one corresponding model image. I chose the model image that should exist for  most of the products and doesn't have much variation - where the model is facing the camera and the full body is captured. 
+In order to create a dataset of image pairs for supervised training, each product must have exactly one corresponding model image. I chose the model image that most of the products should have - where the model is facing the camera and the full body is captured. 
 
 However, there is no clear order or pattern from which to deduce the pose of the model based on the name of the image or its position in the list of images. Since there are more than 60.000 model images only for category dresses, manual selection of the best image for each product would be too time consuming.
 
@@ -1027,33 +1079,33 @@ To identify the best image for each product, I used the following approach:
 For clustering, I used the \textit{K-Means Clustering} algorithm \cite{noauthor_k-means_2018}, which creates $k$ clusters and assigns each data point to the nearest cluster center. The \textit{scikit-learn} library offers a fast implementation of the algorithm \cite{noauthor_sklearn.cluster.kmeans_nodate}.
 
 \subsubsection{Grayscale Clustering}
-For the initial experiment, I have converted the model images to grayscale, in order to separate the person from the background regardless of the color of the product they are wearing.
+For the initial experiment, I have converted the model images to grayscale, in order to separate the person from the background regardless of the color of the product they are wearing. 
 
 In order to reduce the dimensionality and speed up the algorithm, I resized the images to $64\times64$ pixels. The total number of model images is $63.103$, which means the clustering algorithm was fed with an array of size $63103\times64\times64$.
 
-\begin{figure}[h]
-\centering
-{\includegraphics[width=\linewidth]{04_experiments/clustering/grayscale}}
-\caption{\label{fig:cluster_gray} \textbf{Cluster centers with grayscale features.} The left most column displays the cluster centers and the rest columns display random images from the dataset that are assigned to the respective cluster based on their grayscale feature vector.}
-\end{figure}
+%\begin{figure}[h]
+%\centering
+%{\includegraphics[width=.8\linewidth]{04_experiments/clustering/grayscale}}
+%\caption{\label{fig:cluster_gray} \textbf{Cluster centers with grayscale features.} The left most column displays the cluster centers and the rest columns display random images from the dataset that are assigned to the respective cluster based on their grayscale feature vector.}
+%\end{figure}
 
-Figure \ref{fig:cluster_gray} shows the results of K-Means clustering with 4 cluster centers. Although the second cluster center groups the desired image type, it does so only for dark-colored dresses. As one can see from the results, the fourth cluster center tends to group all images with light-colored dresses, in all poses. 
+%Figure \ref{fig:cluster_gray} shows the results of K-Means clustering with 4 cluster centers. Although the second cluster center groups the desired image type, it does so only for dark-colored dresses. As one can see from the results, the fourth cluster center tends to group all images with light-colored dresses, in all poses. 
 
-Therefore grayscale features do not fit the requirement for the clustering process to disregard color as a feature.
+However, the clustering algorithm tented to group model images not only by pose, but also by color. All light-colored dresses were usually grouped to one cluster, regardless of the pose in the image. Therefore grayscale features do not fit the requirement for the clustering process to disregard color as a feature.
 
 
 \subsubsection{Edges}
-In order to avoid the problem of separating dark and light colors into different clusters, I used the \textit{Canny Edge Detection} algorithm to highlight the pose of the model in the model image. This feature only considers the contours of the object in the image and is invariant to color.
-
-This feature, however, is sensitive to edges created on images with darker background. All model images were resized to a uniform size of $256\times256$ as part of the data collection process, by extending the short side of the image with white color. The edge detection algorithm recognizes this transition on images with darker gray background, such as shown in Figure \ref{fig:cluster_edges_data}. 
-
-The clustering experiments using these feature were therefore affected by this detection and tended to group images with darker backgrounds together, regardless of the model pose. Therefore, in all further experiments, the images have center-cropped width of 116 pixels.
+In order to avoid the problem of separating dark and light colors into different clusters, I used \textit{Canny Edge Detection} algorithm to highlight the pose of the model in the model image. This feature only considers the contours of the object in the image and is invariant to the color of the dress.
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{04_experiments/clustering/edges_data}}
 \caption{\label{fig:cluster_edges_data} \textbf{Canny Edge Detection for model images.} Each left image shows original image and right image shows the corresponding edges produced with Canny Edge detection algorithm.}
 \end{figure}
+
+This feature, however, is sensitive to edges created on images with darker background. All model images were resized to a uniform size of $256\times256$ as part of the data collection process, by extending the short side of the image with white color. The edge detection algorithm recognizes this transition on images with darker gray background, such as shown in Figure \ref{fig:cluster_edges_data}. 
+
+The clustering experiments using these feature were therefore affected by this detection and tended to group images with darker backgrounds together, regardless of the model pose. Therefore, in all further experiments, the images have center-cropped width of 116 pixels.
 
 Overall, clustering with edges did not prove to be effective, as the edges are very thin and therefore the measured distance between two images, which are quite similar, but a little bit shifted, would be very big. The detection is also sensitive to patterns in the dresses, as seen in Figure \ref{fig:cluster_edges_data}.
 
@@ -1148,7 +1200,7 @@ Flip Labels    & No             & 10/100 Iterations & 5/100 Iterations    \\ \bo
 \section{Image Retrieval}
 
 \subsection{Dataset Images}
-In this part of the image features comparison, I have used the original product images from the dataset as input to retrieve the most similar images. All feature distances were calculated using L2 distance. Figure \ref{fig:search_pink} illustrates the strengths and weaknesses of the tested feature vectors. 
+In this part of the image features comparison, I have used the original product images from the dataset as input to retrieve the most similar images. Figure \ref{fig:search_pink} illustrates the strengths and weaknesses of the tested feature vectors. 
 
 Akiwi50 retrieves images that have similar color palettes but different shapes, while Akiwi64 does the opposite: it retrieves similarly shaped products regardless of their color. Although the two features combined together return more sensible results, given that the input dress is not very unique in the dataset, the results are still not very accurate. 
 
@@ -1161,25 +1213,44 @@ The ResNet features are quite similar, however in both ResNet and ResNet retrain
 \caption{\label{fig:search_pink} \textbf{Image retrieval results with tested feature vectors.} The left shows the Akiwi Features, the right one shows ResNet Features. Each row shows the input image in the left column and the best 5 matches based on L2 distance between the respective feature vectors. The number under each image represents its distance to the input}.
 \end{figure}
 
-To further analyse the issue of color outliers within ResNet results, I have also tested different weighing combinations of ResNet and Akiwi50 features. Figure \ref{fig:search_weights} shows the retrieved images for different relative ratios between the two features, such as 1:1, 1:2 and 1:3 for ResNet and Akiwi50 respectively. 
-
-When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
+\pagebreak
+I also evaluated the retrieved results based on the metric used - L1 distance and L2 distance. Figure \ref{fig:search_weights} compares retrieved results  using these two distances for different features and their combinations. As shown in the last two rows of Figure \ref{fig:search_weights}, displaying the combination of ResNet features and Akiwi50 features in different ratios, L1 distance supports the retrieval of more color-like images, while L2 distance retrieves more shape-like products. 
 
 \begin{figure}[!h]
 \centering
-{\includegraphics[width=.48\linewidth]{04_experiments/retrieval/resnet_red}}\hspace{0.2cm}
-{\includegraphics[width=.48\linewidth]{04_experiments/retrieval/resnet_yellow}}
+\subcaptionbox{L1 Distance}{
+{\includegraphics[width=.48\linewidth]{04_experiments/retrieval/resnet_l1}}}\hspace{0.2cm}
+\subcaptionbox{L2 Distance}{
+{\includegraphics[width=.48\linewidth]{04_experiments/retrieval/resnet_l2}}}
 \caption{\label{fig:search_weights} \textbf{Image retrieval results with different combinations of ResNet and Akiwi50 features.} Displaying the results for two different input images, the first row shows an equal ratio, second row shows 1:2 ratio and third row shows 1:3 ratio when combining ResNet and Akiwi50 features respectively.}.
 \end{figure}
 
-When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
-When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
-When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
-When using ratio 1:1, as shown in first row, the results still include some outliers in terms of colors. However, ratio 1:3 already depends too strong on the Akiwi50 features and the results include images with fitting color but quite different shape. Therefore I have decided to use the ratio 1:2 of ResNet and Akiwi50 features respectively.
+\subsection{Synthesized Images}
+Although the experiments on real images from the dataset reveled the strenghts and weaknesses of the tested features, the feature should be able to correctly retrieve similar images based on a generated input. This input can contain artifacts and overall not be as high-quality as the original images. 
 
-More examples of results of the image retrieval with different outputs can be found in attachments.
+\begin{figure}[h]
+\centering
+\subcaptionbox{Floral to Unicolors}{
+{\includegraphics[width=.48\linewidth]{04_experiments/retrieval/generated/floral_from}}}\vspace{0.3cm}
+\subcaptionbox{Unicolors to Floral}{
+{\includegraphics[width=.48\linewidth]{04_experiments/retrieval/generated/floral_to}}}
+\caption{\label{fig:search_weights} \textbf{Image retrieval results with generated patterns.} In each figure (a) and (b), the top left image is the original input and underneath it is its translated version to or from floral domain respectively. The rest of the images are most similar images. Retrieved images are based on Resnet-Akiwi50 (1:2) feature and L1 distance.}
+\end{figure}
 
-\subsection{Generated Images}
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{04_experiments/retrieval/generated/pix2pix_retrieval}}
+\caption{\label{fig:search_weights} \textbf{Image retrieval results with generated models.} The image on the left is the input product image. Top row shows the retrieved the images for the original model image and the bottom row shows the retrieved images for the generated model image. Retrieved images are based on Resnet-Akiwi50 (1:2) feature and L1 distance.}
+\end{figure}
+
+
+
+
+\chapter{Results}
+
+
+
+
 
 \appendix
 \newpage
