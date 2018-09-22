@@ -70,18 +70,18 @@ Blablabla
 \chapter{Introduction}
 According to Yann LeCun, a machine learning pioneer, generative adversarial models are one of the most relevant recent developments in deep learning \cite{yann_lecun_what_2016}. These models opened countless possibilities of generating realistic new content by making two neural networks compete with each other. In the past few years, researchers have developed various adversarial implementations that can generate, for example, a Monet painting from a photograph or  a high-resolution fake celebrity face.
 
-One field of computer vision that can benefit from the application of generative models is image retrieval. Most of currently available image retrieval systems rely on machine learning algorithms to retrieve images with similar content.  The questions is, if the retrieval can further benefit from new synthesized content by applying generative adversarial models.
+One field of computer vision that can benefit from the application of generative models is image retrieval. Most of currently available image retrieval systems rely on machine learning algorithms to retrieve images with similar content.  The questions is whether the retrieval can further benefit from new synthesized content by applying generative adversarial models.
 
-A suitable area to evaluate this hypothesis is online fashion retail. Not only due to the vast amount of visual, as well as textual content available, but also because fashion is individual. Navigating through all alternatives to find a product that fits the requirements of an individual is time-consuming, and also highly dependent on the filtering and search options that a given website offers. Retrieving relevant and customized products can therefore help speed up the search process and a chance of conversion.
+A suitable area to evaluate this hypothesis is online fashion retail. Not only due to the vast amount of visual, as well as textual content available, but also because choice of fashion products is subjective. Navigating through all alternatives to find a product that fits the requirements of an individual is time-consuming, and also highly dependent on the filtering and search options that a given website offers. Retrieving relevant and customized products can therefore help speed up the search process.
 
-The goal of this thesis is to evaluate existing generative models suitable for user-driven modification of fashion images, and implement a system that enables the user to influence and improve retrieval of similar products.
+The goal of this thesis is to evaluate existing generative models for user-driven modification of fashion images, and implement a system that enables the user to influence and improve retrieval of similar products.
 
 \newpage
 % ==============================================================
 % GANS
 % ==============================================================
 \chapter{Background}
-This chapter introduces the background of the two building blocks of this thesis: generative adversarial networks (GAN) and content-based image retrieval systems (CBIR). It describes GAN architecture, training objective and some of the instabilities that commonly occur when training a GAN. It also mentions some specific architectures that are used throughout this thesis. The second part of this chapter introduces content-based image retrieval systems, the way they had been implemented in the past and how they changed since the rise of the convolutional neural networks.
+This chapter introduces the background of the two building blocks of this thesis: generative adversarial networks (GAN) and content-based image retrieval systems (CBIR). It describes GAN architecture, training objective and some of the instabilities that commonly occur when training a GAN model. It also mentions some specific architectures that are used throughout this thesis. The second part of this chapter introduces content-based image retrieval systems, the way they had been implemented in the past and how they changed since the rise of the convolutional neural networks.
 
 \pagebreak
 % ==============================================================
@@ -141,7 +141,7 @@ The training objective of the discriminator is to maximize the probability of as
 The gradient of this loss function is back-propagated through the networks in respect to each of the network parameters, $\theta_{d}$ and $\theta_{g}$, followed by a parameter update using an optimization algorithm such as gradient descent.
 
 % ==============================================================
-\subsection{Training Difficulties} \label{sec:gan_diff}
+\subsection{Training Challenges} \label{sec:gan_diff}
 
 In theory, the minimax game described in equation \ref{eq:minimax} is played until generator has perfectly modeled the distribution $p(x)$, so that discriminator classifies the authenticity of the samples at random. In reality, the training of a GAN can prove to be unstable and finding the right balance between the two networks is difficult.
 
@@ -149,7 +149,7 @@ It can happen, for example, that the gradient descent gets stuck in a cycle, whe
 
 One of the common causes of instability is the vanishing gradient problem: when the discriminator gets confident at classifying the generated samples as fake early on, the generator gradient vanishes and the generator has no opportunity to improve. 
 
-In the seminal GAN paper, Goodfellow et al. \cite{goodfellow_generative_2014} suggest $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$, instead of the original term used in Equation \ref{eq:minimax}, to avoid vanishing gradients. 
+In the seminal GAN paper, Goodfellow et al. \cite{goodfellow_generative_2014} suggest $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$, instead of the original term $\mathbb{E}_{z \sim p_{z}(z)}[\log (1 - D(G(z))]$ used in Equation \ref{eq:minimax}, to avoid vanishing gradients. 
 
 Since then, other research on how to stabilize GAN training has been published \cite{arjovsky_towards_2017}\cite{roth_stabilizing_2017}\cite{salimans_improved_2016}. The recommended techniques to prevent the vanishing gradient problem mostly are mostly focused on confusing the discriminator, to give the generator an advantage in the training. 
 
@@ -246,7 +246,7 @@ To create a color histogram, the occurence of each color, as described by the im
 The main advantage of color features is that they are invariant to image transformations such as rotation. However, founding the retrieval only on colors is insufficient, since images that share similar color histograms do not necessarily display the same content and images showing the same content can have different color palettes.
 
 \subsubsection{Texture Features}
-Although texture can be perceived equally important to color, it is more difficult to define it. There are several methods for extracting texture that can be based on statistics, such as the co-occurence matrix, human perception, such as Tamura features, or signal processing, such as Gabor filters or Fourier transformations.
+Although texture feature can be perceived equally important to color feature, it is more difficult to define texture. There are several methods for extracting texture that can be based on statistics, such as the co-occurence matrix, human perception, such as Tamura features, or signal processing, such as Gabor filters or Fourier transformations.
 
 Figure \ref{fig:texture_feat} shows examples of textures with their respective Tamura texture descriptors \cite{tamura1978textural}. They use six terms to describe a given texture: coarseness, contrast, directionality, line-likeness, regularity and roughness. 
 
@@ -258,7 +258,7 @@ Figure \ref{fig:texture_feat} shows examples of textures with their respective T
 
 
 \subsubsection{Shape Features}
-Shape features can be divided into two groups: \textit{contour-based} features which only extract the edges of the shape, or \textit{region-based} features which extract the edges together with their interior \cite{zhang2004review}. Figure \ref{fig:shape_feat} shows the difference between these two groups.
+Shape features can be divided into two groups: \textit{contour-based} features which only extract the edges of the shape, or \textit{region-based} features which extract the edges together with their interior \cite{zhang2004review}.
 
 %\begin{figure}[!h]
 %\centering
@@ -316,11 +316,11 @@ There are also other possible metrics like the \textit{Chebychev metric} or the 
 % ==============================================================
 \chapter{Analysis}
 % ==============================================================
-This chapter firstly introduces the fashion dataset used in this thesis, its requirements and comparison to other available datasets. As mentioned earlier, online fashion retail does not only provide a large amount of visual and textual data, but it is also a field where the search results should fit the style and taste of the user. Therefore, I chose this type of data for the goal of this thesis - to evaluate how user-driven image synthesis can improve image retrieval.
+This chapter firstly introduces the fashion dataset used in this thesis, its requirements and comparison with other available datasets. As mentioned earlier, online fashion retail does not only provide a large amount of visual and textual data, but it is also a field where the search results should fit the individual style and taste of the user. Therefore, I chose this fashion data for the goal of this thesis - to evaluate how user-driven image synthesis can improve image retrieval.
 
 Next, the chapter compares five existing image-to-image translation GANs that can be used for image synthesis, describes their architecture, usage and specific characteristics. I chose image-to-image translation models, since they are based on the concept of conditional generative adversarial networks, and therefore are able to be influenced by image input.
 
-Finally, the chapter introduces several features for image retrieval, from low-level features and features produced by a convolutional neural network, that can be used to retrieve similar images to both original and synthesized images.
+Finally, the chapter introduces several features for image retrieval, from low-level features to features produced by a convolutional neural network. These features can be used to retrieve similar images to both original and synthesized images.
 
 Some of the existing implementations of generative adversarial networks specifically for fashion data are also mentioned at the end of the chapter.
 
