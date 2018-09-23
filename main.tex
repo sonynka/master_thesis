@@ -876,7 +876,7 @@ These modifications require an unsupervised approach, as there are no image pair
 \subsection{Data}
 Table \ref{tab:data_attr} summarized the attributes modified by the experiments. Since all the experiments were trained using the image category ,,dresses'', I have only chosen to train on attribute values that are well-represented within the category. 
 
-For example, only 12 dress images from the dataset are classified with the attribute value ,,normal length''. This length is usually associated with categories such as blouses and tops in the dataset. Therefore I have excluded this attribute value from the training set.
+For example, only 12 dress images from the dataset are classified with the attribute value ,,normal length''. This length is usually associated with categories such as blouses and tops in the dataset. Therefore I have excluded this attribute value from the training set. Figures \ref{fig:sleeve_data} - \ref{fig:pattern_data} show example images of each attribute and its values.
 
 \begin{table}[h]
 \centering
@@ -893,8 +893,6 @@ Pattern					& unicolored, floral, print, stripes & 11.165\\
 \end{tabular}
 \caption{\label{tab:data_attr}\textbf{Data attributes summary}. Attributes of the fashion dataset and their possible values for category dresses with the respective amounts of images that have one of the possible values assigned.}
 \end{table}
-
-Figures \ref{fig:sleeve_data} - \ref{fig:pattern_data} show example images of each attribute and its values.
 
 \begin{figure}[!h]
 \centering
@@ -928,7 +926,7 @@ Figures \ref{fig:sleeve_data} - \ref{fig:pattern_data} show example images of ea
 
 \pagebreak
 \subsection{Shape Modification}
-Since the shape modification is an unsupervised and multi-domain task, StarGAN is the most suitable network from the evaluated models. I used the official StarGAN implementation written in PyTorch to train the models: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
+Since the shape modification is an unsupervised and multi-domain task, StarGAN is the most suitable network from the evaluated models. I used the official StarGAN implementation written in PyTorch to train the models: \linebreak \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
 
 %TODO change batch size and image size if experimnets succesffull
 I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to not enough GPU memory. Each experiment was trained for 40 epochs - around 5 hours on a Tesla M40 12GB GPU. The original source code for StarGAN updates the discriminator weights 5 times for 1 generator update. 
@@ -963,7 +961,8 @@ The reconstruction loss does not penalize this issue, since the generator recons
 \caption{\label{fig:stargan_color} \textbf{Color-flipped StarGAN outputs.} The generator learns to map images to different domains to a different color.}
 \end{figure}
 
-Figure \ref{fig:sleeves_results} shows the results of sleeve length modification. StarGAN learns the mapping relatively early on in the training, however, the network generator struggles with dresses that have a strong pattern, or a very light colored, such as shown in Figure \ref{fig:sleeves_results}.
+\pagebreak
+Figure \ref{fig:sleeves_results} shows the results of sleeve length modification. StarGAN learns the mapping relatively early on in the training, however, the network generator struggles with dresses that have a strong pattern, or are very light colored.
 
 \begin{figure}[h]
 \centering
@@ -975,7 +974,8 @@ To solve this issue, I experimented with modeling the generator as a U-Net, disc
 
 I also tried hyperparameter modifications, such as lowering the generator's learning rate, or changing the relative weights of each loss. None of these experiments have improved the results.
 
-Figure \ref{fig:neckline_results} shows results for other attribute translations, such as neckline and fit modifications.
+\pagebreak
+Translation of sleeve length seemed to be the easiest for the network to learn. The same network trained on other attribute translations, such as neckline and fit, outputs less realistic images, that contain a lot of artifacts. This may be due to the fact, that these attributes are much more subtle than sleeve length - which is quite obvious shape change. Figure \ref{fig:neckline_results} shows results of neckline and fit translation.
 
 \begin{figure}[!h]
 \centering
@@ -983,9 +983,10 @@ Figure \ref{fig:neckline_results} shows results for other attribute translations
 {\includegraphics[width=.45\linewidth]{04_experiments/stargan/neckline_results}}}
 \subcaptionbox{Fit Translation Results}{
 {\includegraphics[width=.45\linewidth]{04_experiments/stargan/fit_results}}}
-\caption{\label{fig:neckline_results} \textbf{Neckline Modiciation Results.} The left column shown the input image, while the rest of the columns show the generated outputs with sleeve-length modifications, such as: sleeveless, short sleeves, half sleeves and long sleeves.}
+\caption{\label{fig:neckline_results} \textbf{Neckline and Fit Modification Results.} The left column shown the input image, while the rest of the columns show the generated outputs. \textbf{(a)} Neckline modifications: round, v-neck and wide neckline. \textbf{(b)} Fit modifications: tight, normal, loose fit.}
 \end{figure}
 
+The attribute length was the hardest to train and the network did not find a proper mapping for the attribute. Therefore I have decided to exclude this attribute from the shape modification possibilities.
 
 \pagebreak
 \subsection{Style Translation}
@@ -1167,9 +1168,7 @@ To avoid this issue, I added some noise to the labels to confuse the discriminat
 
 Although the learning curves can provide an insight into the staibility of the training, there is no objective method to correlate the losses to whether the results look realistic - the network's outputs need to be evaluated mostly visually \cite{preserve_knowledge_how_nodate}. 
 
-Figure \ref{fig:pix2pix_results} shows the generated samples from the test set for 3 different models. The original model produces visually inconsistent results: some generated outputs look realistic enough, as product 1 and 2, while others seem to fail. For example, for products 4 and 5, the generator produces almost identical output with a slight change of color.
-
-We can observe that the model which uses noisy labels, where the discriminator is not as strong, does not have these issues and overall produces more stable results. The same model trained with a lower learning rate is better at capturing the textures of the input image. The training parameters for each model are summarized in Table \ref{tab:pix2pix_exp}.
+Figure \ref{fig:pix2pix_results} shows the generated samples from the test set for 3 different models. The different training parameters for each model are summarized in Table \ref{tab:pix2pix_exp}. 
 
 \begin{table}[h]
 \centering
@@ -1186,6 +1185,10 @@ Flip Labels    & No             & 10/100 Iterations & 5/100 Iterations    \\ \bo
 \caption{\label{tab:pix2pix_exp} \textbf{Pix2Pix Experiments Training Parameters.}}
 \end{table}
 
+\pagebreak
+The original model produces visually inconsistent results: some generated outputs look realistic enough, as product 1 and 2, while others seem to fail. For example, for products 4 and 5, the generator produces almost identical output with a slight change of color.
+
+We can observe that the model which uses noisy labels, where the discriminator is not as strong, does not have these issues and overall produces more stable results. The same model trained with a lower learning rate is better at capturing the textures of the input image.
 
 \begin{figure}[!h]
 \centering
@@ -1204,7 +1207,7 @@ In this part of the image features comparison, I have used the original product 
 
 Akiwi50 retrieves images that have similar color palettes but different shapes, while Akiwi64 does the opposite: it retrieves similarly shaped products regardless of their color. Although the two features combined together return more sensible results, given that the input dress is not very unique in the dataset, the results are still not very accurate. 
 
-The ResNet features are quite similar, however in both ResNet and ResNet retrained there are outliers of images that do not fit color-wise. The combination of the original ResNet feature with the color-focused Akiwi50 prevents this issue and returns the most similar images. 
+The ResNet features are quite similar, however in both ResNet and ResNet retrained there are outliers of images that do not fit color-wise. The combination of the original ResNet feature with the color-focused Akiwi50 prevents this issue and returns the most similar images.
 
 \begin{figure}[h]
 \centering
@@ -1234,20 +1237,49 @@ Although the experiments on real images from the dataset reveled the strenghts a
 {\includegraphics[width=.48\linewidth]{04_experiments/retrieval/generated/floral_from}}}\vspace{0.3cm}
 \subcaptionbox{Unicolors to Floral}{
 {\includegraphics[width=.48\linewidth]{04_experiments/retrieval/generated/floral_to}}}
-\caption{\label{fig:search_weights} \textbf{Image retrieval results with generated patterns.} In each figure (a) and (b), the top left image is the original input and underneath it is its translated version to or from floral domain respectively. The rest of the images are most similar images. Retrieved images are based on Resnet-Akiwi50 (1:2) feature and L1 distance.}
+\caption{\label{fig:search_weights} \textbf{Image retrieval results with generated patterns.} In each figure (a) and (b), the top left image is the original input and underneath it is its translated version to or from floral domain respectively. The rest of the images are most similar images. Retrieved images are based on Resnet+Akiwi50 (1:2) feature and L1 distance.}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 {\includegraphics[width=\linewidth]{04_experiments/retrieval/generated/pix2pix_retrieval}}
-\caption{\label{fig:search_weights} \textbf{Image retrieval results with generated models.} The image on the left is the input product image. Top row shows the retrieved the images for the original model image and the bottom row shows the retrieved images for the generated model image. Retrieved images are based on Resnet-Akiwi50 (1:2) feature and L1 distance.}
+\caption{\label{fig:search_weights} \textbf{Image retrieval results with generated models.} The image on the left is the input product image. Top row shows the retrieved the images for the original model image and the bottom row shows the retrieved images for the generated model image. Retrieved images are based on Resnet+Akiwi50 (1:2) feature and L1 distance.}
 \end{figure}
 
 
 
 
 \chapter{Results}
+The final GAN retrieval pipeline, illustrated in Figure \ref{fig:pipeline}, consists of 3 basic blocks: data, synthesis and retrieval. 
 
+% Attribute Modification
+The final model uses three out of the five evaluated image-to-image translation models: StarGAN for shape modifications, CycleGAN for pattern modifications and Pix2Pix for product-to-model translation. Surprisingly, models that train in pixel-space, instead of decoding the images into a latent representation, resulted in more stable and realistic outputs using the fashion dataset.
+
+Since the shape modification has difficulties keeping the details of the pattern of the dress, the shape should be modified before a pattern modification is applied. It is also possible to stack shape modifications, such as change sleeve length and then change neckline, however, the artifacts created by the first modification are usually magnified. Modifying one image more then 3 times usually results in unrealistic output.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{05_results/pipeline2}}
+\caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
+\end{figure}
+
+
+Although the model images generated by Pix2Pix network do not look realistic to a human observer, they are sufficient to retrieve similar products photographed on models.  
+
+The tested retrieval features are relatively robust when comparing generated output against original images. The final model uses a combination of a 2048-dimensional ResNet feature and a 50-dimensional low-level feature, using L2 distance as metric for feature comparison.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{05_results/results_floral}}
+\caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{05_results/floral_product_retrieval}}
+{\includegraphics[width=\linewidth]{05_results/floral_model_retrieval}}
+\caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
+\end{figure}
 
 
 
