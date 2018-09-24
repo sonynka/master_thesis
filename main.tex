@@ -149,9 +149,9 @@ It can happen, for example, that the gradient descent gets stuck in a cycle, whe
 
 One of the common causes of instability is the vanishing gradient problem: when the discriminator gets confident at classifying the generated samples as fake early on, the generator gradient vanishes and the generator has no opportunity to improve. 
 
-In the seminal GAN paper, Goodfellow et al. \cite{goodfellow_generative_2014} suggest $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$, instead of the original term $\mathbb{E}_{z \sim p_{z}(z)}[\log (1 - D(G(z))]$ used in Equation \ref{eq:minimax}, to avoid vanishing gradients. 
+In the seminal GAN paper, Goodfellow et al. \cite{goodfellow_generative_2014} suggest $G$ to be trained to maximize $\mathbb{E}_{z \sim p_{z}(z)}[\log D(G(z))]$, instead of minimizing the original term $\mathbb{E}_{z \sim p_{z}(z)}[\log (1 - D(G(z))]$ used in Equation \ref{eq:minimax}, to avoid vanishing gradients. 
 
-Since then, other research on how to stabilize GAN training has been published \cite{arjovsky_towards_2017}\cite{roth_stabilizing_2017}\cite{salimans_improved_2016}. The recommended techniques to prevent the vanishing gradient problem mostly are mostly focused on confusing the discriminator, to give the generator an advantage in the training. 
+Since then, other research on how to stabilize GAN training has been published \cite{arjovsky_towards_2017}\cite{roth_stabilizing_2017}\cite{salimans_improved_2016}. The recommended techniques to prevent the vanishing gradient problem are mostly focused on confusing the discriminator, to give the generator an advantage in the training. 
 
 One of the techniques that can be applied is to add noise to the labels that define whether the image is real (1.0) or fake (0.0). As shown by Saliman et al. \cite{salimans_improved_2016}, varying the labels with a slight noise can help to stabilize the training. To further confuse the discriminator, we can also occassionally flip the labels. 
 
@@ -379,7 +379,7 @@ Additionally to an undesired low resolution of the returned images - around 100 
 % ==============================================================
 Based on the evaluation of existing fashion datasets, I have identified a need for creating a new dataset specifically for the requirements of the application. I evaluated several online fashion retailers that provide downloadable product images and easily parsable descriptions. 
 
-I chose 3 websites, based on the structure and amount of information they provide: \href{https://www.zalando.de/damen-home/}{zalando.de}, \href{https://www.aboutyou.de/}{aboutyou.de} and \href{https://www.fashionid.de/damen/}{fashionid.de}. Each of them offer several thousand fashion products for women and men, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc. For simplicity, I have limited the dataset to women's clothes, excluding products like accessories and shoes.
+I chose three websites, based on the structure and amount of information they provide: \href{https://www.zalando.de/damen-home/}{zalando.de}, \href{https://www.aboutyou.de/}{aboutyou.de} and \href{https://www.fashionid.de/damen/}{fashionid.de}. Each of them offer several thousand fashion products for women and men, with a photograph of the item on a white background and some basic description such as color, pattern, shape, length etc. For simplicity, I have limited the dataset to women's clothes, excluding products like accessories and shoes.
 
 The \textit{Fashion Scraper} is a python project, that scrapes images and data from all the mentioned websites and saves them locally for further processing, such as image processing, data cleaning, and description translating. This project was part of my Independent Coursework and the source code of the project can be found on \href{https://github.com/sonynka/fashion_scraper}{github.com/sonynka/fashion\_scraper}.
 
@@ -1250,38 +1250,52 @@ Although the experiments on real images from the dataset reveled the strenghts a
 
 
 \chapter{Results}
-The final GAN retrieval pipeline, illustrated in Figure \ref{fig:pipeline}, consists of 3 basic blocks: data, synthesis and retrieval. 
+Figure \ref{fig:pipeline} illustrates the final GAN search model. A dress image from the dataset is passed to a \textit{Product Synthesis} module, where the dress shape and pattern is modified based on user input. This generated image is passed through another network, \textit{Model Synthesis}, to generate an image of a person wearing the fake dress. Both the generated product image and the generated model image are then passed to the \textit{Product Search} and \textit{Model Search} modules respectively. There feature vectors of the generated images are calculated, and compared to features of original images from the dataset. Based on this comparison, the best (most similar) images are retrieved from the dataset.
 
-% Attribute Modification
-The final model uses three out of the five evaluated image-to-image translation models: StarGAN for shape modifications, CycleGAN for pattern modifications and Pix2Pix for product-to-model translation. Surprisingly, models that train in pixel-space, instead of decoding the images into a latent representation, resulted in more stable and realistic outputs using the fashion dataset.
-
-Since the shape modification has difficulties keeping the details of the pattern of the dress, the shape should be modified before a pattern modification is applied. It is also possible to stack shape modifications, such as change sleeve length and then change neckline, however, the artifacts created by the first modification are usually magnified. Modifying one image more then 3 times usually results in unrealistic output.
-
+\vspace{0.5cm}
 \begin{figure}[h]
 \centering
-{\includegraphics[width=\linewidth]{05_results/pipeline2}}
+{\includegraphics[width=\linewidth]{05_results/pipeline}}
 \caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
 \end{figure}
 
+\pagebreak
+\paragraph{Synthesis}
+Based on the results of the experiments, the final model uses three out of the five evaluated image-to-image translation models: StarGAN for shape modifications, CycleGAN for pattern modifications and Pix2Pix for product-to-model translation. 
 
-Although the model images generated by Pix2Pix network do not look realistic to a human observer, they are sufficient to retrieve similar products photographed on models.  
+Surprisingly, all used models train in pixel-space, instead of decoding the images into a latent representation. The pixel-space models, compared with latent encoder models, resulted in more stable and realistic outputs, when trained with the fashion dataset.
 
-The tested retrieval features are relatively robust when comparing generated output against original images. The final model uses a combination of a 2048-dimensional ResNet feature and a 50-dimensional low-level feature, using L2 distance as metric for feature comparison.
+The final model enables the user to change the attributes of one product multiple times, e.g: first shorten the sleeves and then round the neckline. However, using a synthesized image as an input for another synthesis can magnify artifacts and return unrealistic outputs. To avoid this behaviour, the user can  change one attribute of the dress, trigger a new image search and select a similar image, and then modify further.
+
+As shown in Figure \ref{fig:consecutive_mod}, the shape modification model does not reconstruct detailed patterns in the images well. Therefore pattern modification should only be performed after modifying the shape of the dress, to avoid loss of the pattern. 
 
 \begin{figure}[h]
 \centering
-{\includegraphics[width=\linewidth]{05_results/results_floral}}
-\caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
+\subcaptionbox{Input $\rightarrow$ Pattern $\rightarrow$ Shape}{
+{\includegraphics[width=.48\linewidth]{05_results/consecutive_mod1}}}
+\subcaptionbox{Input $\rightarrow$ Shape $\rightarrow$ Pattern}{
+{\includegraphics[width=.48\linewidth]{05_results/consecutive_mod2}}}
+\caption{\label{fig:consecutive_mod} \textbf{Differences between Consecutive Modifications.} Shape modification can result in loss of pattern details (a), therefore it is better, to first modify shapes and then patterns (b).}
 \end{figure}
+
+After each modification, the generated image is also sent through the product-to-model translation network, which produces a model image from a generated input. This generated model image is supposed to help find more similar products, that are photographed on a person. Although the network does not output realistic images - modelling a person's body and face is too complex for the given networks - the generated images are sufficient to retrieve images with similar products.
+
+\paragraph{Retrieval}
+Based on the experiments with different feature vectors, the final model uses a combination of 2048-dimensional ResNet feature and 50-dimensional low-level Akiwi feature, in the ratio of 1:2. The features are combined based on L1 distance.
+
+The retrieval features are relatively robust when comparing features of generated output against original images. Although, images with a high amount of artifacts or blurry outputs tend to get misinterpreted by the feature.
+
 
 \begin{figure}[h]
 \centering
-{\includegraphics[width=\linewidth]{05_results/floral_product_retrieval}}
-{\includegraphics[width=\linewidth]{05_results/floral_model_retrieval}}
-\caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
+{\includegraphics[width=\linewidth]{05_results/gan_search}}
+\caption{\label{fig:pipeline} \textbf{Fashion GAN Search Results.} Top left image is the original test image, images in the left column underneath are modified versions of the original image. For each image in the left column retrieved images are shown in the respective row. Images were retrieved with Resnet+Akiwi50 feature and L1 distance.}
 \end{figure}
 
 
+\chapter{Conclusion and outlook}
+
+Although the 
 
 
 \appendix
