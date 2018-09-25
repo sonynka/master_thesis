@@ -1250,7 +1250,9 @@ Although the experiments on real images from the dataset reveled the strenghts a
 
 
 \chapter{Results}
-Figure \ref{fig:pipeline} illustrates the final GAN search model. A dress image from the dataset is passed to a \textit{Product Synthesis} module, where the dress shape and pattern is modified based on user input. This generated image is passed through another network, \textit{Model Synthesis}, to generate an image of a person wearing the fake dress. Both the generated product image and the generated model image are then passed to the \textit{Product Search} and \textit{Model Search} modules respectively. There feature vectors of the generated images are calculated, and compared to features of original images from the dataset. Based on this comparison, the best (most similar) images are retrieved from the dataset.
+The final model generates new product images based on user-specified modifications and triggers a search of existing products that are similar to the generated image. 
+
+As illustrated in Figure \ref{fig:pipeline}, a dress image from the dataset is passed to a \textit{Product Synthesis} module, where the dress shape and pattern is modified based on user input. This generated image is passed through another network, \textit{Model Synthesis}, to generate an image of a person wearing the fake dress. Both the generated product image and the generated model image are then passed to the \textit{Product Search} and \textit{Model Search} modules respectively. The feature vectors of the generated images are calculated, and compared to features of original images from the dataset. Based on this comparison, the best (most similar) images are retrieved from the dataset.
 
 \vspace{0.5cm}
 \begin{figure}[h]
@@ -1259,32 +1261,59 @@ Figure \ref{fig:pipeline} illustrates the final GAN search model. A dress image 
 \caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
 \end{figure}
 
-\pagebreak
-\paragraph{Synthesis}
 Based on the results of the experiments, the final model uses three out of the five evaluated image-to-image translation models: StarGAN for shape modifications, CycleGAN for pattern modifications and Pix2Pix for product-to-model translation. 
 
-Surprisingly, all used models train in pixel-space, instead of decoding the images into a latent representation. The pixel-space models, compared with latent encoder models, resulted in more stable and realistic outputs, when trained with the fashion dataset.
+Surprisingly, the common characteristics of the used networks is pixel-space translation, as opposed to encoding the images into a latent representation, such as the evaluated MUNIT network and FaderNetworks. The latent representation models offer more sophisticated translation options, e.g. multi-modality, therefore they are also more complex and, based on my experience, harder to train and interpret. The pixel-space networks are easier to evaluate and overall yielded more stable outputs on the fashion dataset.
 
-The final model enables the user to change the attributes of one product multiple times, e.g: first shorten the sleeves and then round the neckline. However, using a synthesized image as an input for another synthesis can magnify artifacts and return unrealistic outputs. To avoid this behaviour, the user can  change one attribute of the dress, trigger a new image search and select a similar image, and then modify further.
+Each of the used GANs was chosen for its specific task in the model based on its characteristics. Hereby, the focus was not to generate a highly realistic new garment, but to generate realistic enough output to retrieve similar existing products from the dataset.
 
-As shown in Figure \ref{fig:consecutive_mod}, the shape modification model does not reconstruct detailed patterns in the images well. Therefore pattern modification should only be performed after modifying the shape of the dress, to avoid loss of the pattern. 
+The StarGAN network is used for modifying the shape attribute due to its ability of multi-domain training, therefore reducing the amount of generator networks that had to be trained. The quality of the outputs vary from attribute to attribute - sleeve length modification outputs sharp and clean images, while modification of neckline and fit, resulted in less realistic output with more artifacts. The cause is most likely the training data: sleeve length categories are visually very well distinguishable, while the differences between fits of the dresses are hard to categorize, and neckline attribute is often indicated only by a slight transition of color (Figure \ref{fig:problem_data}).
 
 \begin{figure}[h]
 \centering
-\subcaptionbox{Input $\rightarrow$ Pattern $\rightarrow$ Shape}{
-{\includegraphics[width=.48\linewidth]{05_results/consecutive_mod1}}}
-\subcaptionbox{Input $\rightarrow$ Shape $\rightarrow$ Pattern}{
-{\includegraphics[width=.48\linewidth]{05_results/consecutive_mod2}}}
-\caption{\label{fig:consecutive_mod} \textbf{Differences between Consecutive Modifications.} Shape modification can result in loss of pattern details (a), therefore it is better, to first modify shapes and then patterns (b).}
+\subcaptionbox{Round neckline vs. V-neckline}{
+{\includegraphics[width=.23\linewidth]{05_results/neckline_round}}
+{\includegraphics[width=.23\linewidth]{05_results/neckline_v}}
+}
+\vspace{0.2cm}
+\subcaptionbox{Tight fit vs. loose fit}{
+{\includegraphics[width=.23\linewidth]{05_results/fit_tight}}
+{\includegraphics[width=.23\linewidth]{05_results/fit_loose}}
+}
+\caption{\label{fig:problem_data} \textbf{Examples of similar images from different categories.} \textbf{(a)} Displays dresses with different neckline categories, but the difference is hard to distinguish due to the dark color of the dresses. \textbf{(b)} Displays two fit categories that are supposed to be opposite, but look very similar.}
 \end{figure}
 
-After each modification, the generated image is also sent through the product-to-model translation network, which produces a model image from a generated input. This generated model image is supposed to help find more similar products, that are photographed on a person. Although the network does not output realistic images - modelling a person's body and face is too complex for the given networks - the generated images are sufficient to retrieve images with similar products.
+Due to the bottleneck architecture of the generator, it is also hard for StarGAN to reconstruct detailed structures in the products, such as patterns. This can be partly fixed by applying a pattern modification trained with CycleGAN image. 
+
+The CycleGAN was trained to translate unicolor images to floral or stripes pattern, and vice versa. While floral translation works well with most of images, the stripes modification output is not as stable. Figure \ref{fig:stripes_retrieval} demonstrates image retrieval with an existing striped image and a generated striped image. Even though the generated striped image is one of the best results of the stripe-translation, the pattern is not clearly recognized by the feature and the retrieval results are mixed with other patterns.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{05_results/stripes_orig_results}}
+{\includegraphics[width=\linewidth]{05_results/stripes_gen_results}}
+\caption{\label{fig:stripes_retrieval} \textbf{Fashion GAN Search Results.} Top left image is the original test image, images in the left column underneath are modified versions of the original image. For each image in the left column retrieved images are shown in the respective row. Images were retrieved with Resnet+Akiwi50 feature and L1 distance.}
+\end{figure}
+
+
+%
+%Initially, the model was designed so that one can change the attributes of one product multiple times, e.g: first shorten the sleeves and then round the neckline. However, using a synthesized image as an input for a consecutive synthesis can magnify artifacts and blurriness of the result. To avoid this behaviour, the final application allows the user to change one attribute of the dress, trigger a new image search, select a similar existing product, and then modify further.
+
+
+%\begin{figure}[h]
+%\centering
+%\subcaptionbox{Input $\rightarrow$ Pattern $\rightarrow$ Shape}{
+%{\includegraphics[width=.48\linewidth]{05_results/consecutive_mod1}}}
+%\subcaptionbox{Input $\rightarrow$ Shape $\rightarrow$ Pattern}{
+%{\includegraphics[width=.48\linewidth]{05_results/consecutive_mod2}}}
+%\caption{\label{fig:consecutive_mod} \textbf{Differences between Consecutive Modifications.} Shape modification can result in loss of pattern details (a), therefore it is better, to first modify shapes and then patterns (b).}
+%\end{figure}
+
+After each modification, the generated image is also sent through the product-to-model translation, the Pix2Pix network, which produces a model image from a generated input. This generated model image is supposed to help find more similar products, that are photographed on a person. Although the network does not output realistic images - modelling a person's body and face is too complex for the given networks - the generated images are sufficient to retrieve images with similar products.
 
 \paragraph{Retrieval}
 Based on the experiments with different feature vectors, the final model uses a combination of 2048-dimensional ResNet feature and 50-dimensional low-level Akiwi feature, in the ratio of 1:2. The features are combined based on L1 distance.
 
-The retrieval features are relatively robust when comparing features of generated output against original images. Although, images with a high amount of artifacts or blurry outputs tend to get misinterpreted by the feature.
-
+The retrieval features are relatively robust when comparing features of generated output against original images. Although, images with a high amount of artifacts or blurry outputs tend to get misinterpreted by the feature. Figure demonstrates the retrieval result when using a real striped-dress and a generated striped-dress. Although the generated image is one of the best results of the translation, the retrieved results include other patterns, such as floral and polka dots, as opposed to just striped images.
 
 \begin{figure}[h]
 \centering
@@ -1295,7 +1324,12 @@ The retrieval features are relatively robust when comparing features of generate
 
 \chapter{Conclusion and outlook}
 
-Although the 
+Although the synthesis does not achieve to create new realistic fashion products, the generated outputs are sufficient to guide the image retrieval and retrieve more similar images. 
+
+This type of synthesis can be useful, to for example browse a fashion dataset that does not have options for search based on textual attributes. 
+
+However, training of the models and the options that the final model will offer to the user, is highly dependent on the available data. Adding more attributes for the user to modify, improving the training or the retrieval results - it is all a question of whether this data is available.
+
 
 
 \appendix
