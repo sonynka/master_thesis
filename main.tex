@@ -990,8 +990,24 @@ The attribute length was the hardest to train and the network did not find a pro
 
 \pagebreak
 \subsection{Style Translation}
-To modify the style of the products, I trained several models to translate the pattern attribute of the images. Since the content of the image - the product shape -  should be maintained and only the style should be modified, these experiments can be understood as a style transfer.
+In this experiment, the goal of the translation is for the content of the image - the product shape - to be maintained and only the style to be modified. these experiments can be understood as a style transfer. The most fitting models for this task are therefore those that allow a latent representation of the image, in order to separate the content from the style. I experimented with 3 models for this task: FaderNetworks, MUNIT and CycleGAN>
 
+\subsubsection{FaderNetworks}
+The FaderNetworks are unique among the evaluated models in their ability to gradually interpolate between two domains. In the example of style transfer, the user can decide, for example, how of a floral pattern the dress should have.
+
+I have trained the network to translate the floral and stripes pattern of the images, while using the original set-up of the official PyTorch implementation: \linebreak \hyperlink{https://github.com/sonynka/FaderNetworks}{github.com/sonynka/FaderNetworks}.
+
+As seen in Figure \ref{fig:fader_results}, the network trained to translate unicolor domain to striped-pattern domain is able to represent the original image without the pattern. However, the applying of the pattern leads to a ,,burn'' effect of not only the product but also the background of the image.
+
+\begin{figure}[h]
+\centering
+{\includegraphics[width=\linewidth]{04_experiments/fader}}
+\caption{\label{fig:fader_results} \textbf{FaderNetworks Pattern Translation Results.} The left-most image is the original input. Next to it is its attribute-invariant representation. Next, the stripes pattern is gradually applied to the image.}
+\end{figure}
+
+Since changes to the hyperparameters of the network did not improve the results, I decided to abandon this experiment and try pattern translation with a different network.
+
+\pagebreak
 \subsubsection{MUNIT}
 Ideally, the output of style translation should be multi-modal - one unicolored dress should have more than one possible floral-patterned versions and vice versa. MUNIT is the only network from the evaluated networks that models a multi-modal approach. It also provides a ,,guided'' style transfer, so that the user can ,,guide'' the style of a dress in one domain to style of a specific dress in another domain.
 
@@ -1021,7 +1037,6 @@ I used the official PyTorch implementation by the authors of the paper: \linebre
 
 The model was trained with batch size 8 and learning rate 0.0001. The image size was 128 $\times$ 128 pixels. I trained one generator for each of the patterns in the dataset: floral, stripes and print, each of them paired with unicolored domain. The models were trained for 150 epochs (cca 12 hours on the used GPU). 
 
-\pagebreak
 Results of floral pattern translation are shown in Figure \ref{fig:cycle_floral_results}. It learns the mapping of both translation directions while keeping the shape of the dresses as well. Some of the outputs contain minor artifacts around the dress.
 
 \begin{figure}[h]
