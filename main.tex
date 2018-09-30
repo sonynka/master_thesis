@@ -14,6 +14,7 @@
 \usepackage{fancyhdr}
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{amsfonts}
+\usepackage{pdfpages}
 
 \usepackage{booktabs}
 \usepackage{multicol}
@@ -1374,9 +1375,60 @@ The retrieval features are relatively robust when comparing features of generate
 
 
 \chapter{Conclusion and outlook}
+This thesis evaluated some of the state-of-the-art generative algorithms for image-to-image translation and analyzed whether content produced by such algorithms can be used to improve content-based image retrieval. The hypothesis was tested on a dataset consisting of images of fashion products, specifically dresses, and their descriptions. The analysis has shown promising results - even though the dresses synthesized by generative models are not highly realistic, they can be used to influence the results of content-based retrieval. The outcome is demonstrated in the final application, which enables a user to modify an image of a dress in various attributes, such as shape and pattern, and therefore influence the retrieval of similar existing products.
+
+Out of the evaluated generative adversarial networks, the most promising results on the given fashion dataset were achieved with less complex models, that translate image domains in pixel space (StarGAN, CycleGAN and Pix2Pix). The evaluated ,,encoder'' models (FaderNetworks and MUNIT), that translate data in an encoded latent-space, offer features that are attractive for the use case of user-driven image modification. However, these models are also more difficult to train and did not yield sufficient results on the given dataset.
+
+Further development of this project could branch out into two strategies: (1) improving of the existing models to generate higher quality output, and (2) training more complex models to extend the range of user possibilities. 
+
+The first strategy, improving the quality of the outputs of the pixel-space models, can help improve the similarity of the retrieved results. Some of the generated images contain too many artifacts or do not have well-defined contours. This type of output tends to get misinterpreted by the feature vector, and causes poor retrieval results. By training the models with higher-resolution images and cleaner data, the quality of the synthesis can improve and therefore yield better retrieval results.
+
+The pixel-space models, however, are relatively simple and it is easy to reach their limits. Therefore, the second strategy of further development could focus on training the sophisticated ,,encoder'' models that offer more interesting possibilities, such as multi-modality, guided style transfer or a gradual translation between domains. Due to time and resource constraints, I was not able to train these networks. However, experimenting with cleaner and larger dataset, different architectures and more resources, these models could be trained on the fashion dataset - resulting in more diverse options to influence the retrieval of similar products.
+
+Both of these strategies can benefit from extending and cleaning the used fashion dataset. Due to the heterogeneous source of the dataset (several scraped online fashion stores), the grouping of the various descriptions into categories leads to vague image domains, resulting in poor translation results. Therefore, any further development should also focus attention on acquiring a dataset with clearly defined and well-represented image domains.
+
+
+
+
+Due to the heterogeneous source of the dataset (several scraped fashion stores), some image domains are vague resulting in poor translation results. 
+
+ which can influence the retrieval features and retrieve unlike products.   By training the models with higher-resolution images and cleaner data.
+
+However, further experimenting with changes to their architectures could result in better outputs and therefore open more interesting translation possibilities.
+
+
+
+
+
+
+- two strategies for further development/research
+1. to improve the quality and output more realistic, as demonstrated in Figure 5.3. simple networks used, can be improved in terms of quality of the output
+2. extend the modification possibilities - guided style transfer, therefore more complex models neccessary, the simple models are at its limits
+
+more data -> more domains, more attributes, better outputs
+
+
+The main goal of thesis: evaluate if state of the art algorithms can be used for improvement image retrieval.
+State of the art algorithms were successfully used for this specific application;
+Positive 
+- Important to note on a positive note that the outcomes show promising results.
+- Whichmodels show potential, why
+
+Negative/unexpected
+- What would 
+- Simpler models 
+
+One of the reasons simple models did work is also that in papers were 
+
+Recommendations continue this research
+- big datasets do not necessairly translate to better outcomes; specially in the case of MUNIT multi-model architectures are specially prone. Thus, curating datasets would be one suggestion.
+- 
+
+
+
 The outcome of this thesis is a model that can generate new images of dresses based on user input. These generated images are then used as input for an image retrieval system in order to retrieve most similar existing dresses from the dataset. The model does not achieve to synthesize highly realistic outputs, but the quality is sufficient in order to influence the results of the image retrieval. Therefore the thesis hypothesis, that synthesized content can help improve image retrieval, was confirmed.
 
-The final application can be controlled by text input, and offers the user to modify the sleeve length, fit and neckline of a given input dress, using the StarGAN network. Furthermore, it allows the user to change the pattern of the dress, to floral or striped, using a CycleGAN network. The modified image is then used as template for retrieving similar existing products from the dataset. The retrieval system uses a combination of a 2048-dimensional feature vector, extracted from a ResNet network, and a 50-dimensional low-level feature vector, to compare the L1 distances between the images and retrieve the most similar products. The user can choose one of the retrieved images in order to continue modification. Although in most cases, the synthesized images are understood by the retrieval system, some of the generated images contains too many artifacts, which can influence the retrieval features and retrieve unlike products. 
+%The final application can be controlled by text input, and offers the user to modify the sleeve length, fit and neckline of a given input dress, using the StarGAN network. Furthermore, it allows the user to change the pattern of the dress, to floral or striped, using a CycleGAN network. The modified image is then used as template for retrieving similar existing products from the dataset. The retrieval system uses a combination of a 2048-dimensional feature vector, extracted from a ResNet network, and a 50-dimensional low-level feature vector, to compare the L1 distances between the images and retrieve the most similar products. The user can choose one of the retrieved images in order to continue modification. Although in most cases, the synthesized images are understood by the retrieval system, some of the generated images contains too many artifacts, which can influence the retrieval features and retrieve unlike products. 
 
 The search for similar products can be also extended, by translating the modified product image to an image of a person wearing it. This way also images of products being worn by models can be included in the results. However, the outputs of this feature only capture basic characteristics of the products, such as color and length, and the similarity of the retrieved results is not always obvious. 
 
@@ -1408,5 +1460,9 @@ Sona Pecenakova
 \clearpage
 
 \chapter{Documentation} \label{app:doc}
+The source code of the final application of the thesis can be found on: \hyperlink{https://github.com/sonynka/fashion\_gan}{github.com/sonynka/fashion\_gan}. The project was written in Python, and the main application is provided as a Jupyter Notebook.
+
+\section{Usage}
+
 
 \end{document}
