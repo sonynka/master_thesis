@@ -937,9 +937,9 @@ Pattern					& unicolored, floral, print, stripes & 11.165\\
 Since the shape translation is an unsupervised and multi-domain task, StarGAN is the most suitable network from the evaluated models. I used the official StarGAN implementation written in PyTorch to train the models: \linebreak \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
 
 %TODO change batch size and image size if experimnets succesffull
-I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to lack of GPU memory in the laboratory servers. Each experiment was trained for 40 epochs, which in practice translated to around 5 training hours on a Tesla M40 12GB GPU. The original source code for StarGAN updates the discriminator weights five times for one generator update. 
+I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. Each experiment was trained for 40 epochs, which in practice translated to around 5 training hours on a Tesla M40 12GB GPU. The original source code for StarGAN updates the discriminator weights five times for one generator update. 
 
-Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute, namely: sleeve length, length, fit and neckline.
+Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute, namely: sleeve length, length, fit and neckline. The number of generators is still reduced, since a separate generator does not have to be trained for each attribute value translation, such as long sleeves to short and vice versa.
 
 \vspace{0.5cm}
 \begin{figure}[h]
@@ -1056,7 +1056,7 @@ Results of floral pattern translation are shown in Figure \ref{fig:cycle_floral_
 
 Although CycleGAN does not produce multi-modal outputs, some multi-modality can be introduced by using generators from various epochs towards the end of the training. At this stage of training the pattern translation is already trained well and the changes in the output are more influenced by the current batch of training images. 
 
-As shown in Figure \ref{fig:cycle_floral_multimodal}, the outputs from epochs 120, 130 and 150 are all realistic but vary in the colorfulness and scale of the floral pattern. This approach can be used to introduce some multi-modality. However, this approach can be only used when mapping from unicolored domain, since the other directions does not vary the output based on the epoch that much.
+As shown in Figure \ref{fig:cycle_floral_multimodal}, the outputs from epochs 120, 130 and 150 are all realistic but vary in the colorfulness and scale of the floral pattern. This approach can be used to introduce some multi-modality. This variation is only introduced when a unicolored domain is translated into a pattern domain. Outputs from different epochs of translation from pattern domain to unicolor do not vary.
 
 \begin{figure}[h]
 \centering
