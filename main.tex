@@ -760,7 +760,7 @@ The discriminator trains to predict the attributes correctly:
 \mathcal{L}_{Dis} = \mathbb{E}_{x,y}[log(Dis(y|Enc(x)))],
 \end{equation}
 
-while the objective of the encoder is for the decoder to be able to reconstruct the image, and to prevent discriminator from correct classification:
+while the objective of the encoder is for the decoder to be able to reconstruct the image, and to prevent the discriminator from correctly classifying the attributes:
 \begin{equation}
 \mathcal{L} = \mathcal{L}_{rec} - \lambda_E \mathbb{E}_{x,y}[log(Dis(1-y|Enc(x)))].
 \end{equation}
@@ -772,7 +772,7 @@ while the objective of the encoder is for the decoder to be able to reconstruct 
 % ==============================================================
 I analyzed several available image features that can be used to retrieve images of similar products from the fashion dataset. The most significant differences of the analyzed features are summarized in Table \ref{tab:retrieval_com}. 
 
-First set of features comes from the Akiwi API \cite{sonnenberg_akiwi_nodate}, hence an internet connection is necessary to download a feature for a new image. The features are low dimensional and therefore fast to process. The second set of features is created by forwarding the images through a convolutional neural network, which can be done locally. These features are much more high-dimensional - include more information but are also slower to process.
+The first set of features comes from the Akiwi Application Programming Interface (API) \cite{sonnenberg_akiwi_nodate}, hence an internet connection is necessary to download a feature for a new image. The features are low dimensional and therefore fast to process. The second set of features is created by forwarding the images through a convolutional neural network, which can be done locally. These features are much more high-dimensional - include more information but are also slower to process.
 
 \begin{table}[h]
 \centering
@@ -788,7 +788,7 @@ ResNet-152                                                     & 2048           
 \end{table}
 
 \subsection{Akiwi}
-The Akiwi website \cite{sonnenberg_akiwi_nodate} provides an API, where user can upload an image file and the API returns a descriptor of the image. This vector can be used as the image feature to compare similarities with other image features.
+The Akiwi website \cite{sonnenberg_akiwi_nodate} provides an API, where a user can upload an image file and the API returns a descriptor of the image. This vector can be used as the image feature to compare similarities with other image features.
 
 The API provides various descriptors: the 50-dimensional descriptor is based on low-level features of the image, such as color histogram and edge detection. The 64-dimensional descriptor is produced by the last hidden layer of a ResNet-200 network, normalized and reduced to 64 dimensions \cite{Barthel:2017:VBM:3078971.3079016}.
 
@@ -857,7 +857,7 @@ The following chapter contains three types of experiments: (1) attribute modific
 
 The objective of the attribute modification experiments is to test the analyzed generative models on the fashion dataset and evaluate their ability to output a realistic product image with modified attributes. This attribute modification can either effect the shape of the product, such as sleeve length or neckline, or the style of the product, such as its pattern.
 
-The product to model image translation experiment aims to translate the domain of product images to the domain of model images, to expand the possibilities of image retrieval. This section involves data clustering experiments, that were necessary to create a supervised dataset for this task.
+The product to model image translation experiment aims to translate the domain of product images to the domain of model images, to expand the possibilities of image retrieval. This section involves data clustering experiments that were necessary to create a supervised dataset for this task.
 
 The image retrieval experiments test different image features to evaluate their retrieval quality both on original product images and also on generated images from previous experiments.
 
@@ -929,9 +929,9 @@ Pattern					& unicolored, floral, print, stripes & 11.165\\
 Since the shape translation is an unsupervised and multi-domain task, StarGAN is the most suitable network from the evaluated models. I used the official StarGAN implementation written in PyTorch to train the models: \linebreak \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. The exact architecture is displayed in Figure \ref{fig:stargan_arch}.
 
 %TODO change batch size and image size if experimnets succesffull
-I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to not enough GPU memory. Each experiment was trained for 40 epochs - around 5 hours on a Tesla M40 12GB GPU. The original source code for StarGAN updates the discriminator weights 5 times for 1 generator update. 
+I used batch size of 8 throughout the experiments and image size of $128 \times 128$ pixels. I was not able to train bigger image sizes due to lack of GPU memory in the laboratory servers. Each experiment was trained for 40 epochs, which in practice translated to around 5 training hours on a Tesla M40 12GB GPU. The original source code for StarGAN updates the discriminator weights five times for one generator update. 
 
-Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute: sleeve length, length, fit and neckline.
+Theoretically, StarGAN should be able to learn one generator mapping for all the attributes and their values. However, to reduce the complexity of the model, I decided to train one generator per each attribute, namely: sleeve length, length, fit and neckline.
 
 \vspace{0.5cm}
 \begin{figure}[h]
@@ -1011,7 +1011,7 @@ Since changes to the hyperparameters of the network did not improve the results,
 \subsubsection{MUNIT}
 Ideally, the output of style translation should be multi-modal - one unicolored dress should have more than one possible floral-patterned versions and vice versa. MUNIT is the only network from the evaluated networks that models a multi-modal approach. It also provides a ,,guided'' style transfer, so that the user can ,,guide'' the style of a dress in one domain to style of a specific dress in another domain.
 
-I used the official PyTorch implementation, published by NVidia: \linebreak\hyperlink{https://github.com/sonynka/MUNIT}{github.com/sonynka/MUNIT} - with changes to adapt it to the dataset and logging structure. I used batch size 1 to avoid problems with insufficient GPU memory and the default training parameters. The network was trained for 50.000 iterations, which took around 12 hours on the used GPU.
+I used the official PyTorch implementation, published by NVidia: \linebreak\hyperlink{https://github.com/sonynka/MUNIT}{github.com/sonynka/MUNIT} - with changes to adapt it to the dataset and logging structure. I used batch size of one to avoid problems with insufficient GPU memory and the default training parameters. The network was trained for 50.000 iterations, which took around 12 hours on the previously mentioned GPU.
 
 \begin{figure}[h]
 \centering
@@ -1019,7 +1019,7 @@ I used the official PyTorch implementation, published by NVidia: \linebreak\hype
 \caption{\label{fig:munit_results} \textbf{MUNIT Pattern Translation Results.} Domain A represents floral-patterned dresses, domain B represents unicolored dresses. Guided style translation translates the input image A to style of input image B and vice versa. Random style translation chooses a random style from each respective domain to apply to the input images. The displayed images are from the test set.}
 \end{figure}
 
-Figure \ref{fig:munit_results} shows the results of experiments translating the floral pattern to unicolor domain and vice versa. The network learns the content encoding correctly and the shape of the dresses is maintained in the translation. it also learns to map floral dresses to unicolor dresses. However, it fails to find the right encoding for the floral style. As shown in the Guided Style example of Figure \ref{fig:munit_results}, the generated image takes the color of the input but not the floral pattern.
+Figure \ref{fig:munit_results} shows the results of experiments translating the floral pattern to unicolor domain and vice versa. The network learns the content encoding correctly and the shape of the dresses is maintained in the translation. It also learns to map floral dresses to unicolor dresses. However, it fails to find the right encoding for the floral style. As shown in the Guided Style example of Figure \ref{fig:munit_results}, the generated image takes the color of the input but not the floral pattern.
 
 I experimented with increasing the dimension of the style encoding from the original 8 dimensions to 16 and 32, as well as tuning hyperparameters of the network such as learning rate and the relative weight of each term in the loss function. However, none of the experiments have resulted in a reasonable interpretation of the floral style.
 
@@ -1048,7 +1048,7 @@ Results of floral pattern translation are shown in Figure \ref{fig:cycle_floral_
 
 Although CycleGAN does not produce multi-modal outputs, some multi-modality can be introduced by using generators from various epochs towards the end of the training. At this stage of training the pattern translation is already trained well and the changes in the output are more influenced by the current batch of training images. 
 
-As shown in Figure \ref{fig:cycle_floral_multimodal}, the outputs from epochs 120, 130 and 150 are all realistic but vary in the colorfulness and scale of the floral pattern. This approach can be used to introduce some multi-modality. However, this approach can be only used when mapping from unicolored domain, since hte other directions does not vary the output based on the epoch that much.
+As shown in Figure \ref{fig:cycle_floral_multimodal}, the outputs from epochs 120, 130 and 150 are all realistic but vary in the colorfulness and scale of the floral pattern. This approach can be used to introduce some multi-modality. However, this approach can be only used when mapping from unicolored domain, since the other directions does not vary the output based on the epoch that much.
 
 \begin{figure}[h]
 \centering
@@ -1056,7 +1056,7 @@ As shown in Figure \ref{fig:cycle_floral_multimodal}, the outputs from epochs 12
 \caption{\label{fig:cycle_floral_multimodal} \textbf{CycleGAN Multi-Modality.} Results of the translation between floral and unicolor domains on test images. Left image is the input image, the images on the right are outputs of epoch 150, 130 and 120 respectively.}
 \end{figure}
 
-Results for translating stripes pattern are shown in Figures .. . The outputs contain more artifacts and are not as realistic as floral pattern - less training data for this domain can be the cause of worse results. I also experimented with the print pattern, however, the prints in the input images are so diverse - ranging from a simple logo through a full paisley print, that the network had difficulties to recognize the mapping.
+Results for translating stripes pattern are shown in Figures \ref{fig:cycle_stripes_results}. The outputs contain more artifacts and are not as realistic as floral pattern - less training data for this domain can be the cause of worse results. I also experimented with the print pattern, however, the prints in the input images are so diverse - ranging from a simple logo through a full paisley print, that the network had difficulties to recognize the mapping.
 
 \begin{figure}[h]
 \centering
