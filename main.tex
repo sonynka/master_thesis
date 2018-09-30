@@ -62,15 +62,23 @@
 \renewcommand{\headrulewidth}{.5pt}
 \pagenumbering{arabic}
 \chapter{Introduction}
-According to Yann LeCun, a machine learning pioneer, generative adversarial models are one of the most relevant recent developments in deep learning \cite{yann_lecun_what_2016}. These models opened countless possibilities of generating realistic new content by making two neural networks compete with each other. In the past few years, researchers have developed various adversarial implementations that can generate, for example, a Monet painting from a photograph or  a high-resolution fake celebrity face.
 
-One field of computer vision that can benefit from the application of generative models is image retrieval. Most of currently available image retrieval systems rely on machine learning algorithms to retrieve images with similar content.  The questions is whether the retrieval can further benefit from new synthesized content by applying generative adversarial models.
+\section{Motivation}
+% Motivation
+According to Yann LeCun, a machine learning pioneer, generative adversarial models are one of the most relevant recent developments in deep learning \cite{yann_lecun_what_2016}. Introduced in 2014, these models opened countless possibilities of generating realistic new content by making two neural networks compete with each other. In the past few years, researchers have developed various adversarial implementations that can generate, for example, a Monet painting from a photograph or  a high-resolution fake celebrity face.
+
+One field of computer vision that can benefit from the application of generative models is image retrieval. Most of currently available image retrieval systems rely on machine learning algorithms to extract relevant image descriptors, which are then be compared to retrieve images with similar content. The question is whether the retrieval can benefit from new synthesized content by applying generative adversarial models.
 
 A suitable area to evaluate this hypothesis is online fashion retail. Not only due to the vast amount of visual, as well as textual content available, but also because choice of fashion products is subjective. Navigating through all alternatives to find a product that fits the requirements of an individual is time-consuming, and also highly dependent on the filtering and search options that a given website offers. Retrieving relevant and customized products can therefore help speed up the search process.
 
-The goal of this thesis is to evaluate some of the existing generative models for image-to-image translation, and their ability to generate new fashion product image based on user-driven modification. These generated outputs should serve as input for an image retrieval system and enable the user to influence and improve retrieval of similar products.
+% Something like current research has already focused on generating new fashion items that could then be produced, or 3D printed. However, this type of synthesis does not have much practical use. Using hte generated images to retrieve existing products that can be bought on the other hand, can find practical use in fashion retail stores or aggregator sites.
 
-%TODO aufbau der arbeit
+\section{Objective}
+The goal of this thesis is to evaluate existing generative models for user-driven modification of fashion images, and implement a system that enables the user to influence the retrieval of similar products. Hereby, the main goal of the synthesis is not to generate highly realistic output, but output realistic enough to improve the retrieval of similar images. To analyze the possibilities of user-driven modification, several image-to-image translation models are compared and experimented on a dataset consisting of fashion products. The experiments further analyze various features that can be used to retrieve similar images from the dataset.
+
+
+\section{Thesis Structure}
+The following chapter describes the background of the two main topics of this thesis: generative adversarial networks and content-based image retrieval systems. The third chapter introduces some of the existing fashion datasets, and the fashion dataset used for the experiments. It also introduces several generative adversarial models for image-to-image translation and their main characteristics. Furthermore, it also introduces several image descriptors that can be used to retrieve similar images. Chapter four documents the experiments with the evaluated image-to-image translation networks and retrieval features. The results and the final application are then summarized in chapter five, as well as possible causes of synthesis issues that occured in some of the experiments. The last chapter concludes the work and presents possibilities of future development of the project.
 
 \newpage
 % ==============================================================
