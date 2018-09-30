@@ -34,6 +34,13 @@
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 \setlength{\parskip}{1em}
 
+% chapter pages numbering
+\fancypagestyle{plain}{%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyhf{}%
+  \rhead{ \thepage}
+}
+
 % line breaking
 \widowpenalties 1 1000000
 \raggedbottom
@@ -57,7 +64,8 @@
 % page numbering
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\slshape\nouppercase{\rightmark}}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\space#1}{}} 
+\lhead{\slshape\nouppercase{\leftmark}}
 \rhead{ \thepage}
 \renewcommand{\headrulewidth}{.5pt}
 \pagenumbering{arabic}
@@ -821,7 +829,7 @@ Since the ResNet152 was trained on a dataset with a big variety of objects, most
 However, training such a deep network on a new dataset can be very time consuming and requires the dataset to be quite large. The so-called \textit{Transfer Learning} enables one to use a network trained on a big dataset, such as the ImageNet dataset, and only re-train the last few layers of the network to classify a new dataset. This retrained network, for example to classify the categories of the fashion dataset products, can produce more diverse image descriptors for the given dataset.
 
 \pagebreak
-\section{Related Work}
+\section{Related Work} \label{sec:related}
 Although most of the GANs analyzed in this thesis are general models designed to work with many various datasets, there have also been publications focusing on GANs for fashion-specific tasks, such as modifying a person's outfit or translating image of a person wearing a product to a product image.
 
 Using text-to-image translation, ,,Be Your Own Prada'' \cite{zhu_be_2017} explores the possibility of modifying a product, worn by a person, by describing it with a short description. They first use segmentation to extract the person's pose and then apply a mapping that translates the segment into a new product based on the text description. The model is trained on the DeepFashion dataset, described in Section \ref{sec:data}. The results are shown in Figure \ref{fig:fashiongan}.
@@ -1276,17 +1284,17 @@ As illustrated in Figure \ref{fig:pipeline}, a dress image from the dataset is p
 \caption{\label{fig:pipeline} \textbf{Fashion GAN Search Pipeline.}}
 \end{figure}
 
-The project is written in Python and the GAN search application is provided as a \textit{Jupyter Notebook}. The product modification and search can be controlled by the user via text input. The source code of the project can also be found on GitHub: \linebreak \hyperlink{https://github.com/sonynka/fashion\_gan}{github.com/sonynka/fashion\_gan}. For more information about the source code, please see the Documentation in appendix A.
+The project is written in Python and the GAN search application is provided as a \textit{Jupyter Notebook}. The product modification and search can be controlled by the user via text input. The source code of the project can also be found on GitHub: \linebreak \hyperlink{https://github.com/sonynka/fashion\_gan}{github.com/sonynka/fashion\_gan}. For more information about the source code, please see the Documentation in Appendix \ref{app:doc}.
 
 \section{Synthesis}
-Based on the results of the experiments, the final model uses three out of the five evaluated image-to-image translation models: StarGAN for shape modifications, CycleGAN for pattern modifications and Pix2Pix for product-to-model translation. 
+Based on the results of the experiments, the final model uses three out of the five evaluated image-to-image translation models: StarGAN for shape modifications, CycleGAN for pattern modifications and Pix2Pix for product-to-model translation. Each of the used GANs was chosen for its specific task in the model based on its characteristics. Hereby, the focus was not to generate a highly realistic new garment, but to generate realistic enough output to retrieve similar existing products from the dataset.
 
-Each of the used GANs was chosen for its specific task in the model based on its characteristics. Hereby, the focus was not to generate a highly realistic new garment, but to generate realistic enough output to retrieve similar existing products from the dataset.
-
-Surprisingly, the common characteristics of the used networks is pixel-space translation, as opposed to encoding the images into a latent representation, such as the evaluated MUNIT network and FaderNetworks. The latent representation models offer more sophisticated translation options, e.g. multi-modality, therefore they are also more complex and, based on my experience, harder to train and interpret. The pixel-space networks are easier to evaluate and overall yielded more stable outputs on the fashion dataset.
+Surprisingly, the common characteristics of the used networks is pixel-space translation, as opposed to encoding the images into a latent representation, such as the evaluated MUNIT network and FaderNetworks. The latent representation models offer more sophisticated translation options, such as multi-modality, which also makes them more complex and, based on my experience, harder to train and interpret. The pixel-space networks are easier to evaluate and overall yielded more stable outputs on the fashion dataset.
 
 \paragraph{Shape Modification}
-The StarGAN network is used for modifying the shape attribute due to its ability of multi-domain training, therefore reducing the amount of generator networks that had to be trained. The quality of the outputs vary from attribute to attribute - sleeve length modification outputs sharp and clean images, while modification of neckline and fit, resulted in less realistic output with more artifacts. The cause is most likely the training data: sleeve length categories are visually very well distinguishable, while the differences between fits of the dresses are hard to categorize, and neckline attribute is often indicated only by a slight transition of color (Figure \ref{fig:problem_data}).
+The StarGAN network is used for modifying the shape attribute due to its ability of multi-domain training, therefore reducing the amount of generator networks that had to be trained. The final model was trained using the official PyTorch implementation: \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. In order to prevent checkerboard artifacts in the output, I added a bilinear upsampling layer before every deconvolution. I also added an L1 term to the overal loss of the generator, which measures the L1 distance between the generated image and the original image, to prevent the generator from changing the products color.
+
+The quality of the outputs vary from attribute to attribute - sleeve length modification outputs sharp and clean images, while modification of neckline and fit, resulted in less realistic output with more artifacts. The cause is vague training data: sleeve length categories are visually very well distinguishable, while the differences between fits of the dresses are hard to categorize, and neckline attribute is often indicated only by a slight transition of color (Figure \ref{fig:problem_data}).
 
 \begin{figure}[h]
 \centering
@@ -1302,14 +1310,14 @@ The StarGAN network is used for modifying the shape attribute due to its ability
 \caption{\label{fig:problem_data} \textbf{Examples of similar images from different categories.} \textbf{(a)} Dresses with different neckline categories. The difference is hard to distinguish due to the dark color of the dresses. \textbf{(b)} Two fit categories that are supposed to be opposite, but look similar.}
 \end{figure}
 
-The final model was trained using the official PyTorch implementation: \linebreak \hyperlink{https://github.com/sonynka/StarGAN}{github.com/sonynka/StarGAN}. In order to prevent checkerboard artifacts in the output, I added a bilinear upsampling layer before every deconvolution. I also added an L1 term to the overal loss of the generator, which measures the L1 distance between the generated image and the original image, to prevent the generator from changing the products color.
-
-StarGAN struggles with reconstructing detailed structures in the products, such as patterns or other decorative elements. This can be due to the bottleneck architecture of the generator, through which the original input must pass. 
+StarGAN also struggles with reconstructing detailed structures in the products, such as patterns or other decorative elements. This can be due to the bottleneck architecture of the generator through which the original input must pass, and therefore low-level details that both input and output share, get lost. One of the solutions of this problem is to use a U-Net architecture (Section \ref{sec:pix2pix}), however, in my experiments, U-Net generator failed to learn the translation.
 
 \paragraph{Pattern Modification}
 The loss of patterns when translating an attribute with StarGAN, can be partly recovered by applying a new pattern to the product using the trained CycleGAN. CycleGAN is used for pattern modification due to its ,,style transfer'' nature - the network keeps the content of the image while changing its style.
 
-The CycleGAN was trained to translate unicolor images to floral or stripes pattern, and vice versa, resulting in a total of 4 trained generators. The network was trained with the original open-source PyTorch implementation available at: \linebreak \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}. 
+The CycleGAN was trained to translate unicolor images to floral or stripes pattern, and vice versa, resulting in a total of 4 trained generators. The network was not able to train with the pattern ,,print'' that is available in the dataset. This was also due to the fact that the pattern of the images in this category is very variable, raging from a small brand logo to a full animal print of the garment.
+
+The final model was trained with the original open-source PyTorch implementation available at: \linebreak \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}. 
 
 While floral translation works well with most of images, the stripes modification output is not as stable. One of the reasons could be the distortion of very fine stripes in the images.  Figure \ref{fig:stripes_retrieval} demonstrates image retrieval with an existing striped image and a generated striped image. Even though the generated striped image is one of the best results of the stripe-translation, the pattern is not clearly recognized by the feature and the retrieval results are mixed with other patterns.
 
@@ -1320,7 +1328,7 @@ While floral translation works well with most of images, the stripes modificatio
 \caption{\label{fig:stripes_retrieval} \textbf{Fashion GAN Search Results.} Top left image is the original test image, images in the left column underneath are modified versions of the original image. For each image in the left column retrieved images are shown in the respective row. Images were retrieved with Resnet+Akiwi50 feature and L1 distance.}
 \end{figure}
 
-CycleGAN was not able to train with the pattern ,,print'' that is available in the dataset. This was also due to the fact that the pattern of the images in this category is very variable, raging from a small brand logo to a full animal print of the garment.
+One of the major drawbacks of CycleGAN is the lack of a multi-modal output. The floral pattern in the dataset can range from very detailed white flowers to large colorful flower patterns. CycleGAN however, is not able to capture this variety in the output. I introduced some multi-modality in the final model by sending the input image through three snapshots of the CycleGAN model. These snapshots were created after different epochs towards the end of the training and display some variation in the pattern, especially when applied to dark-colored dresses. However, this multi-modality is only limited and mostly visible on dark-colored dresses. The snapshot that the image is sent through at each modification is chosen randomly. I only introduced this approach for floral pattern, as the variation in different snapshots of the stripes model was not obvious.
 
 %
 %Initially, the model was designed so that one can change the attributes of one product multiple times, e.g: first shorten the sleeves and then round the neckline. However, using a synthesized image as an input for a consecutive synthesis can magnify artifacts and blurriness of the result. To avoid this behaviour, the final application allows the user to change one attribute of the dress, trigger a new image search, select a similar existing product, and then modify further.
@@ -1340,9 +1348,9 @@ After each modification, the generated image is sent through the Pix2Pix network
 
 Since products in the original dataset have more than one picture of a person wearing the product assigned, this task first required a clustering of the data in order to create a 1:1 paired image dataset of product and model image. The data was clustered with a K-Means algorithm using a black-and-white threshold mask of the images as input, in order to choose the model image for each product where the person's full-body is photographed.
 
-The final Pix2Pix model was trained using the official open-source PyTorch implementation: \linebreak \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}. The original set-up has resulted in a common failure of GANs, where the discriminator is too strong and does not leave generator the opportunity to improve. Therefore I implemented several strategies to confuse the discriminator.
+The final Pix2Pix model was trained using the official open-source PyTorch implementation: \hyperlink{https://github.com/sonynka/pytorch-CycleGAN-and-pix2pix}{github.com/sonynka/pytorch-CycleGAN-and-pix2pix}. The original set-up has resulted in a common failure of GANs, where the discriminator is too strong and does not leave generator the opportunity to improve. Therefore I implemented several strategies to confuse the discriminator, described in detail in the Experiments section.
 
-The outputs of the Pix2Pix network are not realistic - modeling a person's body and face is too complex for the given networks. The generated images only capture basic characteristics of the products, such as its color or length. More detailed characteristics, such as shape or pattern get lost in the translation. Good retrieval results can usually be achieved only on simple uni-colored silhouettes that are well represented within the dataset. Therefore the usefulness of this feature for the image retrieval can be debated. 
+The outputs of the Pix2Pix network are not realistic - modeling a person's body and face is too complex for the given networks. The generated images only capture basic characteristics of the products, such as its color or length. More detailed characteristics, such as shape or pattern get lost in the translation. Good retrieval results can usually be achieved only on simple uni-colored silhouettes that are well represented within the dataset. Therefore the usefulness of this feature for the image retrieval can be debated. A more reasonable approach might be the one from some of the related research mentioned in Section \ref{sec:related}, where an image of a person is first segmented and then only the fashion garment segment is generated, rather than the whole person.
 
 \begin{figure}[h]
 \centering
@@ -1366,17 +1374,11 @@ The retrieval features are relatively robust when comparing features of generate
 
 
 \chapter{Conclusion and outlook}
+The outcome of this thesis is a model that can generate new fashion product images based on user input. These generated images are then used as input for an image retrieval system in order to retrieve most similar existing products from the dataset. The synthesized fashion products are not highly realistic, but they suffice as input in order to influence the retrieval of the images. The developed tool could be further improved and used to browse fashion datasets, for example in online stores or fashion product aggregator sites, regardless of what search and filter options are available.
 
-Although the synthesis does not achieve to create new realistic fashion products, the generated outputs are sufficient to guide the image retrieval and retrieve more similar images. Therefore, the goal of this thesis was achieved. The developed tool can be used for example to browse a fashion dataset, regardless of what type of filtering options are available. 
+The success of this type of project is dependent on the available dataset. The modification options that are available, as well as the quality and resolution of synthesized images and therefore the retrieval features, can be improved by providing higher-quality and quantity data. Due to the lack of available open-source fashion datasets, that contain products photographed on a white background, the dataset used for this thesis was scraped from various online fashion stores. The heterogeneity of the sources means that the descriptions of the products, such as sleeve length or fit, are difficult to unify. This leads to vaguely-defined categories that are hard to distinguish and therefore hard to train on. The dataset is also hard to extend, as the scraped websites can change their structure and data.
 
-However, the success of this type of project is highly dependant on the given dataset. From the am unt of modificcation options that the user has, the quality and resolution of the synthesized images, to the similarity of retrieved images - all of these can be improved with the right data.
-
-There is unfortunately, a limited amount of open-source datasets available, that provide this type of data. Since the dataset used for this thesis was scraped from various websites, the attributes that are assigned to each dress are not unified. When trying to figure out which one out of 50 different tags that include 'length' could be grouped together, there is naturally gonna be misclassified images.
-
-When trying to translate product image to models, it is too complex. Therefore, a better approach might be the one where the person is not generated but taken from a different phogorapha and only the garment is translated, usign segmentation. This way, the output can be much more multi-modal, generated on different poses and so on.
-
-
-
+Therefore, for further development of this project, more attention should be focused on acquiring a cleaner dataset with well-defined and represented categories, that is also easily extensible in order to stay up-to-date with the latest fashion trends.
 
 \appendix
 
@@ -1401,7 +1403,6 @@ Berlin, 29 September 2018
 Sona Pecenakova
 \clearpage
 
-\addcontentsline{toc}{chapter}{Documentation}
-\chapter*{Documentation}
+\chapter{Documentation} \label{app:doc}
 
 \end{document}
