@@ -300,7 +300,7 @@ UC Berkeley and Adobe Research}
   abstract = {Generative Adversarial Nets [8] were recently introduced as a novel way to train generative models. In this work we introduce the conditional version of generative adversarial nets, which can be constructed by simply feeding the data, y, we wish to condition on to both the generator and discriminator. We show that this model can generate MNIST digits conditioned on class labels. We also illustrate how this model could be used to learn a multi-modal model, and provide preliminary examples of an application to image tagging in which we demonstrate how this approach can generate descriptive tags which are not part of training labels.},
   urldate = {2018-07-28},
   date = {2014-11-06},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Statistics - Machine Learning,Computer Science - Artificial Intelligence,Computer Science - Machine Learning},
   author = {Mirza, Mehdi and Osindero, Simon},
   file = {/Users/sonynka/Zotero/storage/64LSPCFZ/Mirza and Osindero - 2014 - Conditional Generative Adversarial Nets.pdf;/Users/sonynka/Zotero/storage/RKZMWAI7/1411.html}
 }
@@ -933,7 +933,7 @@ The algorithm has a loose relationship to the k-nearest neighbor classifier, a p
   abstract = {Image super-resolution (SR) is an underdetermined inverse problem, where a large number of plausible high-resolution images can explain the same downsampled image. Most current single image SR methods use empirical risk minimisation, often with a pixel-wise mean squared error (MSE) loss. However, the outputs from such methods tend to be blurry, over-smoothed and generally appear implausible. A more desirable approach would employ Maximum a Posteriori (MAP) inference, preferring solutions that always have a high probability under the image prior, and thus appear more plausible. Direct MAP estimation for SR is non-trivial, as it requires us to build a model for the image prior from samples. Furthermore, MAP inference is often performed via optimisation-based iterative algorithms which don't compare well with the efficiency of neural-network-based alternatives. Here we introduce new methods for amortised MAP inference whereby we calculate the MAP estimate directly using a convolutional neural network. We first introduce a novel neural network architecture that performs a projection to the affine subspace of valid SR solutions ensuring that the high resolution output of the network is always consistent with the low resolution input. We show that, using this architecture, the amortised MAP inference problem reduces to minimising the cross-entropy between two distributions, similar to training generative models. We propose three methods to solve this optimisation problem: (1) Generative Adversarial Networks (GAN) (2) denoiser-guided SR which backpropagates gradient-estimates from denoising to train the network, and (3) a baseline method using a maximum-likelihood-trained image prior. Our experiments show that the GAN based approach performs best on real image data. Lastly, we establish a connection between GANs and amortised variational inference as in e.g. variational autoencoders.},
   urldate = {2018-08-30},
   date = {2016-10-14},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Statistics - Machine Learning,Computer Science - Machine Learning},
   author = {S\o{}nderby, Casper Kaae and Caballero, Jose and Theis, Lucas and Shi, Wenzhe and Husz\'ar, Ferenc},
   file = {/Users/sonynka/Zotero/storage/YHT74KRT/Sønderby et al. - 2016 - Amortised MAP Inference for Image Super-resolution.pdf;/Users/sonynka/Zotero/storage/BAPRL9FU/1610.html}
 }
@@ -958,7 +958,7 @@ The algorithm has a loose relationship to the k-nearest neighbor classifier, a p
   abstract = {Deep generative models based on Generative Adversarial Networks (GANs) have demonstrated impressive sample quality but in order to work they require a careful choice of architecture, parameter initialization, and selection of hyper-parameters. This fragility is in part due to a dimensional mismatch or non-overlapping support between the model distribution and the data distribution, causing their density ratio and the associated f-divergence to be undefined. We overcome this fundamental limitation and propose a new regularization approach with low computational cost that yields a stable GAN training procedure. We demonstrate the effectiveness of this regularizer across several architectures trained on common benchmark image generation tasks. Our regularization turns GAN models into reliable building blocks for deep learning.},
   urldate = {2018-08-30},
   date = {2017-05-25},
-  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
   author = {Roth, Kevin and Lucchi, Aurelien and Nowozin, Sebastian and Hofmann, Thomas},
   file = {/Users/sonynka/Zotero/storage/4Z6NSM3J/Roth et al. - 2017 - Stabilizing Training of Generative Adversarial Net.pdf;/Users/sonynka/Zotero/storage/TD5WFQ3F/1705.html}
 }
@@ -1185,6 +1185,21 @@ The algorithm has a loose relationship to the k-nearest neighbor classifier, a p
   author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
   file = {/Users/sonynka/Zotero/storage/ZV72YBN8/He et al. - 2016 - Identity Mappings in Deep Residual Networks.pdf;/Users/sonynka/Zotero/storage/R26PN4S9/1603.html},
   annotation = {Comment: ECCV 2016 camera-ready}
+}
+
+@online{noauthor_jupyter_nodate,
+  title = {The {{Jupyter Notebook}} \textemdash{} {{IPython}}},
+  url = {http://ipython.org/notebook.html},
+  urldate = {2018-09-29},
+  file = {/Users/sonynka/Zotero/storage/ADWY8ZEX/notebook.html}
+}
+
+@online{noauthor_project_nodate,
+  title = {Project {{Jupyter}}},
+  url = {http://www.jupyter.org},
+  abstract = {The Jupyter Notebook is a web-based interactive computing platform. The notebook combines live code, equations, narrative text, visualizations, interactive dashboards and other media.},
+  urldate = {2018-09-29},
+  file = {/Users/sonynka/Zotero/storage/D9IDF6JK/jupyter.org.html}
 }
 
 
